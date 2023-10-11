@@ -21,8 +21,12 @@ app.get('/', (req, res) => {
   res.send('Hello server is started');
 });
 
+let onlineUsers = {};
+
 io.on('connection', (socket) => {
   console.log(`user connected of the id: ${socket.id}`);
+  socket.on('user-login', (data) => loginEventHandler(socket, data));
+
   socket.on('disconnect', () => {
     disconnectEventHandler(socket.id);
   });
@@ -34,4 +38,43 @@ server.listen(PORT, () => {
 
 const disconnectEventHandler = (id) => {
   console.log(`user disconnected of the id: ${id}`);
+  removeOnlineUser(id);
+  broadcastDisconnectedUserDetails(id);
+};
+
+const removeOnlineUser = (id) => {
+  if (onlineUsers[id]) {
+    delete onlineUsers[id];
+  }
+  console.log(onlineUsers);
+};
+
+const broadcastDisconnectedUserDetails = (disconnectedUserSocketId) => {
+  io.to('logged-users').emit('user-disconnected', disconnectedUserSocketId);
+};
+
+const loginEventHandler = (socket, data) => {
+  socket.join('logged-users');
+
+  onlineUsers[socket.id] = {
+    username: data.username,
+    coords: data.coords,
+  };
+
+  io.to('logged-users').emit('online-users', convertOnlineUsersToArray());
+};
+
+const convertOnlineUsersToArray = () => {
+  const onlineUsersArray = [];
+
+  console.log(Object.entries(onlineUsers));
+  Object.entries(onlineUsers).forEach(([key, value]) => {
+    onlineUsersArray.push({
+      socketId: key,
+      username: value.username,
+      coords: value.coords,
+    });
+  });
+
+  return onlineUsersArray;
 };
