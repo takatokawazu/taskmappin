@@ -29,3 +29,27 @@ function deg2rad(deg) {
 const roundToTwoDecimals = (num) => {
   return +(Math.round(num + 'e+2') + 'e-2');
 };
+
+const locationOptions = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
+const getCurrentPosition = (onSuccess, onError) => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve(position);
+        onSuccess(position);
+      },
+      (error) => {
+        reject(error);
+        onError(error);
+      },
+      locationOptions
+    );
+  });
+};
+
+export { getCurrentPosition };

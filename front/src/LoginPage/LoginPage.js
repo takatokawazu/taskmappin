@@ -7,17 +7,12 @@ import LoginButton from './LoginButton';
 import LoginInput from './LoginInput';
 import Logo from './Logo';
 import './LoginPage.css';
-import { getFakeLocation } from './FAKE_LOCATION';
+import { getCurrentPosition } from '../utils/location';
 import { proceedWithLogin } from '../stores/actions/loginPageAction';
+import { createOnSuccess, createOnError } from '../utils/locationHandler'; // ここでインポート
 
 const isUsernameValid = (username) => {
   return username.length > 0 && username.length < 10 && !username.includes(' ');
-};
-
-const locationOptions = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0,
 };
 
 const LoginPage = () => {
@@ -28,8 +23,11 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const onSuccess = createOnSuccess(dispatch, setMyLocation);
+  const onError = createOnError(setLocationErrorOccurred);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    await getCurrentPosition(onSuccess, onError);
     proceedWithLogin({
       username,
       coords: {
@@ -37,37 +35,14 @@ const LoginPage = () => {
         lat: myLocation.lat,
       },
     });
-    navigate('/map');
-  };
-
-  const onSucess = (position) => {
-    dispatch(
-      setMyLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-    );
-  };
-
-  console.log(myLocation);
-
-  const onError = (error) => {
-    console.log('Error occured!');
-    console.log(error);
-    setLocationErrorOccurred(true);
+    navigate(`/map/${username}`);
   };
 
   useEffect(() => {
-    // navigator.geolocation.getCurrentPosition(
-    //   onSucess,
-    //   onError,
-    //   locationOptions
-    // );
-    onSucess(getFakeLocation());
+    getCurrentPosition(onSuccess, onError);
   }, []);
 
   useEffect(() => {
-    console.log(myLocation);
     if (myLocation) {
       connectWithSocketIOServer();
     }

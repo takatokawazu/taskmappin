@@ -13,7 +13,6 @@ const Label = ({ fontSize, text }) => {
 
 const UserInfoCard = ({ username, userLocation, socketId }) => {
   const myLocation = useSelector((state) => state.map.myLocation);
-
   return (
     <div className="map_page_card_container">
       <Label text={username} fontSize="16px" />

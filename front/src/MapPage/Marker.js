@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import locationIcon from '../resources/images/location-icon.svg';
 import { setCardChosenOption } from './mapSlice';
-
-const Marker = (props) => {
-  const { myself, socketId, username, coords } = props;
+import { Marker } from 'react-map-gl';
+import { Room } from '@mui/icons-material';
+const CustomMarker = (props) => {
+  const { myself, socketId, username, coords, currentUser } = props;
   const dispatch = useDispatch();
 
   const handleOptionChoose = () => {
@@ -21,10 +21,20 @@ const Marker = (props) => {
 
   return (
     <div className="map_page_marker_container" onClick={handleOptionChoose}>
-      <img src={locationIcon} alt={username} className="map_page_marker_img" />
-      <p className="map_page_marker_text">{myself ? 'Me' : username}</p>
+      {/* {username !== currentUser && ( */}
+      <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
+        <Room
+          style={{
+            cursor: 'pointer',
+            color: 'slateblue',
+          }}
+        />
+        <p className="map_page_marker_text" style={{ color: 'slateblue' }}>
+          {myself ? 'Me' : username}
+        </p>
+      </Marker>
     </div>
   );
 };
 
-export default Marker;
+export default CustomMarker;

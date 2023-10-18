@@ -46,7 +46,6 @@ const removeOnlineUser = (id) => {
   if (onlineUsers[id]) {
     delete onlineUsers[id];
   }
-  console.log(onlineUsers);
 };
 
 const broadcastDisconnectedUserDetails = (disconnectedUserSocketId) => {
@@ -67,14 +66,25 @@ const loginEventHandler = (socket, data) => {
 const convertOnlineUsersToArray = () => {
   const onlineUsersArray = [];
 
-  console.log(Object.entries(onlineUsers));
   Object.entries(onlineUsers).forEach(([key, value]) => {
-    onlineUsersArray.push({
+    const newEntry = {
       socketId: key,
       username: value.username,
       coords: value.coords,
-    });
+    };
+
+    const existingEntryIndex = onlineUsersArray.findIndex(
+      (entry) => entry.username === newEntry.username
+    );
+
+    if (existingEntryIndex !== -1) {
+      onlineUsersArray.splice(existingEntryIndex, 1);
+    }
+
+    onlineUsersArray.push(newEntry);
   });
+
+  console.log(onlineUsersArray);
 
   return onlineUsersArray;
 };

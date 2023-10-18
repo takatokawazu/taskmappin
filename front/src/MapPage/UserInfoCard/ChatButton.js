@@ -1,8 +1,18 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import chatIcon from '../../resources/images/chat-icon.svg';
+import { addChatbox } from '../../Messanger/MessagerSlice';
 
 const ChatButton = ({ socketId, username }) => {
-  const handleAddChatbox = () => {};
+  const dispatch = useDispatch();
+  const handleAddChatbox = () => {
+    dispatch(
+      addChatbox({
+        username,
+        socketId,
+      })
+    );
+  };
 
   return (
     <img
