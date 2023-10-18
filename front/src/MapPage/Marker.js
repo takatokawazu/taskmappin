@@ -21,18 +21,31 @@ const CustomMarker = (props) => {
 
   return (
     <div className="map_page_marker_container" onClick={handleOptionChoose}>
-      {/* {username !== currentUser && ( */}
-      <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
-        <Room
-          style={{
-            cursor: 'pointer',
-            color: 'slateblue',
-          }}
-        />
-        <p className="map_page_marker_text" style={{ color: 'slateblue' }}>
-          {myself ? 'Me' : username}
-        </p>
-      </Marker>
+      {username !== currentUser ? (
+        <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
+          <Room
+            style={{
+              cursor: 'pointer',
+              color: 'slateblue',
+            }}
+          />
+          <p className="map_page_marker_text" style={{ color: 'slateblue' }}>
+            {myself ? 'Me' : username}
+          </p>
+        </Marker>
+      ) : (
+        <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
+          <Room
+            style={{
+              cursor: 'pointer',
+              color: 'red',
+            }}
+          />
+          <p className="map_page_marker_text" style={{ color: 'red' }}>
+            {myself ? 'Me' : username}
+          </p>
+        </Marker>
+      )}
     </div>
   );
 };
