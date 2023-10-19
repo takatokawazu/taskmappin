@@ -15,11 +15,40 @@ const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
   const { username } = useParams();
+  const [currentUserPosition, setCurrentUserPosition] = useState(null);
   const [viewport, setViewport] = useState({
     longitude: process.env.REACT_APP_DEFAULT_LONTITUDE,
     latitude: process.env.REACT_APP_DEFAULT_LATITUDE,
     zoom: 8,
   });
+
+  useEffect(() => {
+    connectWithSocketIOServer();
+
+    const getLocation = () => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setCurrentUserPosition(position.coords);
+            updateUserLocation(position);
+          },
+          (error) => {
+            console.error('位置情報の取得に失敗しました: ' + error.message);
+          }
+        );
+      } else {
+        console.error('このブラウザは位置情報をサポートしていません。');
+      }
+    };
+
+    const timer = setInterval(() => {
+      getLocation();
+    }, 5000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = () => {
@@ -39,7 +68,6 @@ const MapPage = () => {
     };
     fetchData();
   }, []);
-  console.log(onlineUsers);
 
   const updateUserLocation = (position) => {
     proceedWithLogin({
@@ -83,11 +111,12 @@ const MapPage = () => {
         </ReactMapGL>
       </LoadScript>
       <Messanger />
-      {cardChosenOption && (
+      {cardChosenOption && currentUserPosition && (
         <UserInfoCard
           socketId={cardChosenOption.socketId}
           username={cardChosenOption.username}
           userLocation={cardChosenOption.coords}
+          currentUserPosition={currentUserPosition}
         />
       )}
     </div>

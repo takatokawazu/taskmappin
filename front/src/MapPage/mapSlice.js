@@ -10,9 +10,6 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    setMyLocation: (state, action) => {
-      state.myLocation = action.payload;
-    },
     setOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;
     },
@@ -27,11 +24,7 @@ export const mapSlice = createSlice({
   },
 });
 
-export const {
-  setMyLocation,
-  setOnlineUsers,
-  removeDisconnectedUser,
-  setCardChosenOption,
-} = mapSlice.actions;
+export const { setOnlineUsers, removeDisconnectedUser, setCardChosenOption } =
+  mapSlice.actions;
 
 export default mapSlice.reducer;

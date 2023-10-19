@@ -11,13 +11,22 @@ const Label = ({ fontSize, text }) => {
   );
 };
 
-const UserInfoCard = ({ username, userLocation, socketId }) => {
+const UserInfoCard = ({
+  username,
+  userLocation,
+  socketId,
+  currentUserPosition,
+}) => {
   const myLocation = useSelector((state) => state.map.myLocation);
+  console.log(userLocation);
   return (
     <div className="map_page_card_container">
       <Label text={username} fontSize="16px" />
       <Label
-        text={`${calulateDistanceBetweenCoords(myLocation, userLocation)}km`}
+        text={`${calulateDistanceBetweenCoords(
+          currentUserPosition,
+          userLocation
+        )}km`}
         fontSize="16px"
       />
       <ActionButton socketId={socketId} username={username} />
