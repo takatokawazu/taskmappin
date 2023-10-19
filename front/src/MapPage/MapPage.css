@@ -145,3 +145,7 @@
 .m_page_v_rooms_video_button:hover {
   opacity: 0.6;
 }
+
+.mapboxgl-ctrl-bottom-left {
+  display: none;
+}

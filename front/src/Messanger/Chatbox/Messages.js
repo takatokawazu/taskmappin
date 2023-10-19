@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import SingleMessage from './SingleMessage';
 import { useSelector } from 'react-redux';
 
@@ -7,7 +7,13 @@ const Messages = ({ socketId }) => {
     (state) => state.messanger.chatHistory[socketId]
   );
 
-  const onlineUsers = useSelector((state) => state.map.onlineUsers);
+  const scrollRef = useRef();
+
+  const scrollToBottom = () => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(scrollToBottom, [messages]);
 
   return (
     <div className="chatbox_messages_container">
@@ -18,6 +24,7 @@ const Messages = ({ socketId }) => {
           myMessage={message.myMessage}
         />
       ))}
+      <div ref={scrollRef}></div>
     </div>
   );
 };

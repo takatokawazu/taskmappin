@@ -27,6 +27,8 @@ io.on('connection', (socket) => {
   console.log(`user connected of the id: ${socket.id}`);
   socket.on('user-login', (data) => loginEventHandler(socket, data));
 
+  socket.on('chat-message', (data) => chatMessageHandler(socket, data));
+
   socket.on('disconnect', () => {
     disconnectEventHandler(socket.id);
   });
@@ -40,6 +42,19 @@ const disconnectEventHandler = (id) => {
   console.log(`user disconnected of the id: ${id}`);
   removeOnlineUser(id);
   broadcastDisconnectedUserDetails(id);
+};
+
+const chatMessageHandler = (socket, data) => {
+  const { receiverSocketId, content, id } = data;
+  if (onlineUsers[receiverSocketId]) {
+    console.log('message received');
+    console.log('sending message to other user');
+    io.to(receiverSocketId).emit('chat-message', {
+      senderSocketId: socket.id,
+      content,
+      id,
+    });
+  }
 };
 
 const removeOnlineUser = (id) => {

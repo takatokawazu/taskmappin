@@ -3,6 +3,7 @@ import {
   onlineUsersHandler,
   userDisconnectedHandler,
 } from '../stores/actions/usersActions';
+import { chatMessageHandler } from '../stores/actions/messangerActions';
 
 let socket = null;
 
@@ -17,6 +18,10 @@ export const connectWithSocketIOServer = () => {
     onlineUsersHandler(socket.id, usersData);
   });
 
+  socket.on('chat-message', (messageData) => {
+    chatMessageHandler(messageData);
+  });
+
   socket.on('user-disconnected', (disconnectedUserSocketId) => {
     userDisconnectedHandler(disconnectedUserSocketId);
   });
@@ -24,4 +29,8 @@ export const connectWithSocketIOServer = () => {
 
 export const login = (data) => {
   socket.emit('user-login', data);
+};
+
+export const sendChatMessage = (data) => {
+  socket.emit('chat-message', data);
 };
