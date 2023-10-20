@@ -4,6 +4,7 @@ import {
   userDisconnectedHandler,
 } from '../stores/actions/usersActions';
 import { chatMessageHandler } from '../stores/actions/messangerActions';
+import { videoRoomsListHandler } from '../stores/actions/videoRoomActions';
 
 let socket = null;
 
@@ -22,6 +23,10 @@ export const connectWithSocketIOServer = () => {
     chatMessageHandler(messageData);
   });
 
+  socket.on('video-rooms', (videoRooms) => {
+    videoRoomsListHandler(videoRooms);
+  });
+
   socket.on('user-disconnected', (disconnectedUserSocketId) => {
     userDisconnectedHandler(disconnectedUserSocketId);
   });
@@ -33,4 +38,9 @@ export const login = (data) => {
 
 export const sendChatMessage = (data) => {
   socket.emit('chat-message', data);
+};
+
+export const createVideoRoom = (data) => {
+  console.log('emitting');
+  socket.emit('video-room-create', data);
 };

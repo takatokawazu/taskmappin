@@ -22,12 +22,17 @@ app.get('/', (req, res) => {
 });
 
 let onlineUsers = {};
+let videoRooms = {};
 
 io.on('connection', (socket) => {
   console.log(`user connected of the id: ${socket.id}`);
   socket.on('user-login', (data) => loginEventHandler(socket, data));
 
   socket.on('chat-message', (data) => chatMessageHandler(socket, data));
+
+  socket.on('video-room-create', (data) =>
+    videoRoomCreateHandler(socket, data)
+  );
 
   socket.on('disconnect', () => {
     disconnectEventHandler(socket.id);
@@ -41,6 +46,7 @@ server.listen(PORT, () => {
 const disconnectEventHandler = (id) => {
   console.log(`user disconnected of the id: ${id}`);
   removeOnlineUser(id);
+  // removeUserFromVideoRooms(id);
   broadcastDisconnectedUserDetails(id);
 };
 
@@ -57,6 +63,40 @@ const chatMessageHandler = (socket, data) => {
   }
 };
 
+const videoRoomCreateHandler = (socket, data) => {
+  console.log('new room', data);
+  const { peerId, newRoomId } = data;
+
+  videoRooms[newRoomId] = {
+    participants: [
+      {
+        socketId: socket.id,
+        username: onlineUsers[socket.id].username,
+        peerId,
+      },
+    ],
+  };
+
+  broadcastVideoRooms();
+};
+
+// const removeUserFromVideoRooms = (id) => {
+//   Object.keys(videoRooms).forEach((roomId) => {
+//     const room = videoRooms[roomId];
+//     const participantIndex = room.participants.findIndex(
+//       (participant) => participant.socketId === id
+//     );
+//     if (participantIndex !== -1) {
+//       room.participants.splice(participantIndex, 1);
+//       if (room.participants.length === 0) {
+//         // ルームの参加者が0人になった場合、ルームを削除する
+//         delete videoRooms[roomId];
+//       }
+//     }
+//   });
+//   broadcastVideoRooms(); // 更新したビデオルームの情報をブロードキャストする
+// };
+
 const removeOnlineUser = (id) => {
   if (onlineUsers[id]) {
     delete onlineUsers[id];
@@ -65,6 +105,10 @@ const removeOnlineUser = (id) => {
 
 const broadcastDisconnectedUserDetails = (disconnectedUserSocketId) => {
   io.to('logged-users').emit('user-disconnected', disconnectedUserSocketId);
+};
+
+const broadcastVideoRooms = () => {
+  io.emit('video-rooms', videoRooms);
 };
 
 const loginEventHandler = (socket, data) => {
@@ -98,8 +142,6 @@ const convertOnlineUsersToArray = () => {
 
     onlineUsersArray.push(newEntry);
   });
-
-  console.log(onlineUsersArray);
 
   return onlineUsersArray;
 };

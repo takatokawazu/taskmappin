@@ -10,6 +10,7 @@ import './MapPage.css';
 import { proceedWithLogin } from '../stores/actions/loginPageAction';
 import { useParams } from 'react-router-dom';
 import { connectWithSocketIOServer } from '../socketConnection/socketConn';
+import VideoRooms from '../VideoRooms/VideoRooms';
 
 const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
@@ -119,6 +120,7 @@ const MapPage = () => {
           currentUserPosition={currentUserPosition}
         />
       )}
+      <VideoRooms />
     </div>
   );
 };
