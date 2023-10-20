@@ -11,6 +11,7 @@ import { proceedWithLogin } from '../stores/actions/loginPageAction';
 import { useParams } from 'react-router-dom';
 import { connectWithSocketIOServer } from '../socketConnection/socketConn';
 import VideoRooms from '../VideoRooms/VideoRooms';
+import { connectWithPeerServer } from '../realtimeCommunication/webRTCHandler';
 
 const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
@@ -25,7 +26,7 @@ const MapPage = () => {
 
   useEffect(() => {
     connectWithSocketIOServer();
-
+    connectWithPeerServer();
     const getLocation = () => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
