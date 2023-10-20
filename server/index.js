@@ -3,6 +3,7 @@ const app = express();
 const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
+const { PeerServer } = require('peer');
 
 const server = http.createServer(app);
 
@@ -14,6 +15,8 @@ const io = new Server(server, {
     methods: ['GET', 'POST'],
   },
 });
+
+const peerServer = PeerServer({ port: 9000, path: '/peer' });
 
 const PORT = process.env.PORT || 3003;
 
@@ -33,6 +36,10 @@ io.on('connection', (socket) => {
   socket.on('video-room-create', (data) =>
     videoRoomCreateHandler(socket, data)
   );
+
+  socket.on('video-room-join', (data) => {
+    videoRoomJoinHandler(socket, data);
+  });
 
   socket.on('disconnect', () => {
     disconnectEventHandler(socket.id);
@@ -80,23 +87,6 @@ const videoRoomCreateHandler = (socket, data) => {
   broadcastVideoRooms();
 };
 
-// const removeUserFromVideoRooms = (id) => {
-//   Object.keys(videoRooms).forEach((roomId) => {
-//     const room = videoRooms[roomId];
-//     const participantIndex = room.participants.findIndex(
-//       (participant) => participant.socketId === id
-//     );
-//     if (participantIndex !== -1) {
-//       room.participants.splice(participantIndex, 1);
-//       if (room.participants.length === 0) {
-//         // ルームの参加者が0人になった場合、ルームを削除する
-//         delete videoRooms[roomId];
-//       }
-//     }
-//   });
-//   broadcastVideoRooms(); // 更新したビデオルームの情報をブロードキャストする
-// };
-
 const removeOnlineUser = (id) => {
   if (onlineUsers[id]) {
     delete onlineUsers[id];
@@ -108,7 +98,7 @@ const broadcastDisconnectedUserDetails = (disconnectedUserSocketId) => {
 };
 
 const broadcastVideoRooms = () => {
-  io.emit('video-rooms', videoRooms);
+  io.to('logged-users').emit('video-rooms', videoRooms);
 };
 
 const loginEventHandler = (socket, data) => {
@@ -120,6 +110,32 @@ const loginEventHandler = (socket, data) => {
   };
 
   io.to('logged-users').emit('online-users', convertOnlineUsersToArray());
+  broadcastVideoRooms();
+};
+
+const videoRoomJoinHandler = (socket, data) => {
+  const { roomId, peerId } = data;
+
+  if (videoRooms[roomId]) {
+    videoRooms[roomId].participants.forEach((participant) => {
+      socket.to(participant.socketId).emit('video-room-init', {
+        newParticipantPeerId: peerId,
+      });
+    });
+
+    videoRooms[roomId].participants = [
+      ...videoRooms[roomId].participants,
+      {
+        socketId: socket.id,
+        username: onlineUsers[socket.id].username,
+        peerId,
+      },
+    ];
+
+    broadcastVideoRooms();
+  } else {
+    console.log('something went happened');
+  }
 };
 
 const convertOnlineUsersToArray = () => {

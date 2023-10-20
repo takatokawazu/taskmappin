@@ -5,7 +5,10 @@ import {
   setRooms,
 } from '../../realtimeCommunication/videoRoomsSlice';
 import * as socketConn from '../../socketConnection/socketConn';
-import { getAccessToLocalStream } from '../../realtimeCommunication/webRTCHandler';
+import {
+  getAccessToLocalStream,
+  getPeerId,
+} from '../../realtimeCommunication/webRTCHandler';
 
 export const createVideoRoom = async () => {
   const success = await getAccessToLocalStream();
@@ -16,12 +19,25 @@ export const createVideoRoom = async () => {
     store.dispatch(setInRoom(newRoomId));
 
     socketConn.createVideoRoom({
-      peerId: 1,
+      peerId: getPeerId(),
       newRoomId,
     });
   }
 
   console.log(success);
+};
+
+export const joinVideoRoom = async (roomId) => {
+  const success = await getAccessToLocalStream();
+
+  if (success) {
+    store.dispatch(setInRoom(roomId));
+
+    socketConn.joinVideoRoom({
+      roomId,
+      peerId: getPeerId(),
+    });
+  }
 };
 
 export const videoRoomsListHandler = (videoRooms) => {
