@@ -6,6 +6,7 @@ import {
 } from '../../realtimeCommunication/videoRoomsSlice';
 import * as socketConn from '../../socketConnection/socketConn';
 import {
+  disconnect,
   getAccessToLocalStream,
   getPeerId,
 } from '../../realtimeCommunication/webRTCHandler';
@@ -23,8 +24,6 @@ export const createVideoRoom = async () => {
       newRoomId,
     });
   }
-
-  console.log(success);
 };
 
 export const joinVideoRoom = async (roomId) => {
@@ -42,4 +41,13 @@ export const joinVideoRoom = async (roomId) => {
 
 export const videoRoomsListHandler = (videoRooms) => {
   store.dispatch(setRooms(videoRooms));
+};
+
+export const leaveVideoRoom = (roomId) => {
+  disconnect();
+  socketConn.leaveVideoRoom({
+    roomId,
+  });
+
+  store.dispatch(setInRoom(false));
 };
