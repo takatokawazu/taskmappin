@@ -41,8 +41,12 @@ io.on('connection', (socket) => {
     videoRoomJoinHandler(socket, data);
   });
 
+  socket.on('video-room-leave', (data) => {
+    videoRoomLeaveHandler(socket, data);
+  });
+
   socket.on('disconnect', () => {
-    disconnectEventHandler(socket.id);
+    disconnectEventHandler(socket);
   });
 });
 
@@ -50,11 +54,11 @@ server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-const disconnectEventHandler = (id) => {
-  console.log(`user disconnected of the id: ${id}`);
-  removeOnlineUser(id);
-  // removeUserFromVideoRooms(id);
-  broadcastDisconnectedUserDetails(id);
+const disconnectEventHandler = (socket) => {
+  console.log(`user disconnected of the id: ${socket.id}`);
+  checkIfUserIsInCall(socket);
+  removeOnlineUser(socket.id);
+  broadcastDisconnectedUserDetails(socket.id);
 };
 
 const chatMessageHandler = (socket, data) => {
@@ -91,6 +95,34 @@ const removeOnlineUser = (id) => {
   if (onlineUsers[id]) {
     delete onlineUsers[id];
   }
+};
+
+const checkIfUserIsInCall = (socket) => {
+  Object.entries(videoRooms).forEach(([key, value]) => {
+    const participant = value.participants.find(
+      (p) => p.socketId === socket.id
+    );
+
+    if (participant) {
+      removeUserFromTheVideoRoom(socket.id, key);
+    }
+  });
+};
+
+const removeUserFromTheVideoRoom = (socketId, roomId) => {
+  videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
+    (p) => p.socketId !== socketId
+  );
+
+  if (videoRooms[roomId].participants.length < 1) {
+    delete videoRooms[roomId];
+  } else {
+    io.to(videoRooms[roomId].participants[0].socketId).emit(
+      'video-call-disconnect'
+    );
+  }
+
+  broadcastVideoRooms();
 };
 
 const broadcastDisconnectedUserDetails = (disconnectedUserSocketId) => {
@@ -133,9 +165,29 @@ const videoRoomJoinHandler = (socket, data) => {
     ];
 
     broadcastVideoRooms();
-  } else {
-    console.log('something went happened');
   }
+};
+
+const videoRoomLeaveHandler = (socket, data) => {
+  const { roomId } = data;
+
+  if (videoRooms[roomId]) {
+    videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
+      (p) => p.socketId !== socket.id
+    );
+  }
+
+  if (videoRooms[roomId]?.participants.length > 0) {
+    socket
+      .to(videoRooms[roomId].participants[0].socketId)
+      .emit('video-call-disconnect');
+  }
+
+  if (videoRooms[roomId].participants.length < 1) {
+    delete videoRooms[roomId];
+  }
+
+  broadcastVideoRooms();
 };
 
 const convertOnlineUsersToArray = () => {

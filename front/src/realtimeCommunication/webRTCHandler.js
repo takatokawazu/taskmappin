@@ -56,3 +56,18 @@ export const call = (data) => {
     store.dispatch(setRemoteStream(remoteStream));
   });
 };
+
+export const disconnect = () => {
+  console.log(peer.connections);
+  for (let conns in peer.connections) {
+    peer.connections[conns].forEach((c) => {
+      console.log('closing connection');
+      console.log(c);
+      c.peerConnection.close();
+
+      if (c.close) c.close();
+    });
+  }
+
+  store.dispatch(setRemoteStream(null));
+};
