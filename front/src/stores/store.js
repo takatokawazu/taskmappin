@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import mapReducer from '../slices/mapSlice';
-import messagerReducer from '../slices/messangerSlice';
-import videoRoomsReducer from '../slices/videoRoomsSlice';
+import mapReducer from '../redux/slices/mapSlice';
+import messagerReducer from '../redux/slices/messangerSlice';
+import videoRoomsReducer from '../redux/slices/videoRoomsSlice';
 
 const store = configureStore({
   reducer: {

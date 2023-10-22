@@ -7,7 +7,7 @@ import Messanger from '../../components/Messanger/Messanger';
 import ReactMapGL, { GeolocateControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapPage.css';
-import { proceedWithLogin } from '../../redux/actions/loginPageAction';
+import * as socketConn from '../../socketConnection/socketConn';
 import { useParams } from 'react-router-dom';
 import { connectWithSocketIOServer } from '../../socketConnection/socketConn';
 import VideoRooms from '../../components/VideoRooms/VideoRooms';
@@ -72,7 +72,7 @@ const MapPage = () => {
   }, []);
 
   const updateUserLocation = (position) => {
-    proceedWithLogin({
+    socketConn.login({
       username,
       coords: {
         lng:

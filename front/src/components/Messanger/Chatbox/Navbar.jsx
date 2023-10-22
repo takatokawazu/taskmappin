@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import closeIcon from '../../../resources/images/close-icon.svg';
-import { removeChatbox } from '../../../redux/slices/MessagerSlice';
+import { removeChatbox } from '../../../redux/slices/messangerSlice';
 
 const Navbar = ({ username, socketId }) => {
   const dispatch = useDispatch();
