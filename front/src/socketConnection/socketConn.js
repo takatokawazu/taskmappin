@@ -2,9 +2,9 @@ import io from 'socket.io-client';
 import {
   onlineUsersHandler,
   userDisconnectedHandler,
-} from '../stores/actions/usersActions';
-import { chatMessageHandler } from '../stores/actions/messangerActions';
-import { videoRoomsListHandler } from '../stores/actions/videoRoomActions';
+} from '../redux/actions/usersActions';
+import { chatMessageHandler } from '../redux/actions/messangerActions';
+import { videoRoomsListHandler } from '../redux/actions/videoRoomActions';
 import { call, disconnect } from '../realtimeCommunication/webRTCHandler';
 
 let socket = null;
