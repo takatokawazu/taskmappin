@@ -3,6 +3,7 @@ const requestErrorHandler = function (controller) {
     try {
       return await controller(req, res);
     } catch (err) {
+      console.log(err);
       next(err.stack);
     }
   };

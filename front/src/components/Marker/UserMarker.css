@@ -1,0 +1,8 @@
+.border-radius {
+  width: 30px;
+  height: 40px;
+  line-height: 20px;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+}
