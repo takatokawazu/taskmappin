@@ -22,6 +22,7 @@ import TaskPopup from '../../components/TaskPopup/TaskPopup';
 import Navbar from '../../components/Navbar/Navbar';
 
 const libraries = ['places'];
+
 const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
@@ -171,6 +172,8 @@ const MapPage = () => {
     libraries,
   });
 
+  const [open, setOpen] = React.useState(false);
+
   return (
     isLoaded && (
       <div className="map_page_container">
@@ -178,7 +181,7 @@ const MapPage = () => {
         <Map
           mapboxAccessToken={process.env.REACT_APP_MAPBOX}
           {...viewport}
-          style={{ width: '100vw', height: '100vh' }}
+          style={{ width: '100vw', height: '92vh' }}
           mapStyle="mapbox://styles/mapbox/streets-v9"
           onMove={(evt) => setViewport(evt.viewState)}
           onDblClick={handleAddClick}
@@ -198,6 +201,7 @@ const MapPage = () => {
               coords={onlineUser.coords}
               currentUser={username}
               onMarkerClick={(lat, long) => {
+                setOpen(true);
                 setViewport({
                   longitude: long,
                   latitude: lat,
@@ -249,12 +253,15 @@ const MapPage = () => {
         <Messanger />
         {cardChosenOption && currentUserPosition && (
           <UserInfoCard
+            open={open}
+            setOpen={setOpen}
             socketId={cardChosenOption.socketId}
             username={cardChosenOption.username}
             userLocation={cardChosenOption.coords}
             currentUserPosition={currentUserPosition}
           />
         )}
+
         <VideoRooms />
       </div>
     )

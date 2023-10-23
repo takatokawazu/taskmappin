@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import chatIcon from '../../resources/images/chat-icon.svg';
 import { addChatbox } from '../../redux/slices/messangerSlice';
+import { Button } from '@mui/material';
 
-const ChatButton = ({ socketId, username }) => {
+const ChatButton = ({ socketId, username, setOpen }) => {
   const dispatch = useDispatch();
   const handleAddChatbox = () => {
     dispatch(
@@ -15,12 +15,14 @@ const ChatButton = ({ socketId, username }) => {
   };
 
   return (
-    <img
-      src={chatIcon}
-      className="map_page_card_img"
-      onClick={handleAddChatbox}
-      alt={chatIcon}
-    />
+    <Button
+      onClick={() => {
+        setOpen(false);
+        handleAddChatbox();
+      }}
+    >
+      chatする
+    </Button>
   );
 };
 
