@@ -18,13 +18,14 @@ import axios from 'axios';
 
 const defaultTheme = createTheme();
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const userData = {
+      username: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
     };
@@ -32,12 +33,11 @@ const LoginPage = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:3003/api/users/login',
+        'http://localhost:3003/api/users/register',
         userData
       );
-      const username = res.data.username;
-      const token = res.data.token;
-      navigate(`/map/${username}`);
+      console.log(res.data);
+      navigate('/');
     } catch (e) {
       console.log(e);
     }
@@ -64,7 +64,7 @@ const LoginPage = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Register
           </Typography>
           <Box
             component="form"
@@ -72,6 +72,16 @@ const LoginPage = () => {
             noValidate
             sx={{ mt: 1, width: 1 }}
           >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="username"
+              name="name"
+              autoComplete="name"
+              autoFocus
+            />
             <TextField
               margin="normal"
               required
@@ -113,8 +123,8 @@ const LoginPage = () => {
             >
               Sign In
             </Button>
-            <Link href="/register" variant="body2">
-              {"Don't have an account? Sign Up"}
+            <Link href="/" variant="body2">
+              {'You want to log in?'}
             </Link>
           </Box>
         </Box>
@@ -123,4 +133,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

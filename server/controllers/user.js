@@ -1,6 +1,9 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+
+const secretKey = 'abcdefghi';
 
 const registerUser = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
@@ -17,16 +20,34 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const user = await User.findOne({ username: req.body.username });
-  if (!user)
-    return res.status(400).json({ error: 'Wrong username or password' });
+  try {
+    const user = await User.findOne({ email: req.body.email });
 
-  const validPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!user) {
+      return res.status(400).json({ error: 'Wrong username or password' });
+    }
 
-  if (!validPassword)
-    return res.status(400).json({ error: 'Wrong username or password' });
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
 
-  res.status(200).json({ _id: user._id, username: user.username });
+    if (!validPassword) {
+      return res.status(400).json({ error: 'Wrong username or password' });
+    }
+
+    // ユーザーが正常に認証された場合、JWTを生成
+    const token = jwt.sign(
+      { _id: user._id, username: user.username },
+      secretKey
+    );
+
+    // JWTをクライアントに返信
+    res.status(200).json({ token, username: user.username });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 const getUserById = async (req, res) => {
