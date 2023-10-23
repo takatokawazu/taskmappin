@@ -24,6 +24,10 @@ export const connectWithSocketIOServer = () => {
     chatMessageHandler(messageData);
   });
 
+  socket.on('received-tasks', (taskData) => {
+    console.log(taskData);
+  });
+
   socket.on('video-rooms', (videoRooms) => {
     videoRoomsListHandler(videoRooms);
   });

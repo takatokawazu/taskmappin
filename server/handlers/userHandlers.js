@@ -16,8 +16,6 @@ const loginEventHandler = (socket, data, io) => {
     coords: data.coords,
   };
 
-  console.log(onlineUsers);
-
   io.to('logged-users').emit('online-users', convertOnlineUsersToArray());
   broadcastVideoRooms(io);
 };
