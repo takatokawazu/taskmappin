@@ -12,11 +12,10 @@ const NewMessage = ({ socketId }) => {
     setMessage(e.target.value);
   };
 
-  const handleKeyPressed = (e) => {
-    if (e.code === 'Enter' && message.length > 0) {
-      proceedChatMessage();
-      setMessage('');
-    }
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    proceedChatMessage();
+    setMessage('');
   };
 
   const proceedChatMessage = () => {
@@ -29,15 +28,19 @@ const NewMessage = ({ socketId }) => {
 
   return (
     <div className="chatbox_new_message_container">
-      <input
-        className="chatbox_new_message_input"
-        type="text"
-        placeholder="Type your message ..."
-        value={message}
-        onChange={handleMessageValueChange}
-        onKeyDown={handleKeyPressed}
-        disabled={inputDisabled}
-      />
+      <form
+        style={{ height: '40px', width: '100%' }}
+        onSubmit={handleSendMessage}
+      >
+        <input
+          className="chatbox_new_message_input"
+          type="text"
+          placeholder="Type your message ..."
+          value={message}
+          onChange={handleMessageValueChange}
+          disabled={inputDisabled}
+        />
+      </form>
     </div>
   );
 };

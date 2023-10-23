@@ -6,7 +6,14 @@ import './UserMarker.css';
 import myselfImage from '../../resources/icons/myself.png';
 import otherUserImage from '../../resources/icons/otherUser.png';
 
-const UserMarker = ({ myself, socketId, username, coords, currentUser }) => {
+const UserMarker = ({
+  myself,
+  socketId,
+  username,
+  coords,
+  currentUser,
+  onMarkerClick,
+}) => {
   const dispatch = useDispatch();
 
   const handleOptionChoose = () => {
@@ -25,7 +32,13 @@ const UserMarker = ({ myself, socketId, username, coords, currentUser }) => {
   const markerColor = isCurrentUser ? 'red' : 'slateblue';
 
   return (
-    <div className="map_page_marker_container" onClick={handleOptionChoose}>
+    <div
+      className="map_page_marker_container"
+      onClick={() => {
+        onMarkerClick(coords.lat, coords.lng);
+        handleOptionChoose();
+      }}
+    >
       <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
         <div className="border-radius">
           <img

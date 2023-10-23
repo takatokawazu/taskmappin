@@ -51,12 +51,11 @@
 }
 
 .chatbox_new_message_input {
-  width: calc(100% - 10px);
-  height: 100%;
   border: none;
   outline: none;
   background: white;
   font-size: 14px;
+  height: 100%;
 }
 
 .chatbox_close_icon_container {

@@ -1,13 +1,22 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import closeIcon from '../../../resources/images/close-icon.svg';
 import { removeChatbox } from '../../../redux/slices/messangerSlice';
 
 const Navbar = ({ username, socketId }) => {
+  const onlineUsers = useSelector((state) => state.map.onlineUsers);
+
   const dispatch = useDispatch();
   const handleCloseChatbox = () => {
     dispatch(removeChatbox(socketId));
   };
+
+  useEffect(() => {
+    if (onlineUsers.find((user) => user.socketId === socketId)) {
+    } else {
+      handleCloseChatbox();
+    }
+  }, [onlineUsers]);
 
   return (
     <div className="chatbox_nav_bar_container">

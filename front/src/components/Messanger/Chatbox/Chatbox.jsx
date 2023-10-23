@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from './Navbar';
+import ChatNavbar from './ChatNavbar';
 import Messages from './Messages';
 import NewMessage from './NewMessage';
 
@@ -7,7 +7,7 @@ const Chatbox = (props) => {
   const { socketId } = props;
   return (
     <div className="chatbox_container">
-      <Navbar {...props} />
+      <ChatNavbar {...props} />
       <Messages socketId={socketId} />
       <NewMessage socketId={socketId} />
     </div>
