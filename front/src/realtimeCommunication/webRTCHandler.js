@@ -1,5 +1,8 @@
-import { setLocalStream, setRemoteStream } from './videoRoomsSlice';
-import store from '../stores/store';
+import {
+  setLocalStream,
+  setRemoteStream,
+} from '../redux/slices/videoRoomsSlice';
+import store from '../redux/stores/store';
 import { Peer } from 'peerjs';
 
 let peer;
@@ -58,11 +61,9 @@ export const call = (data) => {
 };
 
 export const disconnect = () => {
-  console.log(peer.connections);
   for (let conns in peer.connections) {
     peer.connections[conns].forEach((c) => {
       console.log('closing connection');
-      console.log(c);
       c.peerConnection.close();
 
       if (c.close) c.close();
