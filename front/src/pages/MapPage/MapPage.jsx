@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { LoadScript } from '@react-google-maps/api';
+import { useJsApiLoader } from '@react-google-maps/api';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Map, { GeolocateControl, Popup } from 'react-map-gl';
+import Map, { GeolocateControl } from 'react-map-gl';
 
 import UserMarker from '../../components/Marker/UserMarker';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
@@ -19,7 +19,9 @@ import './MapPage.css';
 import NewTaskPopup from '../../components/TaskPopup/NewTaskPopup';
 import TasksMarker from '../../components/Marker/TasksMarker';
 import TaskPopup from '../../components/TaskPopup/TaskPopup';
+import Navbar from '../../components/Navbar/Navbar';
 
+const libraries = ['places'];
 const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
@@ -164,39 +166,15 @@ const MapPage = () => {
     }
   };
 
-  const handleSearch = async (e) => {
-    if (e.key === 'Enter') {
-      try {
-        const response = await axios.get(
-          `https://maps.googleapis.com/maps/api/geocode/json?address=${state.location}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`
-        );
-
-        if (response.data.results && response.data.results.length > 0) {
-          const { lat, lng } = response.data.results[0].geometry.location;
-          setViewport({
-            longitude: lng,
-            latitude: lat,
-            zoom: 18,
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching geocoding results', error);
-      }
-    }
-  };
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    libraries,
+  });
 
   return (
-    <div className="map_page_container">
-      <input
-        type="text"
-        value={state.location}
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, location: e.target.value }))
-        }
-        onKeyPress={handleSearch}
-        placeholder="Enter a location"
-      />
-      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
+    isLoaded && (
+      <div className="map_page_container">
+        <Navbar state={state} setState={setState} setViewport={setViewport} />
         <Map
           mapboxAccessToken={process.env.REACT_APP_MAPBOX}
           {...viewport}
@@ -219,6 +197,13 @@ const MapPage = () => {
               username={onlineUser.username}
               coords={onlineUser.coords}
               currentUser={username}
+              onMarkerClick={(lat, long) => {
+                setViewport({
+                  longitude: long,
+                  latitude: lat,
+                  zoom: 18,
+                });
+              }}
             />
           ))}
           {state.tasks.map((task) => (
@@ -261,18 +246,18 @@ const MapPage = () => {
             />
           )}
         </Map>
-      </LoadScript>
-      <Messanger />
-      {cardChosenOption && currentUserPosition && (
-        <UserInfoCard
-          socketId={cardChosenOption.socketId}
-          username={cardChosenOption.username}
-          userLocation={cardChosenOption.coords}
-          currentUserPosition={currentUserPosition}
-        />
-      )}
-      <VideoRooms />
-    </div>
+        <Messanger />
+        {cardChosenOption && currentUserPosition && (
+          <UserInfoCard
+            socketId={cardChosenOption.socketId}
+            username={cardChosenOption.username}
+            userLocation={cardChosenOption.coords}
+            currentUserPosition={currentUserPosition}
+          />
+        )}
+        <VideoRooms />
+      </div>
+    )
   );
 };
 
