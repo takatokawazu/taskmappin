@@ -10,7 +10,6 @@ export const sendChatMessage = (receiverSocketId, content) => {
     id: uuid(),
   };
 
-  // socektConnection
   socketConn.sendChatMessage(message);
 
   store.dispatch(

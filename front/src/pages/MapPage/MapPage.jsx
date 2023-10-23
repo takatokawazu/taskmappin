@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Map, { GeolocateControl } from 'react-map-gl';
 
@@ -20,12 +20,15 @@ import NewTaskPopup from '../../components/TaskPopup/NewTaskPopup';
 import TasksMarker from '../../components/Marker/TasksMarker';
 import TaskPopup from '../../components/TaskPopup/TaskPopup';
 import Navbar from '../../components/Navbar/Navbar';
+import { setTask, addTask } from '../../redux/slices/taskSlice';
 
 const libraries = ['places'];
 
 const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
+  const tasks = useSelector((state) => state.task.tasks);
+  const dispatch = useDispatch();
   const { username } = useParams();
   const [currentUserPosition, setCurrentUserPosition] = useState(null);
   const [viewport, setViewport] = useState({
@@ -37,7 +40,6 @@ const MapPage = () => {
   const [state, setState] = useState({
     newPlace: null,
     formFields: { title: '', desc: '', assignedUser: username, deadline: '' },
-    tasks: [],
     currentPlaceId: null,
     assignedUser: '',
     currentUser: username,
@@ -65,7 +67,7 @@ const MapPage = () => {
 
     const timer = setInterval(() => {
       getLocation();
-    }, 5000);
+    }, 3000);
 
     return () => {
       clearInterval(timer);
@@ -95,14 +97,14 @@ const MapPage = () => {
     const fetchTasks = async () => {
       try {
         const response = await axios.get('http://localhost:3003/api/tasks');
-        setState((prev) => ({ ...prev, tasks: response.data }));
+        dispatch(setTask(response.data));
       } catch (error) {
         console.error('Error fetching pins:', error);
       }
     };
 
     fetchTasks();
-  }, []);
+  }, [tasks]);
 
   const updateUserLocation = (position) => {
     socketConn.login({
@@ -144,12 +146,12 @@ const MapPage = () => {
     };
 
     try {
-      const res = await axios.post('http://localhost:3003/api/tasks', newTask);
+      await axios.post('http://localhost:3003/api/tasks', newTask);
       setState((prev) => ({
         ...prev,
-        tasks: [...prev.tasks, res.data],
         newPlace: null,
       }));
+      dispatch(addTask(newTask));
     } catch (error) {
       console.error('Error submitting pin:', error);
     }
@@ -210,34 +212,36 @@ const MapPage = () => {
               }}
             />
           ))}
-          {state.tasks.map((task) => (
-            <div key={task._id}>
-              <TasksMarker
-                task={task}
-                currentUser={state.currentUser}
-                onMarkerClick={(id, lat, long) => {
-                  getUser(task.assignedUser);
-                  setState((prev) => ({
-                    ...prev,
-                    currentPlaceId: id,
-                  }));
-                  setViewport({
-                    longitude: long,
-                    latitude: lat,
-                  });
-                }}
-              />
-              {task._id === state.currentPlaceId && (
-                <TaskPopup
+          {tasks &&
+            tasks.map((task) => (
+              <div key={task._id}>
+                <TasksMarker
                   task={task}
-                  assignedUser={state.assignedUser}
-                  onClose={() =>
-                    setState((prev) => ({ ...prev, currentPlaceId: null }))
-                  }
+                  currentUser={state.currentUser}
+                  onMarkerClick={(id, lat, long) => {
+                    getUser(task.assignedUser);
+                    setState((prev) => ({
+                      ...prev,
+                      currentPlaceId: id,
+                    }));
+                    setViewport({
+                      longitude: long,
+                      latitude: lat,
+                      zoom: 15,
+                    });
+                  }}
                 />
-              )}
-            </div>
-          ))}
+                {task._id === state.currentPlaceId && (
+                  <TaskPopup
+                    task={task}
+                    assignedUser={state.assignedUser}
+                    onClose={() =>
+                      setState((prev) => ({ ...prev, currentPlaceId: null }))
+                    }
+                  />
+                )}
+              </div>
+            ))}
           {state.newPlace && (
             <NewTaskPopup
               longitude={state.newPlace.lng}
