@@ -11,7 +11,6 @@ import {
 import {
   MoreVert,
   Notifications,
-  Mail,
   AccountCircle,
   Search,
   HighlightOffRounded,
