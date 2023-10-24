@@ -168,6 +168,7 @@ const Navbar = ({ state, setState, setViewport }) => {
         anchorEl={anchorEl}
         menuId={menuId}
         handleMenuClose={handleMenuClose}
+        setViewport={setViewport}
       />
     </Box>
   );
