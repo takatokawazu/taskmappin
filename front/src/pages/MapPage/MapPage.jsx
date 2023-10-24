@@ -102,9 +102,8 @@ const MapPage = () => {
         console.error('Error fetching pins:', error);
       }
     };
-
     fetchTasks();
-  }, [tasks]);
+  }, []);
 
   const updateUserLocation = (position) => {
     socketConn.login({

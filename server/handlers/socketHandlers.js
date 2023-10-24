@@ -1,5 +1,4 @@
 const userHandlers = require('./userHandlers');
-const taskHandlers = require('./taskHandlers');
 const videoRoomHandlers = require('./videoRoomHandlers');
 
 const setupSocketHandlers = (io) => {

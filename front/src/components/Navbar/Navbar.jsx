@@ -15,6 +15,7 @@ import {
   AccountCircle,
   Search,
   HighlightOffRounded,
+  People,
 } from '@mui/icons-material';
 import {
   StyledInputBase,
@@ -24,10 +25,13 @@ import {
 import RenderMenu from './RenderMenu';
 import RenderMobileMenu from './RenderMobileMenu';
 import { StandaloneSearchBox } from '@react-google-maps/api';
+import { useSelector } from 'react-redux';
 
 const Navbar = ({ state, setState, setViewport }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const onlineUsers = useSelector((state) => state.map.onlineUsers);
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -46,7 +50,6 @@ const Navbar = ({ state, setState, setViewport }) => {
   };
 
   const menuId = 'primary-search-account-menu';
-
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const inputRef = useRef();
   const handlePlaceChanged = () => {
@@ -115,9 +118,10 @@ const Navbar = ({ state, setState, setViewport }) => {
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
+              onClick={handleProfileMenuOpen}
             >
-              <Badge badgeContent={2} color="error">
-                <Mail />
+              <Badge badgeContent={onlineUsers.length} color="error">
+                <People />
               </Badge>
             </IconButton>
             <IconButton
@@ -135,7 +139,6 @@ const Navbar = ({ state, setState, setViewport }) => {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <AccountCircle />
