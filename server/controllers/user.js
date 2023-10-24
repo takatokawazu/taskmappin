@@ -55,11 +55,18 @@ const getUserById = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.status(400).send('Invalid ObjectId');
   }
-  const user = await User.findById(userId);
+  const user = await User.findById(userId)
+    .populate('createdTasks')
+    .populate('assignedTasks')
+    .populate('completedTasks');
   if (!user) {
     return res.status(404).send('User not found');
   }
-  res.status(200).json(user);
+
+  const userObject = user.toObject();
+  delete userObject.password;
+
+  res.status(200).json(userObject);
 };
 
 module.exports = { registerUser, loginUser, getUserById };
