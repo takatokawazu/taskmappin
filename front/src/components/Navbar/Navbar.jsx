@@ -21,18 +21,30 @@ import {
   SearchIconWrapper,
   SearchStyle,
 } from './NavbarStyles';
-import RenderMenu from './RenderMenu';
+import OnlineUserMenu from './OnlineUserMenu';
 import RenderMobileMenu from './RenderMobileMenu';
+import NotificationMenu from './NotificationMenu';
 import { StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector } from 'react-redux';
 
-const Navbar = ({ state, setState, setViewport }) => {
+const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [notification, setNotification] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
+  const tasks = useSelector((state) => state.task.tasks);
 
+  const assignedTasks = tasks.filter(
+    (task) => task.assignedUser === currentUserId
+  );
+
+  console.log(assignedTasks);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationMenuOpen = (event) => {
+    setNotification(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
@@ -46,6 +58,7 @@ const Navbar = ({ state, setState, setViewport }) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+    setNotification(null);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -115,7 +128,7 @@ const Navbar = ({ state, setState, setViewport }) => {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
+              aria-label="show mails"
               color="inherit"
               onClick={handleProfileMenuOpen}
             >
@@ -125,10 +138,11 @@ const Navbar = ({ state, setState, setViewport }) => {
             </IconButton>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label="show notifications"
               color="inherit"
+              onClick={handleNotificationMenuOpen}
             >
-              <Badge badgeContent={2} color="error">
+              <Badge badgeContent={assignedTasks.length} color="error">
                 <Notifications />
               </Badge>
             </IconButton>
@@ -163,11 +177,17 @@ const Navbar = ({ state, setState, setViewport }) => {
         setMobileMoreAnchorEl={setMobileMoreAnchorEl}
         handleProfileMenuOpen={handleProfileMenuOpen}
       />
-      <RenderMenu
+      <OnlineUserMenu
         anchorEl={anchorEl}
         menuId={menuId}
         handleMenuClose={handleMenuClose}
         setViewport={setViewport}
+      />
+      <NotificationMenu
+        notification={notification}
+        handleMenuClose={handleMenuClose}
+        setViewport={setViewport}
+        assignedTasks={assignedTasks}
       />
     </Box>
   );

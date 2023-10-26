@@ -29,6 +29,8 @@ const MapPage = () => {
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
   const tasks = useSelector((state) => state.task.tasks);
   const { username } = useParams();
+  const [currentUserId, setCurrentUserId] = useState('');
+
   const [currentUserPosition, setCurrentUserPosition] = useState(null);
   const [viewport, setViewport] = useState({
     longitude: process.env.REACT_APP_DEFAULT_LONTITUDE,
@@ -73,26 +75,34 @@ const MapPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchData = () => {
-      connectWithSocketIOServer();
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            updateUserLocation(position);
-          },
-          (error) => {
-            console.error('位置情報の取得に失敗しました: ' + error.message);
-          }
-        );
-      } else {
-        console.error('このブラウザは位置情報をサポートしていません。');
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = () => {
+  //     connectWithSocketIOServer();
+  //     if ('geolocation' in navigator) {
+  //       navigator.geolocation.getCurrentPosition(
+  //         (position) => {
+  //           updateUserLocation(position);
+  //         },
+  //         (error) => {
+  //           console.error('位置情報の取得に失敗しました: ' + error.message);
+  //         }
+  //       );
+  //     } else {
+  //       console.error('このブラウザは位置情報をサポートしていません。');
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
-  console.log(tasks);
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const res = await axios.get(
+        `http://localhost:3003/api/users/name/${username}`
+      );
+      setCurrentUserId(res.data._id);
+    };
+    fetchUserId();
+  }, []);
 
   const updateUserLocation = (position) => {
     socketConn.login({
@@ -144,7 +154,9 @@ const MapPage = () => {
 
   const getUser = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3003/api/users/${id}`);
+      const response = await axios.get(
+        `http://localhost:3003/api/users/id/${id}`
+      );
       setState((prev) => ({
         ...prev,
         assignedUser: response.data.username,
@@ -164,7 +176,12 @@ const MapPage = () => {
   return (
     isLoaded && (
       <div className="map_page_container">
-        <Navbar state={state} setState={setState} setViewport={setViewport} />
+        <Navbar
+          state={state}
+          setState={setState}
+          setViewport={setViewport}
+          currentUserId={currentUserId}
+        />
         <Map
           mapboxAccessToken={process.env.REACT_APP_MAPBOX}
           {...viewport}

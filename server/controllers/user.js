@@ -69,4 +69,12 @@ const getUserById = async (req, res) => {
   res.status(200).json(userObject);
 };
 
-module.exports = { registerUser, loginUser, getUserById };
+const getUserByName = async (req, res) => {
+  const user = await User.findOne({ username: req.params.user });
+  if (!user) {
+    return res.status(400).json({ error: 'Wrong username or password' });
+  }
+  res.status(200).json(user);
+};
+
+module.exports = { registerUser, loginUser, getUserById, getUserByName };

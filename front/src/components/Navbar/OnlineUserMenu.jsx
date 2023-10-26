@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addChatbox } from '../../redux/slices/messangerSlice';
 import { useParams } from 'react-router-dom';
 
-const RenderMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
+const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
   const isMenuOpen = Boolean(anchorEl);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const currentUser = useParams().username;
@@ -21,7 +21,6 @@ const RenderMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
     }
   };
 
-  console.log(onlineUsers);
   return (
     <Menu
       anchorEl={anchorEl}
@@ -58,4 +57,4 @@ const RenderMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
   );
 };
 
-export default RenderMenu;
+export default OnlineUserMenu;
