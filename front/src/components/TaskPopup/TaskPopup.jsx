@@ -3,19 +3,16 @@ import TimeAgo from 'timeago-react';
 import { Popup } from 'react-map-gl';
 import { Box, Button, CardContent, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { connectWithSocketIOServer } from '../../socketConnection/socketConn';
+import { completeTask } from '../../redux/actions/taskActions';
 
 const TaskPopup = ({ task, assignedUser, onClose }) => {
   const username = useParams();
-
-  const completeTask = async (e) => {
+  const handleComplateTask = async (e) => {
+    completeTask(task, username);
+    connectWithSocketIOServer();
     e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3003/api/tasks/${task._id}`, username);
-      onClose();
-    } catch (e) {
-      console.log(e);
-    }
+    onClose();
   };
 
   return (
@@ -46,7 +43,7 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
         </Typography>
       </CardContent>
       <Box textAlign="center">
-        <Button variant="contained" onClick={completeTask}>
+        <Button variant="contained" onClick={handleComplateTask}>
           完了する
         </Button>
       </Box>

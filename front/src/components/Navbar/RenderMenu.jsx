@@ -40,6 +40,7 @@ const RenderMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
     >
       {onlineUsers.map((onlineUser) => (
         <MenuItem
+          key={onlineUser.socketId}
           onClick={() => {
             handleMenuClose();
             handleAddChatbox(onlineUser.username, onlineUser.socketId);

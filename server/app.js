@@ -2,9 +2,10 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
-const setupSocketHandlers = require('./handlers/socketHandlers');
+const { default: mongoose } = require('mongoose');
 const app = express();
 const server = http.createServer(app);
+require('dotenv').config();
 
 app.use(cors());
 
@@ -15,6 +16,4 @@ const io = new Server(server, {
   },
 });
 
-setupSocketHandlers(io);
-
-module.exports = { app, server };
+module.exports = { app, server, io, mongoose };
