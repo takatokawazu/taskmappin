@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Map, { GeolocateControl } from 'react-map-gl';
 
@@ -20,7 +20,7 @@ import NewTaskPopup from '../../components/TaskPopup/NewTaskPopup';
 import TasksMarker from '../../components/Marker/TasksMarker';
 import TaskPopup from '../../components/TaskPopup/TaskPopup';
 import Navbar from '../../components/Navbar/Navbar';
-import { setTask, addTask } from '../../redux/slices/taskSlice';
+import { addTaskHandler } from '../../redux/actions/taskActions';
 
 const libraries = ['places'];
 
@@ -28,7 +28,6 @@ const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
   const tasks = useSelector((state) => state.task.tasks);
-  const dispatch = useDispatch();
   const { username } = useParams();
   const [currentUserPosition, setCurrentUserPosition] = useState(null);
   const [viewport, setViewport] = useState({
@@ -93,17 +92,7 @@ const MapPage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get('http://localhost:3003/api/tasks');
-        dispatch(setTask(response.data));
-      } catch (error) {
-        console.error('Error fetching pins:', error);
-      }
-    };
-    fetchTasks();
-  }, []);
+  console.log(tasks);
 
   const updateUserLocation = (position) => {
     socketConn.login({
@@ -145,15 +134,12 @@ const MapPage = () => {
     };
 
     try {
-      await axios.post('http://localhost:3003/api/tasks', newTask);
-      setState((prev) => ({
-        ...prev,
-        newPlace: null,
-      }));
-      dispatch(addTask(newTask));
+      addTaskHandler(newTask);
+      connectWithSocketIOServer();
     } catch (error) {
       console.error('Error submitting pin:', error);
     }
+    setState((prev) => ({ ...prev, newPlace: null }));
   };
 
   const getUser = async (id) => {
@@ -245,7 +231,6 @@ const MapPage = () => {
             <NewTaskPopup
               longitude={state.newPlace.lng}
               latitude={state.newPlace.lat}
-              onClose={() => setState((prev) => ({ ...prev, newPlace: null }))}
               onSubmit={handleSubmit}
               onlineUsers={onlineUsers}
               handleFormFieldChange={handleFormFieldChange}
