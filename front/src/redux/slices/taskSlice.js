@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   tasks: [],
+  finishedTasks: [],
 };
 
 export const taskSlice = createSlice({
@@ -12,15 +13,19 @@ export const taskSlice = createSlice({
       state.tasks.push(action.payload);
     },
     setTask: (state, action) => {
-      state.tasks = action.payload;
+      state.finishedTasks = action.payload.filter((task) => task.isDone);
+      state.tasks = action.payload.filter((task) => !task.isDone);
     },
     completeTask: (state, action) => {
-      state.tasks = state.tasks.map((task) => {
-        if (task.taskId === action.payload.taskId) {
-          return action.payload;
-        }
-        return task;
-      });
+      state.tasks = state.tasks.filter(
+        (task) => task._id !== action.payload._id
+      );
+      const completedTask = state.tasks.find(
+        (task) => task._id === action.payload._id
+      );
+      if (completedTask) {
+        state.finishedTasks.push(completedTask);
+      }
     },
   },
 });

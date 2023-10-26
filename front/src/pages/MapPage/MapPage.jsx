@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Map, { GeolocateControl } from 'react-map-gl';
 
@@ -139,6 +139,7 @@ const MapPage = () => {
     } catch (error) {
       console.error('Error submitting pin:', error);
     }
+    setState((prev) => ({ ...prev, newPlace: null }));
   };
 
   const getUser = async (id) => {
@@ -230,7 +231,6 @@ const MapPage = () => {
             <NewTaskPopup
               longitude={state.newPlace.lng}
               latitude={state.newPlace.lat}
-              onClose={() => setState((prev) => ({ ...prev, newPlace: null }))}
               onSubmit={handleSubmit}
               onlineUsers={onlineUsers}
               handleFormFieldChange={handleFormFieldChange}
