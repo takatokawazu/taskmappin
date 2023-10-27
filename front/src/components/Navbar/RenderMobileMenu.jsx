@@ -6,6 +6,7 @@ import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useSelector } from 'react-redux';
 
 const RenderMobileMenu = ({
   mobileMenuId,
@@ -14,6 +15,7 @@ const RenderMobileMenu = ({
   handleProfileMenuOpen,
 }) => {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const onlineUsers = useSelector((state) => state.map.onlineUsers);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -35,9 +37,9 @@ const RenderMobileMenu = ({
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton size="large" aria-label="show mails" color="inherit">
+          <Badge badgeContent={onlineUsers.length} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
@@ -55,7 +57,7 @@ const RenderMobileMenu = ({
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem>
         <IconButton
           size="large"
           aria-label="account of current user"

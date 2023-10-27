@@ -36,7 +36,10 @@ const registerTask = async (req, res) => {
 };
 
 const getAllTasks = async (req, res) => {
-  const tasks = await Task.find();
+  const tasks = await Task.find()
+    .populate('assignedUser')
+    .populate('auther')
+    .populate('completedBy');
   res.status(200).json(tasks);
 };
 
