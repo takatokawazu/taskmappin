@@ -70,7 +70,10 @@ const getUserById = async (req, res) => {
 };
 
 const getUserByName = async (req, res) => {
-  const user = await User.findOne({ username: req.params.user });
+  const user = await User.findOne({ username: req.params.user })
+    .populate('createdTasks')
+    .populate('assignedTasks')
+    .populate('completedTasks');
   if (!user) {
     return res.status(400).json({ error: 'Wrong username or password' });
   }

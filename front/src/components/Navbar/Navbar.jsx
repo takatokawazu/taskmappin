@@ -26,6 +26,7 @@ import RenderMobileMenu from './RenderMobileMenu';
 import NotificationMenu from './NotificationMenu';
 import { StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -33,12 +34,13 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const tasks = useSelector((state) => state.task.tasks);
+  const { username } = useParams();
+  const navigate = useNavigate();
 
   const assignedTasks = tasks.filter(
     (task) => task.assignedUser === currentUserId
   );
 
-  console.log(assignedTasks);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -81,6 +83,10 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   const clearInput = () => {
     setInputValue('');
     setState((prev) => ({ ...prev, location: '' }));
+  };
+
+  const handleAdminPage = () => {
+    navigate(`/admin/${username}`);
   };
 
   return (
@@ -153,6 +159,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
               aria-controls={menuId}
               aria-haspopup="true"
               color="inherit"
+              onClick={handleAdminPage}
             >
               <AccountCircle />
             </IconButton>
