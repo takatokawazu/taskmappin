@@ -18,8 +18,10 @@ const columns = [
   { field: 'isDone', headerName: 'Is Done', width: 100 },
 ];
 
+const API_BASE_URL = 'http://localhost:3003/api';
+
 export default function AdminPage() {
-  const [selectedButton, setSelectedButton] = React.useState('all tasks');
+  const [selectedButton, setSelectedButton] = useState('all tasks');
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [createdTasks, setCreatedTasks] = useState([]);
   const [myCompletedTasks, setMyCompletedTasks] = useState([]);
@@ -30,105 +32,36 @@ export default function AdminPage() {
   const { username } = useParams();
 
   useEffect(() => {
+    const mapTasks = (tasks) =>
+      tasks.map((item, index) => ({
+        ...item,
+        id: index + 1,
+        assignedUser: item.assignedUser.username,
+        completedBy: item.completedBy ? item.completedBy.username : 'not yet',
+        createdAt: formatDateTime(item.createdAt),
+        deadline: formatDateTime(item.deadline),
+      }));
+
     const fetchData = async () => {
-      const res1 = await axios.get('http://localhost:3003/api/tasks');
-      const allT = res1.data;
-      setAllTasks(
-        allT.map((item, index) => {
-          console.log(item);
-          return {
-            ...item,
-            id: index + 1,
-            assignedUser: item.assignedUser.username,
-            completedBy: item.completedBy
-              ? item.completedBy.username
-              : 'not yet',
-            createdAt: formatDateTime(item.createdAt),
-            deadline: formatDateTime(item.deadline),
-          };
-        })
-      );
+      const { data: allTasksData } = await axios.get(`${API_BASE_URL}/tasks`);
 
-      setCompletedTasks(
-        allT
-          .filter((task) => task.isDone)
-          .map((item, index) => {
-            return {
-              ...item,
-              id: index + 1,
-              assignedUser: item.assignedUser.username,
-              completedBy: item.completedBy
-                ? item.completedBy.username
-                : 'not yet',
-              createdAt: formatDateTime(item.createdAt),
-              deadline: formatDateTime(item.deadline),
-            };
-          })
-      );
-
+      setAllTasks(mapTasks(allTasksData));
+      setCompletedTasks(mapTasks(allTasksData.filter((task) => task.isDone)));
       setUncompletedTasks(
-        allT
-          .filter((task) => !task.isDone)
-          .map((item, index) => {
-            return {
-              ...item,
-              id: index + 1,
-              assignedUser: item.assignedUser.username,
-              completedBy: item.completedBy
-                ? item.completedBy.username
-                : 'not yet',
-              createdAt: formatDateTime(item.createdAt),
-              deadline: formatDateTime(item.deadline),
-            };
-          })
+        mapTasks(allTasksData.filter((task) => !task.isDone))
       );
 
-      const res = await axios.get(
-        `http://localhost:3003/api/users/name/${username}`
+      const { data: userData } = await axios.get(
+        `${API_BASE_URL}/users/name/${username}`
       );
 
-      const assignedT = res.data.assignedTasks;
-      console.log(assignedT);
-      setAssignedTasks(
-        assignedT.map((item, index) => {
-          return {
-            ...item,
-            id: index + 1,
-            assignedUser: item.assignedUser.username,
-            createdAt: formatDateTime(item.createdAt),
-            deadline: formatDateTime(item.deadline),
-          };
-        })
-      );
-
-      const createdT = res.data.createdTasks;
-      setCreatedTasks(
-        createdT.map((item, index) => {
-          return {
-            ...item,
-            id: index + 1,
-            assignedUser: item.assignedUser.username,
-            createdAt: formatDateTime(item.createdAt),
-            deadline: formatDateTime(item.deadline),
-          };
-        })
-      );
-
-      const completedT = res.data.completedTasks;
-      setMyCompletedTasks(
-        completedT.map((item, index) => {
-          return {
-            ...item,
-            id: index + 1,
-            assignedUser: item.assignedUser.username,
-            createdAt: formatDateTime(item.createdAt),
-            deadline: formatDateTime(item.deadline),
-          };
-        })
-      );
+      setAssignedTasks(mapTasks(userData.assignedTasks));
+      setCreatedTasks(mapTasks(userData.createdTasks));
+      setMyCompletedTasks(mapTasks(userData.completedTasks));
     };
+
     fetchData();
-  }, []);
+  }, [username]);
 
   return (
     <div>
@@ -137,17 +70,14 @@ export default function AdminPage() {
         <AdminButton setSelectedButton={setSelectedButton} />
         <DataGrid
           rows={
-            selectedButton === 'all tasks'
-              ? allTasks
-              : selectedButton === 'my completed tasks'
-              ? myCompletedTasks
-              : selectedButton === 'completed tasks'
-              ? completedTasks
-              : selectedButton === 'created tasks'
-              ? createdTasks
-              : selectedButton === 'assigned tasks'
-              ? assignedTasks
-              : uncompletedTasks
+            {
+              'all tasks': allTasks,
+              'my completed tasks': myCompletedTasks,
+              'completed tasks': completedTasks,
+              'created tasks': createdTasks,
+              'assigned tasks': assignedTasks,
+              'uncompleted tasks': uncompletedTasks,
+            }[selectedButton] || []
           }
           columns={columns}
           initialState={{
