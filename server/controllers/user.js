@@ -71,9 +71,45 @@ const getUserById = async (req, res) => {
 
 const getUserByName = async (req, res) => {
   const user = await User.findOne({ username: req.params.user })
-    .populate('createdTasks')
-    .populate('assignedTasks')
-    .populate('completedTasks');
+    .populate({
+      path: 'createdTasks',
+      populate: [
+        {
+          path: 'assignedUser',
+          select: 'username',
+        },
+        {
+          path: 'completedBy',
+          select: 'username',
+        },
+      ],
+    })
+    .populate({
+      path: 'assignedTasks',
+      populate: [
+        {
+          path: 'assignedUser',
+          select: 'username',
+        },
+        {
+          path: 'completedBy',
+          select: 'username',
+        },
+      ],
+    })
+    .populate({
+      path: 'completedTasks',
+      populate: [
+        {
+          path: 'completedBy',
+          select: 'username',
+        },
+        {
+          path: 'assignedUser',
+          select: 'username',
+        },
+      ],
+    });
   if (!user) {
     return res.status(400).json({ error: 'Wrong username or password' });
   }
