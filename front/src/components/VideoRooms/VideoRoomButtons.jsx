@@ -11,6 +11,7 @@ import {
   setIsMicOn,
   setLocalStream,
 } from '../../redux/slices/videoRoomsSlice';
+import { Box, Button } from '@mui/material';
 
 const VideoRoomButtons = ({ inRoom }) => {
   const isMicOn = useSelector((state) => state.videoRooms.isMicOn);
@@ -43,27 +44,68 @@ const VideoRoomButtons = ({ inRoom }) => {
   };
 
   return (
-    <div className="m_page_v_rooms_video_buttons_container">
-      <button
+    <Box
+      sx={{ display: 'flex', width: '100%', justifyContent: 'space-evenly' }}
+    >
+      <Button
         onClick={handleMuteUnmuteChange}
-        className="m_page_v_rooms_video_button"
+        variant="contained"
+        color="primary"
+        sx={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50px',
+          fontSize: '16px',
+          border: 'none',
+          transition: '0.3s',
+          '&:hover': {
+            opacity: 0.6,
+          },
+        }}
       >
         <img src={isMicOn ? micIcon : micOffIcon} width="25px" height="25px" />
-      </button>
-      <button onClick={handleLeaveRoom} className="m_page_v_rooms_video_button">
+      </Button>
+      <Button
+        onClick={handleLeaveRoom}
+        variant="contained"
+        color="primary"
+        sx={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50px',
+          fontSize: '16px',
+          border: 'none',
+          transition: '0.3s',
+          '&:hover': {
+            opacity: 0.6,
+          },
+        }}
+      >
         <img src={disconnectIcon} width="25px" height="25px" />
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={handleCameraOnOffChange}
-        className="m_page_v_rooms_video_button"
+        variant="contained"
+        color="primary"
+        sx={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50px',
+          fontSize: '16px',
+          border: 'none',
+          transition: '0.3s',
+          '&:hover': {
+            opacity: 0.6,
+          },
+        }}
       >
         <img
           src={isCameraOn ? cameraIcon : cameraOffIcon}
           width="25px"
           height="25px"
         />
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 

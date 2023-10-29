@@ -1,14 +1,22 @@
 import React from 'react';
 
-import './Messanger.css';
 import Chatbox from './Chatbox/Chatbox';
 import { useSelector } from 'react-redux';
+import { Box } from '@mui/material';
 
 const Messanger = () => {
   const chatboxes = useSelector((state) => state.messanger.chatboxes);
 
   return (
-    <div className="messenger_container">
+    <Box
+      sx={{
+        height: 400,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        display: 'flex',
+      }}
+    >
       {chatboxes.map((chatbox) => (
         <Chatbox
           key={chatbox.socketId}
@@ -16,7 +24,7 @@ const Messanger = () => {
           username={chatbox.username}
         />
       ))}
-    </div>
+    </Box>
   );
 };
 
