@@ -13,6 +13,9 @@ const RenderMobileMenu = ({
   mobileMoreAnchorEl,
   setMobileMoreAnchorEl,
   handleProfileMenuOpen,
+  handleNotificationMenuOpen,
+  assignedTasks,
+  handleAdminPage,
 }) => {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
@@ -45,19 +48,19 @@ const RenderMobileMenu = ({
         </IconButton>
         <p>Messages</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={handleNotificationMenuOpen}>
         <IconButton
           size="large"
-          aria-label="show 17 new notifications"
+          aria-label="show notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={assignedTasks.length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={handleAdminPage}>
         <IconButton
           size="large"
           aria-label="account of current user"

@@ -21,6 +21,7 @@ import TasksMarker from '../../components/Marker/TasksMarker';
 import TaskPopup from '../../components/TaskPopup/TaskPopup';
 import Navbar from '../../components/Navbar/Navbar';
 import { addTaskHandler } from '../../redux/actions/taskActions';
+import { Box } from '@mui/material';
 
 const libraries = ['places'];
 
@@ -175,7 +176,7 @@ const MapPage = () => {
 
   return (
     isLoaded && (
-      <div className="map_page_container">
+      <Box sx={{ height: '100vh', width: '100%' }}>
         <Navbar
           state={state}
           setState={setState}
@@ -251,7 +252,7 @@ const MapPage = () => {
               onSubmit={handleSubmit}
               onlineUsers={onlineUsers}
               handleFormFieldChange={handleFormFieldChange}
-              formFields={state.formFields}
+              onClose={() => setState((prev) => ({ ...prev, newPlace: null }))}
             />
           )}
         </Map>
@@ -268,7 +269,7 @@ const MapPage = () => {
         )}
 
         <VideoRooms />
-      </div>
+      </Box>
     )
   );
 };

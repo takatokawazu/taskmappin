@@ -1,5 +1,14 @@
 import React from 'react';
 import { Popup } from 'react-map-gl';
+import {
+  Box,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Button,
+} from '@mui/material';
+
 const NewTaskPopup = ({
   longitude,
   latitude,
@@ -15,38 +24,106 @@ const NewTaskPopup = ({
       anchor="left"
       onClose={onClose}
     >
-      <div>
+      <Box p={2}>
         <form onSubmit={onSubmit}>
-          <label>タイトル</label>
-          <input
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'tomato',
+              fontSize: '13px',
+              borderBottom: '0.5px solid tomato',
+              mb: '2px',
+            }}
+          >
+            タイトル
+          </Typography>
+          <TextField
             placeholder="Enter a title"
+            fullWidth
+            size="small"
+            variant="outlined"
             onChange={(e) => handleFormFieldChange('title', e.target.value)}
           />
-          <label>説明</label>
-          <textarea
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'tomato',
+              fontSize: '13px',
+              borderBottom: '0.5px solid tomato',
+              mb: '2px',
+            }}
+          >
+            説明
+          </Typography>
+          <TextField
+            id="outlined-multiline-flexible"
+            multiline
             placeholder="Say us something about this place"
+            size="small"
+            fullWidth
+            minRows={3}
+            maxRows={6}
             onChange={(e) => handleFormFieldChange('desc', e.target.value)}
           />
-          <label>誰にして欲しい？</label>
-          <select
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'tomato',
+              fontSize: '13px',
+              borderBottom: '0.5px solid tomato',
+              mb: '2px',
+            }}
+          >
+            誰がする？
+          </Typography>
+          <Select
+            fullWidth
+            variant="outlined"
+            size="small"
             onChange={(e) =>
               handleFormFieldChange('assignedUser', e.target.value)
             }
           >
             {onlineUsers.map((user) => (
-              <option key={user.socketId} value={user.username}>
+              <MenuItem key={user.socketId} value={user.username}>
                 {user.username}
-              </option>
+              </MenuItem>
             ))}
-          </select>
-          <label>締め切り日</label>
-          <input
+          </Select>
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'tomato',
+              fontSize: '13px',
+              borderBottom: '0.5px solid tomato',
+              mb: '2px',
+            }}
+          >
+            締め切り日
+          </Typography>
+          <TextField
             type="date"
+            fullWidth
+            size="small"
+            variant="outlined"
             onChange={(e) => handleFormFieldChange('deadline', e.target.value)}
           />
-          <button className="submitButton">仕事を追加する</button>
+          <Button
+            type="submit"
+            className="submitButton"
+            fullWidth
+            size="small"
+            sx={{
+              mt: 2,
+              backgroundColor: 'tomato',
+              color: 'white',
+              '&:hover': { backgroundColor: 'tomato', opacity: 0.8 },
+            }}
+          >
+            仕事を追加する
+          </Button>
         </form>
-      </div>
+      </Box>
     </Popup>
   );
 };

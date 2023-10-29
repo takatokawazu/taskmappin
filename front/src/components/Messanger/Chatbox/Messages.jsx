@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import SingleMessage from './SingleMessage';
 import { useSelector } from 'react-redux';
+import { Box } from '@mui/material';
 
 const Messages = ({ socketId }) => {
   const messages = useSelector(
@@ -16,7 +17,15 @@ const Messages = ({ socketId }) => {
   useEffect(scrollToBottom, [messages]);
 
   return (
-    <div className="chatbox_messages_container">
+    <Box
+      sx={{
+        width: '100%',
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'auto',
+      }}
+    >
       {messages?.map((message) => (
         <SingleMessage
           key={message.id}
@@ -25,7 +34,7 @@ const Messages = ({ socketId }) => {
         />
       ))}
       <div ref={scrollRef}></div>
-    </div>
+    </Box>
   );
 };
 

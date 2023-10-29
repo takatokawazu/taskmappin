@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import React, { useRef, useEffect } from 'react';
 
 const Video = ({ stream, muted }) => {
@@ -13,7 +14,18 @@ const Video = ({ stream, muted }) => {
   }, [stream]);
 
   return (
-    <div className="map_page_v_rooms_video_container">
+    <Box
+      sx={{
+        height: '200px',
+        width: '250px',
+        backgroundColor: 'black',
+        marginBottom: '10px',
+        borderRadius: '10px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <video
         ref={videoEl}
         width="98%"
@@ -22,7 +34,7 @@ const Video = ({ stream, muted }) => {
         autoPlay
         muted={muted}
       />
-    </div>
+    </Box>
   );
 };
 

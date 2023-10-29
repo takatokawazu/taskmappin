@@ -2,9 +2,9 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setCardChosenOption } from '../../redux/slices/mapSlice';
 import { Marker } from 'react-map-gl';
-import './UserMarker.css';
 import myselfImage from '../../resources/icons/myself.png';
 import otherUserImage from '../../resources/icons/otherUser.png';
+import { Box } from '@mui/material';
 
 const UserMarker = ({
   myself,
@@ -32,15 +32,33 @@ const UserMarker = ({
   const markerColor = isCurrentUser ? 'red' : 'slateblue';
 
   return (
-    <div
-      className="map_page_marker_container"
+    <Box
+      sx={{ width: '30px', height: '30px', position: 'relative' }}
       onClick={() => {
         onMarkerClick(coords.lat, coords.lng);
         handleOptionChoose();
       }}
     >
       <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
-        <div className="border-radius">
+        <Box
+          sx={{
+            width: '30px',
+            height: '40px',
+            lineHeight: '20px',
+            borderRadius: '50%',
+            color: '#fff',
+            textAlign: 'center',
+            '& p': {
+              fontSize: '13px',
+              color: 'white',
+              fontWeight: 700,
+              verticalAlign: 'text-top',
+              textAlign: 'center',
+              margin: 0,
+              padding: 0,
+            },
+          }}
+        >
           <img
             src={myself ? myselfImage : otherUserImage}
             alt={myself ? 'myself' : 'otherUser'}
@@ -52,12 +70,10 @@ const UserMarker = ({
               cursor: 'pointer',
             }}
           />
-          <p className="map_page_marker_text" style={{ color: markerColor }}>
-            {myself ? 'Me' : username}
-          </p>
-        </div>
+          <p style={{ color: markerColor }}>{myself ? 'Me' : username}</p>
+        </Box>
       </Marker>
-    </div>
+    </Box>
   );
 };
 

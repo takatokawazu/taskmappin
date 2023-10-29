@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import callIcon from '../../resources/images/call-icon.svg';
 import { createVideoRoom } from '../../redux/actions/videoRoomActions';
+import { Call } from '@mui/icons-material/';
+import { Button } from '@mui/material';
 
 const CreateRoomButton = () => {
   const inRoom = useSelector((state) => state.videoRooms.inRoom);
@@ -15,11 +16,29 @@ const CreateRoomButton = () => {
   };
 
   return (
-    <img
-      className="map_page_card_img"
-      src={callIcon}
-      onClick={handleRoomCreate}
-    />
+    <>
+      <Button
+        onClick={handleRoomCreate}
+        variant="contained"
+        color="primary"
+        sx={{
+          width: '45px',
+          height: '45px',
+          marginRight: '15px',
+          borderRadius: '50px',
+          fontSize: '24px',
+          transition: '0.3s',
+          '&:hover': {
+            opacity: 0.6,
+          },
+          '&:active': {
+            backgroundColor: 'black',
+          },
+        }}
+      >
+        <Call />
+      </Button>
+    </>
   );
 };
 

@@ -113,9 +113,9 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
                 <StyledInputBase
                   placeholder="Search…"
                   inputProps={{ 'aria-label': 'search' }}
-                  value={state.location} // ステート変数を使用
+                  value={state.location}
                   onChange={(e) => {
-                    setInputValue(e.target.value); // ステート変数を更新
+                    setInputValue(e.target.value);
                     setState((prev) => ({ ...prev, location: e.target.value }));
                   }}
                 />
@@ -183,6 +183,9 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
         mobileMoreAnchorEl={mobileMoreAnchorEl}
         setMobileMoreAnchorEl={setMobileMoreAnchorEl}
         handleProfileMenuOpen={handleProfileMenuOpen}
+        handleNotificationMenuOpen={handleNotificationMenuOpen}
+        assignedTasks={assignedTasks}
+        handleAdminPage={handleAdminPage}
       />
       <OnlineUserMenu
         anchorEl={anchorEl}
@@ -190,12 +193,14 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
         handleMenuClose={handleMenuClose}
         setViewport={setViewport}
       />
-      <NotificationMenu
-        notification={notification}
-        handleMenuClose={handleMenuClose}
-        setViewport={setViewport}
-        assignedTasks={assignedTasks}
-      />
+      {assignedTasks.length != 0 && (
+        <NotificationMenu
+          notification={notification}
+          handleMenuClose={handleMenuClose}
+          setViewport={setViewport}
+          assignedTasks={assignedTasks}
+        />
+      )}
     </Box>
   );
 };

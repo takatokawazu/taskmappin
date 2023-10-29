@@ -9,7 +9,6 @@ const NotificationMenu = ({
   assignedTasks,
 }) => {
   const isMenuOpen = Boolean(notification);
-
   return (
     <Menu
       notification={notification}

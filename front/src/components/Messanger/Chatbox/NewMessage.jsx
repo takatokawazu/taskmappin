@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { sendChatMessage } from '../../../redux/actions/messangerActions';
 import { useSelector } from 'react-redux';
+import { Box, TextField } from '@mui/material';
 
 const NewMessage = ({ socketId }) => {
   const [message, setMessage] = useState('');
@@ -27,21 +28,53 @@ const NewMessage = ({ socketId }) => {
   };
 
   return (
-    <div className="chatbox_new_message_container">
+    <Box
+      sx={{
+        width: '100%',
+        minHeight: '40px',
+        borderTop: '1px solid #e5e5e5',
+      }}
+    >
       <form
         style={{ height: '40px', width: '100%' }}
         onSubmit={handleSendMessage}
       >
-        <input
-          className="chatbox_new_message_input"
-          type="text"
+        <TextField
+          variant="outlined"
+          fullWidth
           placeholder="Type your message ..."
           value={message}
           onChange={handleMessageValueChange}
           disabled={inputDisabled}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                border: 'none',
+              },
+              '&:hover fieldset': {
+                border: 'none',
+              },
+              '&.Mui-focused fieldset': {
+                border: 'none',
+              },
+            },
+            '& input': {
+              height: '40px',
+              padding: '0px',
+            },
+          }}
+          style={{
+            height: '100%',
+            width: '100%',
+          }}
+          InputProps={{
+            sx: {
+              height: '40px',
+            },
+          }}
         />
       </form>
-    </div>
+    </Box>
   );
 };
 
