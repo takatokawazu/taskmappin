@@ -11,7 +11,7 @@ const App = () => {
   const { loggedIn, user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
+
   useEffect(() => {
     if (loggedIn === true && user) {
       if (location.pathname !== `/admin/${user.username}`) {

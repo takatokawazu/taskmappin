@@ -74,11 +74,17 @@ const loginUser = async (req, res) => {
     { _id: user._id, username: user.username },
     process.env.JWT_SECRET
   );
+
+  const userData = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+  };
   res
     .cookie('token', token, {
       httpOnly: true,
     })
-    .json({ token, user });
+    .json({ user: userData });
 };
 
 const loggedIn = async (req, res) => {

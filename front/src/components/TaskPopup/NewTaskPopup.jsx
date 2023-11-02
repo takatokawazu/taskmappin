@@ -14,6 +14,7 @@ const NewTaskPopup = ({
   latitude,
   onClose,
   onSubmit,
+  formFields,
   onlineUsers,
   handleFormFieldChange,
 }) => {
@@ -80,6 +81,7 @@ const NewTaskPopup = ({
             fullWidth
             variant="outlined"
             size="small"
+            value={formFields.assignedUser}
             onChange={(e) =>
               handleFormFieldChange('assignedUser', e.target.value)
             }

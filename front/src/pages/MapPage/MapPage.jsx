@@ -23,7 +23,7 @@ import { addTaskHandler } from '../../redux/actions/taskActions';
 import { Box } from '@mui/material';
 import AuthContext from '../../context/AuthContext';
 
-const libraries = ['places'];
+const libraries = [process.env.REACT_APP_PLACES];
 
 const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
@@ -46,12 +46,11 @@ const MapPage = () => {
     formFields: {
       title: '',
       desc: '',
-      assignedUser: user.username || '',
+      assignedUser: '',
       deadline: '',
     },
     currentPlaceId: null,
     assignedUser: '',
-    currentUser: user.username || '',
     location: '',
   });
 
@@ -62,6 +61,7 @@ const MapPage = () => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            console.log('AFSDafdsa');
             setCurrentUserPosition(position.coords);
             updateUserLocation(position);
           },
@@ -83,24 +83,24 @@ const MapPage = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = () => {
-  //     connectWithSocketIOServer();
-  //     if ('geolocation' in navigator) {
-  //       navigator.geolocation.getCurrentPosition(
-  //         (position) => {
-  //           updateUserLocation(position);
-  //         },
-  //         (error) => {
-  //           console.error('位置情報の取得に失敗しました: ' + error.message);
-  //         }
-  //       );
-  //     } else {
-  //       console.error('このブラウザは位置情報をサポートしていません。');
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = () => {
+      connectWithSocketIOServer();
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            updateUserLocation(position);
+          },
+          (error) => {
+            console.error('位置情報の取得に失敗しました: ' + error.message);
+          }
+        );
+      } else {
+        console.error('このブラウザは位置情報をサポートしていません。');
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -230,11 +230,12 @@ const MapPage = () => {
             />
           ))}
           {tasks &&
+            user &&
             tasks.map((task) => (
               <div key={task._id}>
                 <TasksMarker
                   task={task}
-                  currentUser={state.currentUser}
+                  currentUser={user.username}
                   onMarkerClick={(id, lat, long) => {
                     getUser(task.assignedUser);
                     setState((prev) => ({
@@ -265,6 +266,7 @@ const MapPage = () => {
               latitude={state.newPlace.lat}
               onSubmit={handleSubmit}
               onlineUsers={onlineUsers}
+              formFields={state.formFields}
               handleFormFieldChange={handleFormFieldChange}
               onClose={() => setState((prev) => ({ ...prev, newPlace: null }))}
             />

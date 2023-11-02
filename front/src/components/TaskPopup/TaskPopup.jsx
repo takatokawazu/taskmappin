@@ -79,7 +79,7 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
               mb: '2px',
             }}
           >
-            誰がした？
+            誰がする予定？
           </Typography>
           <TextField size="small" fullWidth value={assignedUser} disabled />
           <Typography

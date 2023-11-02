@@ -46,12 +46,12 @@ const LoginPage = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('navigate');
-    if (loggedIn) {
-      navigate('/map/takato');
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log('navigate');
+  //   if (loggedIn) {
+  //     navigate('/map/takato');
+  //   }
+  // }, []);
 
   const [showPassword, setShowPassword] = React.useState(false);
 
