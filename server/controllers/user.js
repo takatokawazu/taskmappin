@@ -3,50 +3,97 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-const secretKey = 'abcdefghi';
-
 const registerUser = async (req, res) => {
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return res
+      .status(400)
+      .json({ errorMessage: 'Please enter all required fields.' });
+  }
+
+  if (password.length < 6)
+    return res.status(400).json({
+      errorMessage: 'Please enter enter a password of at lease 6 charcters.',
+    });
+
+  const exitingUser = await User.findOne({ email });
+
+  if (exitingUser)
+    return res.status(400).json({
+      errorMessage: 'An account with this email already exists',
+    });
+
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   const newUser = new User({
-    username: req.body.username,
-    email: req.body.email,
+    username,
+    email,
     password: hashedPassword,
   });
 
   const user = await newUser.save();
-  res.status(200).json(user);
+
+  const token = jwt.sign(
+    {
+      user: user._id,
+    },
+    process.env.JWT_SECRET
+  );
+
+  res
+    .cookie('token', token, {
+      httpOnly: true,
+    })
+    .status(200)
+    .json(user);
 };
 
 const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ errorMessage: 'Please enter all required fields.' });
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({ errorMessage: 'Wrong username or password' });
+  }
+
+  const validPassword = await bcrypt.compare(password, user.password);
+
+  if (!validPassword) {
+    return res.status(400).json({ errorMessage: 'Wrong username or password' });
+  }
+
+  const token = jwt.sign(
+    { _id: user._id, username: user.username },
+    process.env.JWT_SECRET
+  );
+  res
+    .cookie('token', token, {
+      httpOnly: true,
+    })
+    .json({ token, user });
+};
+
+const loggedIn = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const token = req.cookies.token;
+    console.log(req.cookies.token);
+    if (!token) return res.json(false);
 
-    if (!user) {
-      return res.status(400).json({ error: 'Wrong username or password' });
-    }
+    jwt.verify(token, process.env.JWT_SECRET);
 
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-
-    if (!validPassword) {
-      return res.status(400).json({ error: 'Wrong username or password' });
-    }
-
-    // ユーザーが正常に認証された場合、JWTを生成
-    const token = jwt.sign(
-      { _id: user._id, username: user.username },
-      secretKey
-    );
-
-    // JWTをクライアントに返信
-    res.status(200).json({ token, username: user.username });
-  } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.send(true);
+  } catch (err) {
+    // console.log(err.errorMessage);
+    console.log(err);
+    res.json(err);
   }
 };
 
@@ -116,4 +163,10 @@ const getUserByName = async (req, res) => {
   res.status(200).json(user);
 };
 
-module.exports = { registerUser, loginUser, getUserById, getUserByName };
+module.exports = {
+  registerUser,
+  loginUser,
+  loggedIn,
+  getUserById,
+  getUserByName,
+};

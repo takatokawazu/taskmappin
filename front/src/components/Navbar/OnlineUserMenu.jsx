@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addChatbox } from '../../redux/slices/messangerSlice';
-import { useParams } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
 
 const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
   const isMenuOpen = Boolean(anchorEl);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
-  const currentUser = useParams().username;
+  const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
   const handleAddChatbox = (username, socketId) => {
-    if (currentUser !== username) {
+    if (user.username !== username) {
       dispatch(
         addChatbox({
           username,

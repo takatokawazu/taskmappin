@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
@@ -15,12 +15,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
+import AuthContext from '../../context/AuthContext';
 
 const defaultTheme = createTheme();
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
+  const { getLoggedIn, loggedIn } = useContext(AuthContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -31,17 +32,26 @@ const LoginPage = () => {
     console.log(userData);
 
     try {
-      const res = await axios.post(
+      const { data } = await axios.post(
         'http://localhost:3003/api/users/login',
         userData
       );
-      const username = res.data.username;
-      const token = res.data.token;
+      console.log(data);
+      await getLoggedIn();
+      const username = data.user.username;
+      localStorage.setItem('userInfo', JSON.stringify(data.user));
       navigate(`/map/${username}`);
     } catch (e) {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    console.log('navigate');
+    if (loggedIn) {
+      navigate('/map/takato');
+    }
+  }, []);
 
   const [showPassword, setShowPassword] = React.useState(false);
 

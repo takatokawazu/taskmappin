@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Map, { GeolocateControl } from 'react-map-gl';
 
 import UserMarker from '../../components/Marker/UserMarker';
@@ -22,6 +21,7 @@ import TaskPopup from '../../components/TaskPopup/TaskPopup';
 import Navbar from '../../components/Navbar/Navbar';
 import { addTaskHandler } from '../../redux/actions/taskActions';
 import { Box } from '@mui/material';
+import AuthContext from '../../context/AuthContext';
 
 const libraries = ['places'];
 
@@ -29,8 +29,10 @@ const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
   const tasks = useSelector((state) => state.task.tasks);
-  const { username } = useParams();
+  // const { username } = useParams();
   const [currentUserId, setCurrentUserId] = useState('');
+  const { user } = useContext(AuthContext);
+  // const username = user.username;
 
   const [currentUserPosition, setCurrentUserPosition] = useState(null);
   const [viewport, setViewport] = useState({
@@ -41,10 +43,15 @@ const MapPage = () => {
 
   const [state, setState] = useState({
     newPlace: null,
-    formFields: { title: '', desc: '', assignedUser: username, deadline: '' },
+    formFields: {
+      title: '',
+      desc: '',
+      assignedUser: user.username || '',
+      deadline: '',
+    },
     currentPlaceId: null,
     assignedUser: '',
-    currentUser: username,
+    currentUser: user.username || '',
     location: '',
   });
 
@@ -97,23 +104,30 @@ const MapPage = () => {
 
   useEffect(() => {
     const fetchUserId = async () => {
-      const res = await axios.get(
-        `http://localhost:3003/api/users/name/${username}`
-      );
-      setCurrentUserId(res.data._id);
+      if (user) {
+        const res = await axios.get(
+          `http://localhost:3003/api/users/name/${user.username}`
+        );
+        setCurrentUserId(res.data._id);
+      }
     };
     fetchUserId();
   }, []);
 
   const updateUserLocation = (position) => {
-    socketConn.login({
-      username,
-      coords: {
-        lng:
-          position.coords.longitude || process.env.REACT_APP_DEFAULT_LONTITUDE,
-        lat: position.coords.latitude || process.env.REACT_APP_DEFAULT_LATITUDE,
-      },
-    });
+    if (user) {
+      const username = user.username;
+      socketConn.login({
+        username,
+        coords: {
+          lng:
+            position.coords.longitude ||
+            process.env.REACT_APP_DEFAULT_LONTITUDE,
+          lat:
+            position.coords.latitude || process.env.REACT_APP_DEFAULT_LATITUDE,
+        },
+      });
+    }
   };
 
   const handleAddClick = (e) => {
@@ -139,7 +153,7 @@ const MapPage = () => {
     e.preventDefault();
 
     const newTask = {
-      createdBy: username,
+      createdBy: user.username,
       ...state.formFields,
       coords: state.newPlace,
     };
@@ -204,7 +218,7 @@ const MapPage = () => {
               socketId={onlineUser.socketId}
               username={onlineUser.username}
               coords={onlineUser.coords}
-              currentUser={username}
+              currentUser={user.username}
               onMarkerClick={(lat, long) => {
                 setOpen(true);
                 setViewport({
