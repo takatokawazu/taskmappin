@@ -29,10 +29,8 @@ const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
   const tasks = useSelector((state) => state.task.tasks);
-  // const { username } = useParams();
   const [currentUserId, setCurrentUserId] = useState('');
   const { user } = useContext(AuthContext);
-  // const username = user.username;
 
   const [currentUserPosition, setCurrentUserPosition] = useState(null);
   const [viewport, setViewport] = useState({
@@ -46,7 +44,7 @@ const MapPage = () => {
     formFields: {
       title: '',
       desc: '',
-      assignedUser: '',
+      assignedUser: user.username,
       deadline: '',
     },
     currentPlaceId: null,
@@ -61,7 +59,6 @@ const MapPage = () => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            console.log('AFSDafdsa');
             setCurrentUserPosition(position.coords);
             updateUserLocation(position);
           },
@@ -82,6 +79,7 @@ const MapPage = () => {
       clearInterval(timer);
     };
   }, []);
+  // console.log(onlineUsers);
 
   useEffect(() => {
     const fetchData = () => {
@@ -116,9 +114,8 @@ const MapPage = () => {
 
   const updateUserLocation = (position) => {
     if (user) {
-      const username = user.username;
       socketConn.login({
-        username,
+        user,
         coords: {
           lng:
             position.coords.longitude ||
@@ -148,6 +145,8 @@ const MapPage = () => {
       formFields: { ...prev.formFields, [field]: value },
     }));
   };
+
+  // console.log(onlineUsers);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -213,9 +212,9 @@ const MapPage = () => {
             <UserMarker
               lat={onlineUser.coords?.lat}
               lng={onlineUser.coords?.lng}
-              key={onlineUser.socketId}
+              key={onlineUser.userId}
               myself={onlineUser?.myself || false}
-              socketId={onlineUser.socketId}
+              userId={onlineUser.userId}
               username={onlineUser.username}
               coords={onlineUser.coords}
               currentUser={user.username}
@@ -277,7 +276,7 @@ const MapPage = () => {
           <UserInfoCard
             open={open}
             setOpen={setOpen}
-            socketId={cardChosenOption.socketId}
+            userId={cardChosenOption.userId}
             username={cardChosenOption.username}
             userLocation={cardChosenOption.coords}
             currentUserPosition={currentUserPosition}

@@ -5,7 +5,7 @@ import NewMessage from './NewMessage';
 import { Box } from '@mui/material';
 
 const Chatbox = (props) => {
-  const { socketId } = props;
+  const { userId } = props;
   return (
     <Box
       sx={{
@@ -20,8 +20,8 @@ const Chatbox = (props) => {
       }}
     >
       <ChatNavbar {...props} />
-      <Messages socketId={socketId} />
-      <NewMessage socketId={socketId} />
+      <Messages userId={userId} />
+      <NewMessage userId={userId} />
     </Box>
   );
 };

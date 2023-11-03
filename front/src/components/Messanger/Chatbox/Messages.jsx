@@ -3,11 +3,9 @@ import SingleMessage from './SingleMessage';
 import { useSelector } from 'react-redux';
 import { Box } from '@mui/material';
 
-const Messages = ({ socketId }) => {
-  const messages = useSelector(
-    (state) => state.messanger.chatHistory[socketId]
-  );
-
+const Messages = ({ userId }) => {
+  const messages = useSelector((state) => state.messanger.chatHistory[userId]);
+  console.log(messages);
   const scrollRef = useRef();
 
   const scrollToBottom = () => {

@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 
 const Messanger = () => {
   const chatboxes = useSelector((state) => state.messanger.chatboxes);
-
+  console.log(chatboxes);
   return (
     <Box
       sx={{
@@ -19,8 +19,8 @@ const Messanger = () => {
     >
       {chatboxes.map((chatbox) => (
         <Chatbox
-          key={chatbox.socketId}
-          socketId={chatbox.socketId}
+          key={chatbox.userId}
+          socketId={chatbox.userId}
           username={chatbox.username}
         />
       ))}

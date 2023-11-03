@@ -90,14 +90,12 @@ const loginUser = async (req, res) => {
 const loggedIn = async (req, res) => {
   try {
     const token = req.cookies.token;
-    console.log(req.cookies.token);
     if (!token) return res.json(false);
 
     jwt.verify(token, process.env.JWT_SECRET);
 
     res.send(true);
   } catch (err) {
-    // console.log(err.errorMessage);
     console.log(err);
     res.json(err);
   }

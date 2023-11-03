@@ -21,7 +21,7 @@ const defaultTheme = createTheme();
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { getLoggedIn, loggedIn } = useContext(AuthContext);
+  const { getLoggedIn, setUser } = useContext(AuthContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -29,7 +29,6 @@ const LoginPage = () => {
       email: data.get('email'),
       password: data.get('password'),
     };
-    console.log(userData);
 
     try {
       const { data } = await axios.post(
@@ -40,6 +39,7 @@ const LoginPage = () => {
       await getLoggedIn();
       const username = data.user.username;
       localStorage.setItem('userInfo', JSON.stringify(data.user));
+      setUser(data.user);
       navigate(`/map/${username}`);
     } catch (e) {
       console.log(e);

@@ -3,18 +3,20 @@ import store from '../stores/store';
 import { addChatMessage, addChatbox } from '../slices/messangerSlice';
 import * as socketConn from '../../socketConnection/socketConn';
 
-export const sendChatMessage = (receiverSocketId, content) => {
+export const sendChatMessage = (receiverUserId, content) => {
   const message = {
     content,
-    receiverSocketId,
+    receiverUserId,
     id: uuid(),
   };
+
+  console.log(message);
 
   socketConn.sendChatMessage(message);
 
   store.dispatch(
     addChatMessage({
-      socketId: receiverSocketId,
+      userId: receiverUserId,
       content,
       myMessage: true,
       id: message.id,
@@ -25,7 +27,7 @@ export const sendChatMessage = (receiverSocketId, content) => {
 export const chatMessageHandler = (messageData) => {
   store.dispatch(
     addChatMessage({
-      socketId: messageData.senderSocketId,
+      userId: messageData.senderSocketId,
       content: messageData.content,
       meMessage: false,
       id: messageData.id,

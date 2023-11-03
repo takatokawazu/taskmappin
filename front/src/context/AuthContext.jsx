@@ -32,7 +32,7 @@ const AuthContextProvider = (props) => {
   }, [navigate]);
 
   return (
-    <AuthContext.Provider value={{ loggedIn, getLoggedIn, user }}>
+    <AuthContext.Provider value={{ loggedIn, getLoggedIn, user, setUser }}>
       {props.children}
     </AuthContext.Provider>
   );

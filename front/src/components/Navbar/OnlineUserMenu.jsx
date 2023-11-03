@@ -10,12 +10,12 @@ const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
-  const handleAddChatbox = (username, socketId) => {
+  const handleAddChatbox = (username, userId) => {
     if (user.username !== username) {
       dispatch(
         addChatbox({
           username,
-          socketId,
+          userId,
         })
       );
     }
@@ -42,7 +42,7 @@ const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
           key={onlineUser.socketId}
           onClick={() => {
             handleMenuClose();
-            handleAddChatbox(onlineUser.username, onlineUser.socketId);
+            handleAddChatbox(onlineUser.username, onlineUser.userId);
             setViewport({
               longitude: onlineUser.coords.lng,
               latitude: onlineUser.coords.lat,

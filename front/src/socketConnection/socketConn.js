@@ -31,11 +31,12 @@ export const connectWithSocketIOServer = () => {
     store.dispatch(completeTask(taskData));
   });
 
-  socket.on('online-users', (usersData) => {
-    onlineUsersHandler(socket.id, usersData);
+  socket.on('online-users', (socketToUserId, usersData) => {
+    onlineUsersHandler(socketToUserId[socket.id], usersData);
   });
 
   socket.on('chat-message', (messageData) => {
+    console.log(messageData);
     chatMessageHandler(messageData);
   });
 

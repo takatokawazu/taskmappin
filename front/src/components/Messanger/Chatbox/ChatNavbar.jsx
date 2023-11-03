@@ -4,16 +4,16 @@ import closeIcon from '../../../resources/images/close-icon.svg';
 import { removeChatbox } from '../../../redux/slices/messangerSlice';
 import { Box, Typography } from '@mui/material';
 
-const Navbar = ({ username, socketId }) => {
+const ChatNavbar = ({ username, userId }) => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
 
   const dispatch = useDispatch();
   const handleCloseChatbox = () => {
-    dispatch(removeChatbox(socketId));
+    dispatch(removeChatbox(userId));
   };
 
   useEffect(() => {
-    if (onlineUsers.find((user) => user.socketId === socketId)) {
+    if (onlineUsers.find((user) => user.userId === userId)) {
     } else {
       handleCloseChatbox();
     }
@@ -63,4 +63,4 @@ const Navbar = ({ username, socketId }) => {
   );
 };
 
-export default Navbar;
+export default ChatNavbar;

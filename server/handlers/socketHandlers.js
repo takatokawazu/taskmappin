@@ -5,8 +5,6 @@ const taskHandlers = require('./taskHandlers');
 
 const setupSocketHandlers = (io) => {
   io.on('connection', (socket) => {
-    console.log(`user connected of the id: ${socket.id}`);
-
     socket.on('user-login', (data) =>
       userHandlers.loginEventHandler(socket, data, io)
     );

@@ -1,5 +1,6 @@
 let onlineUsers = {};
 let videoRooms = {};
+let socketToUserId = {};
 
 const broadcastDisconnectedUserDetails = (disconnectedUserSocketId, io) => {
   io.to('logged-users').emit('user-disconnected', disconnectedUserSocketId);
@@ -11,22 +12,32 @@ const broadcastVideoRooms = (io) => {
 
 const loginEventHandler = (socket, data, io) => {
   socket.join('logged-users');
-  onlineUsers[socket.id] = {
-    username: data.username,
+  const user = data.user;
+  console.log(`user connected of the id: ${user._id}`);
+  onlineUsers[user._id] = {
+    username: user.username,
     coords: data.coords,
+    socketId: socket.id,
   };
 
-  io.to('logged-users').emit('online-users', convertOnlineUsersToArray());
+  socketToUserId[socket.id] = user._id;
+
+  io.to('logged-users').emit(
+    'online-users',
+    socketToUserId,
+    convertOnlineUsersToArray()
+  );
+
   broadcastVideoRooms(io);
 };
 
 const chatMessageHandler = (socket, data, io) => {
   const { receiverSocketId, content, id } = data;
-  if (onlineUsers[receiverSocketId]) {
+  if (onlineUsers[socketToUserId[receiverSocketId]]) {
     console.log('message received');
     console.log('sending message to other user');
     io.to(receiverSocketId).emit('chat-message', {
-      senderSocketId: socket.id,
+      senderUserId: socketToUserId[socket.id],
       content,
       id,
     });
@@ -35,9 +46,22 @@ const chatMessageHandler = (socket, data, io) => {
 
 const disconnectEventHandler = (socket, io) => {
   console.log(`user disconnected of the id: ${socket.id}`);
-  checkIfUserIsInCall(socket, io);
-  removeOnlineUser(socket.id);
-  broadcastDisconnectedUserDetails(socket.id, io);
+  const userId = socketToUserId[socket.id];
+
+  if (userId !== undefined) {
+    console.log(`socketId ${socket.id} に対応するuser._idは ${userId} です。`);
+    checkIfUserIsInCall(socket, io);
+    removeOnlineUser(userId);
+    delete socketToUserId[socket.id];
+    broadcastDisconnectedUserDetails(userId, io);
+  } else {
+    console.log(
+      `socketId ${socket.id} に対応するユーザーが見つかりませんでした。`
+    );
+  }
+  // checkIfUserIsInCall(socket, io);
+  // removeOnlineUser(foundUserId);
+  // broadcastDisconnectedUserDetails(foundUserId, io);
 };
 
 const removeOnlineUser = (id) => {
@@ -79,7 +103,7 @@ const convertOnlineUsersToArray = () => {
 
   Object.entries(onlineUsers).forEach(([key, value]) => {
     const newEntry = {
-      socketId: key,
+      userId: key,
       username: value.username,
       coords: value.coords,
     };

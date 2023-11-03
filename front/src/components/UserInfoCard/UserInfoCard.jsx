@@ -7,14 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 
 export default function UserInfoCard(props) {
-  const {
-    open,
-    setOpen,
-    username,
-    userLocation,
-    socketId,
-    currentUserPosition,
-  } = props;
+  const { open, setOpen, username, userLocation, userId, currentUserPosition } =
+    props;
 
   return (
     <Dialog onClose={() => setOpen(false)} open={open}>
@@ -31,11 +25,7 @@ export default function UserInfoCard(props) {
           )}km`}</b>
         </p>
         <div>
-          <ChatButton
-            socketId={socketId}
-            username={username}
-            setOpen={setOpen}
-          />
+          <ChatButton userId={userId} username={username} setOpen={setOpen} />
         </div>
       </List>
     </Dialog>
