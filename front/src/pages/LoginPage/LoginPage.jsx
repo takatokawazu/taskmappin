@@ -35,7 +35,7 @@ const LoginPage = () => {
         'http://localhost:3003/api/users/login',
         userData
       );
-      console.log(data);
+      // console.log(data);
       await getLoggedIn();
       const username = data.user.username;
       localStorage.setItem('userInfo', JSON.stringify(data.user));

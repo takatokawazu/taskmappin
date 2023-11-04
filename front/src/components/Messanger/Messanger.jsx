@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 
 const Messanger = () => {
   const chatboxes = useSelector((state) => state.messanger.chatboxes);
-  console.log(chatboxes);
+  // console.log(chatboxes);
   return (
     <Box
       sx={{

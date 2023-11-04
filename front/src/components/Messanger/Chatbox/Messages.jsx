@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 
 const Messages = ({ userId }) => {
   const messages = useSelector((state) => state.messanger.chatHistory[userId]);
-  console.log(messages);
+  // console.log(messages);
   const scrollRef = useRef();
 
   const scrollToBottom = () => {

@@ -45,6 +45,7 @@ export const connectWithSocketIOServer = () => {
   });
 
   socket.on('video-room-init', (data) => {
+    console.log('video-call!!!!!!!!!');
     call(data);
   });
 

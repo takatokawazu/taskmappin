@@ -13,6 +13,7 @@ const videoRoomCreateHandler = (socket, data, io) => {
       {
         userId: socketToUserId[socket.id],
         username: onlineUsers[socketToUserId[socket.id]].username,
+        socketId: socket.id,
         peerId,
       },
     ],
@@ -23,9 +24,10 @@ const videoRoomCreateHandler = (socket, data, io) => {
 
 const videoRoomJoinHandler = (socket, data, io) => {
   const { roomId, peerId } = data;
+  console.log(videoRooms[roomId].participants);
   if (videoRooms[roomId]) {
     videoRooms[roomId].participants.forEach((participant) => {
-      socket.to(participant.userId).emit('video-room-init', {
+      socket.to(participant.socketId).emit('video-room-init', {
         newParticipantPeerId: peerId,
       });
     });
@@ -35,6 +37,7 @@ const videoRoomJoinHandler = (socket, data, io) => {
       {
         userId: socketToUserId[socket.id],
         username: onlineUsers[socketToUserId[socket.id]].username,
+        socketId: socket.id,
         peerId,
       },
     ];
@@ -48,13 +51,13 @@ const videoRoomLeaveHandler = (socket, data, io) => {
 
   if (videoRooms[roomId]) {
     videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
-      (p) => p.userId !== socketToUserId[socket.id]
+      (p) => p.socketId !== socket.id
     );
   }
 
   if (videoRooms[roomId]?.participants.length > 0) {
     socket
-      .to(videoRooms[roomId].participants[0].userId)
+      .to(videoRooms[roomId].participants[0].socketId)
       .emit('video-call-disconnect');
   }
 

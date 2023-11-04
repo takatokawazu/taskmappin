@@ -9,10 +9,10 @@ const RoomJoinButton = ({ creatorUsername, roomId, amountOfParticipants }) => {
   const remoteStream = useSelector((state) => state.videoRooms.remoteStream);
   const rooms = useSelector((state) => state.videoRooms.rooms);
 
-  console.log(inRoom);
-  console.log(localStream);
-  console.log(remoteStream);
-  console.log(rooms);
+  // console.log(inRoom);
+  // console.log(localStream);
+  // console.log(remoteStream);
+  // console.log(rooms);
 
   const handleJoinRoom = () => {
     if (inRoom) {
