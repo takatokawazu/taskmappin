@@ -87,7 +87,7 @@ const NewTaskPopup = ({
             }
           >
             {onlineUsers.map((user) => (
-              <MenuItem key={user.socketId} value={user.username}>
+              <MenuItem key={user.userId} value={user.username}>
                 {user.username}
               </MenuItem>
             ))}

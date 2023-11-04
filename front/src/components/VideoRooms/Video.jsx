@@ -7,7 +7,6 @@ const Video = ({ stream, muted }) => {
   useEffect(() => {
     const video = videoEl.current;
     video.srcObject = stream;
-
     video.onloadedmetadata = () => {
       video.play();
     };

@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 
 const Chatbox = (props) => {
   const { userId } = props;
+
   return (
     <Box
       sx={{

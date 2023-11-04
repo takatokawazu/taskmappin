@@ -25,6 +25,7 @@ export const messagerSlice = createSlice({
     },
     addChatMessage: (state, action) => {
       if (state.chatHistory[action.payload.userId]) {
+        console.log(state.chatHistory[action.payload.userId]);
         state.chatHistory[action.payload.userId].push({
           content: action.payload.content,
           myMessage: action.payload.myMessage,

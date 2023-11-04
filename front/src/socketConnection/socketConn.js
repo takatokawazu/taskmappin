@@ -72,7 +72,6 @@ export const createVideoRoom = (data) => {
 
 export const joinVideoRoom = (data) => {
   console.log('emitting event to join a room');
-  console.log(data);
   socket.emit('video-room-join', data);
 };
 

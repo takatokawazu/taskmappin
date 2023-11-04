@@ -32,11 +32,18 @@ const loginEventHandler = (socket, data, io) => {
 };
 
 const chatMessageHandler = (socket, data, io) => {
-  const { receiverSocketId, content, id } = data;
-  if (onlineUsers[socketToUserId[receiverSocketId]]) {
-    console.log('message received');
-    console.log('sending message to other user');
-    io.to(receiverSocketId).emit('chat-message', {
+  const { receiverUserId, content, id } = data;
+  console.log('message received');
+  console.log('sending message to other user');
+  console.log(receiverUserId);
+  // console.log(socketToUserId);
+  // console.log(onlineUsers);
+  console.log(socketToUserId[socket.id]);
+  console.log(onlineUsers[receiverUserId]);
+  console.log('#########################');
+  if (onlineUsers[receiverUserId]) {
+    console.log('通った');
+    io.to(onlineUsers[receiverUserId].socketId).emit('chat-message', {
       senderUserId: socketToUserId[socket.id],
       content,
       id,
@@ -72,25 +79,27 @@ const removeOnlineUser = (id) => {
 
 const checkIfUserIsInCall = (socket, io) => {
   Object.entries(videoRooms).forEach(([key, value]) => {
+    console.log('check!!!!!!!!!!!!!!!!');
+    console.log(value);
     const participant = value.participants.find(
-      (p) => p.socketId === socket.id
+      (p) => p.userId === socketToUserId[socket.id]
     );
 
     if (participant) {
-      removeUserFromTheVideoRoom(socket.id, key, io);
+      removeUserFromTheVideoRoom(socketToUserId[socket.id], key, io);
     }
   });
 };
 
-const removeUserFromTheVideoRoom = (socketId, roomId, io) => {
+const removeUserFromTheVideoRoom = (userId, roomId, io) => {
   videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
-    (p) => p.socketId !== socketId
+    (p) => p.userId !== userId
   );
 
   if (videoRooms[roomId].participants.length < 1) {
     delete videoRooms[roomId];
   } else {
-    io.to(videoRooms[roomId].participants[0].socketId).emit(
+    io.to(videoRooms[roomId].participants[0].userId).emit(
       'video-call-disconnect'
     );
   }
@@ -128,5 +137,6 @@ module.exports = {
   disconnectEventHandler,
   onlineUsers,
   videoRooms,
+  socketToUserId,
   broadcastVideoRooms,
 };

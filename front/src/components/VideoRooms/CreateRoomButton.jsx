@@ -6,7 +6,6 @@ import { Button } from '@mui/material';
 
 const CreateRoomButton = () => {
   const inRoom = useSelector((state) => state.videoRooms.inRoom);
-
   const handleRoomCreate = () => {
     if (inRoom) {
       return alert('You are already in the room');

@@ -5,6 +5,14 @@ import { Button } from '@mui/material';
 
 const RoomJoinButton = ({ creatorUsername, roomId, amountOfParticipants }) => {
   const inRoom = useSelector((state) => state.videoRooms.inRoom);
+  const localStream = useSelector((state) => state.videoRooms.localStream);
+  const remoteStream = useSelector((state) => state.videoRooms.remoteStream);
+  const rooms = useSelector((state) => state.videoRooms.rooms);
+
+  console.log(inRoom);
+  console.log(localStream);
+  console.log(remoteStream);
+  console.log(rooms);
 
   const handleJoinRoom = () => {
     if (inRoom) {

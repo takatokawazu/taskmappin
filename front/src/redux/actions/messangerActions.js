@@ -27,25 +27,25 @@ export const sendChatMessage = (receiverUserId, content) => {
 export const chatMessageHandler = (messageData) => {
   store.dispatch(
     addChatMessage({
-      userId: messageData.senderSocketId,
+      userId: messageData.senderUserId,
       content: messageData.content,
       meMessage: false,
       id: messageData.id,
     })
   );
 
-  openChatboxIfClosed(messageData.senderSocketId);
+  openChatboxIfClosed(messageData.senderUserId);
 };
 
-const openChatboxIfClosed = (socketId) => {
+const openChatboxIfClosed = (userId) => {
   const chatbox = store
     .getState()
-    .messanger.chatboxes.find((c) => c.socketId === socketId);
+    .messanger.chatboxes.find((c) => c.userId === userId);
   const username = store
     .getState()
-    .map.onlineUsers.find((user) => user.socketId === socketId)?.username;
+    .map.onlineUsers.find((user) => user.userId === userId)?.username;
 
   if (!chatbox) {
-    store.dispatch(addChatbox({ socketId, username }));
+    store.dispatch(addChatbox({ userId, username }));
   }
 };

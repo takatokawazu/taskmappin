@@ -21,6 +21,8 @@ const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
     }
   };
 
+  console.log(onlineUsers);
+
   return (
     <Menu
       anchorEl={anchorEl}
@@ -39,7 +41,7 @@ const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
     >
       {onlineUsers.map((onlineUser) => (
         <MenuItem
-          key={onlineUser.socketId}
+          key={onlineUser.userId}
           onClick={() => {
             handleMenuClose();
             handleAddChatbox(onlineUser.username, onlineUser.userId);

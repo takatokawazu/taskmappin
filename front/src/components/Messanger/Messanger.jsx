@@ -20,7 +20,7 @@ const Messanger = () => {
       {chatboxes.map((chatbox) => (
         <Chatbox
           key={chatbox.userId}
-          socketId={chatbox.userId}
+          userId={chatbox.userId}
           username={chatbox.username}
         />
       ))}
