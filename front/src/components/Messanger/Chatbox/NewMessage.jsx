@@ -3,7 +3,7 @@ import { sendChatMessage } from '../../../redux/actions/messangerActions';
 import { useSelector } from 'react-redux';
 import { Box, TextField } from '@mui/material';
 
-const NewMessage = ({ socketId }) => {
+const NewMessage = ({ userId }) => {
   const [message, setMessage] = useState('');
   const [inputDisabled, setInputDisabled] = useState(false);
 
@@ -20,8 +20,8 @@ const NewMessage = ({ socketId }) => {
   };
 
   const proceedChatMessage = () => {
-    if (onlineUsers.find((user) => user.socketId === socketId)) {
-      sendChatMessage(socketId, message);
+    if (onlineUsers.find((user) => user.userId === userId)) {
+      sendChatMessage(userId, message);
     } else {
       setInputDisabled(true);
     }

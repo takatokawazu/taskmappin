@@ -12,7 +12,7 @@ export const messagerSlice = createSlice({
     addChatbox: (state, action) => {
       if (
         !state.chatboxes.find(
-          (chatbox) => chatbox.socketId === action.payload.socketId
+          (chatbox) => chatbox.userId === action.payload.userId
         )
       ) {
         state.chatboxes.push(action.payload);
@@ -20,18 +20,19 @@ export const messagerSlice = createSlice({
     },
     removeChatbox: (state, action) => {
       state.chatboxes = state.chatboxes.filter(
-        (chatbox) => chatbox.socketId !== action.payload
+        (chatbox) => chatbox.userId !== action.payload
       );
     },
     addChatMessage: (state, action) => {
-      if (state.chatHistory[action.payload.socketId]) {
-        state.chatHistory[action.payload.socketId].push({
+      if (state.chatHistory[action.payload.userId]) {
+        console.log(state.chatHistory[action.payload.userId]);
+        state.chatHistory[action.payload.userId].push({
           content: action.payload.content,
           myMessage: action.payload.myMessage,
           id: action.payload.id,
         });
       } else {
-        state.chatHistory[action.payload.socketId] = [
+        state.chatHistory[action.payload.userId] = [
           {
             content: action.payload.content,
             myMessage: action.payload.myMessage,

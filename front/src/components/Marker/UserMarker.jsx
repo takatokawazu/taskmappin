@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 
 const UserMarker = ({
   myself,
-  socketId,
+  userId,
   username,
   coords,
   currentUser,
@@ -20,7 +20,7 @@ const UserMarker = ({
     if (!myself) {
       dispatch(
         setCardChosenOption({
-          socketId,
+          userId,
           username,
           coords,
         })

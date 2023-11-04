@@ -1,5 +1,6 @@
 let onlineUsers = {};
 let videoRooms = {};
+let socketToUserId = {};
 
 const broadcastDisconnectedUserDetails = (disconnectedUserSocketId, io) => {
   io.to('logged-users').emit('user-disconnected', disconnectedUserSocketId);
@@ -11,22 +12,39 @@ const broadcastVideoRooms = (io) => {
 
 const loginEventHandler = (socket, data, io) => {
   socket.join('logged-users');
-  onlineUsers[socket.id] = {
-    username: data.username,
+  const user = data.user;
+  console.log(`user connected of the id: ${user._id}`);
+  onlineUsers[user._id] = {
+    username: user.username,
     coords: data.coords,
+    socketId: socket.id,
   };
 
-  io.to('logged-users').emit('online-users', convertOnlineUsersToArray());
+  socketToUserId[socket.id] = user._id;
+
+  io.to('logged-users').emit(
+    'online-users',
+    socketToUserId,
+    convertOnlineUsersToArray()
+  );
+
   broadcastVideoRooms(io);
 };
 
 const chatMessageHandler = (socket, data, io) => {
-  const { receiverSocketId, content, id } = data;
-  if (onlineUsers[receiverSocketId]) {
-    console.log('message received');
-    console.log('sending message to other user');
-    io.to(receiverSocketId).emit('chat-message', {
-      senderSocketId: socket.id,
+  const { receiverUserId, content, id } = data;
+  console.log('message received');
+  console.log('sending message to other user');
+  console.log(receiverUserId);
+  // console.log(socketToUserId);
+  // console.log(onlineUsers);
+  console.log(socketToUserId[socket.id]);
+  console.log(onlineUsers[receiverUserId]);
+  console.log('#########################');
+  if (onlineUsers[receiverUserId]) {
+    console.log('通った');
+    io.to(onlineUsers[receiverUserId].socketId).emit('chat-message', {
+      senderUserId: socketToUserId[socket.id],
       content,
       id,
     });
@@ -35,9 +53,22 @@ const chatMessageHandler = (socket, data, io) => {
 
 const disconnectEventHandler = (socket, io) => {
   console.log(`user disconnected of the id: ${socket.id}`);
-  checkIfUserIsInCall(socket, io);
-  removeOnlineUser(socket.id);
-  broadcastDisconnectedUserDetails(socket.id, io);
+  const userId = socketToUserId[socket.id];
+
+  if (userId !== undefined) {
+    console.log(`socketId ${socket.id} に対応するuser._idは ${userId} です。`);
+    checkIfUserIsInCall(socket, io);
+    removeOnlineUser(userId);
+    delete socketToUserId[socket.id];
+    broadcastDisconnectedUserDetails(userId, io);
+  } else {
+    console.log(
+      `socketId ${socket.id} に対応するユーザーが見つかりませんでした。`
+    );
+  }
+  // checkIfUserIsInCall(socket, io);
+  // removeOnlineUser(foundUserId);
+  // broadcastDisconnectedUserDetails(foundUserId, io);
 };
 
 const removeOnlineUser = (id) => {
@@ -48,25 +79,27 @@ const removeOnlineUser = (id) => {
 
 const checkIfUserIsInCall = (socket, io) => {
   Object.entries(videoRooms).forEach(([key, value]) => {
+    console.log('check!!!!!!!!!!!!!!!!');
+    console.log(value);
     const participant = value.participants.find(
-      (p) => p.socketId === socket.id
+      (p) => p.userId === socketToUserId[socket.id]
     );
 
     if (participant) {
-      removeUserFromTheVideoRoom(socket.id, key, io);
+      removeUserFromTheVideoRoom(socketToUserId[socket.id], key, io);
     }
   });
 };
 
-const removeUserFromTheVideoRoom = (socketId, roomId, io) => {
+const removeUserFromTheVideoRoom = (userId, roomId, io) => {
   videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
-    (p) => p.socketId !== socketId
+    (p) => p.userId !== userId
   );
 
   if (videoRooms[roomId].participants.length < 1) {
     delete videoRooms[roomId];
   } else {
-    io.to(videoRooms[roomId].participants[0].socketId).emit(
+    io.to(videoRooms[roomId].participants[0].userId).emit(
       'video-call-disconnect'
     );
   }
@@ -79,7 +112,7 @@ const convertOnlineUsersToArray = () => {
 
   Object.entries(onlineUsers).forEach(([key, value]) => {
     const newEntry = {
-      socketId: key,
+      userId: key,
       username: value.username,
       coords: value.coords,
     };
@@ -104,5 +137,6 @@ module.exports = {
   disconnectEventHandler,
   onlineUsers,
   videoRooms,
+  socketToUserId,
   broadcastVideoRooms,
 };

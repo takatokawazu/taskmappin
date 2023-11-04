@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addChatbox } from '../../redux/slices/messangerSlice';
-import { useParams } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
 
 const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
   const isMenuOpen = Boolean(anchorEl);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
-  const currentUser = useParams().username;
+  const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
-  const handleAddChatbox = (username, socketId) => {
-    if (currentUser !== username) {
+  const handleAddChatbox = (username, userId) => {
+    if (user.username !== username) {
       dispatch(
         addChatbox({
           username,
-          socketId,
+          userId,
         })
       );
     }
   };
+
+  // console.log(onlineUsers);
 
   return (
     <Menu
@@ -39,10 +41,10 @@ const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
     >
       {onlineUsers.map((onlineUser) => (
         <MenuItem
-          key={onlineUser.socketId}
+          key={onlineUser.userId}
           onClick={() => {
             handleMenuClose();
-            handleAddChatbox(onlineUser.username, onlineUser.socketId);
+            handleAddChatbox(onlineUser.username, onlineUser.userId);
             setViewport({
               longitude: onlineUser.coords.lng,
               latitude: onlineUser.coords.lat,

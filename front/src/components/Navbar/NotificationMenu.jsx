@@ -11,7 +11,7 @@ const NotificationMenu = ({
   const isMenuOpen = Boolean(notification);
   return (
     <Menu
-      notification={notification}
+      anchorEl={notification}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',

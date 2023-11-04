@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
@@ -15,11 +15,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
+import AuthContext from '../../context/AuthContext';
 
 const defaultTheme = createTheme();
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const { getLoggedIn } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +39,7 @@ const RegisterPage = () => {
         userData
       );
       console.log(res.data);
+      await getLoggedIn();
       navigate('/');
     } catch (e) {
       console.log(e);

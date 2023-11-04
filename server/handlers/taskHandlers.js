@@ -35,8 +35,8 @@ const registerTask = async (data, io) => {
 };
 
 const completeTask = async (data, username, io) => {
-  console.log(data);
-  console.log('~~~~~~~~~~~~~');
+  // console.log(data);
+  // console.log('~~~~~~~~~~~~~');
   try {
     const taskId = data._id;
     const name = username.username;

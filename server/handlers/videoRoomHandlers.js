@@ -1,18 +1,19 @@
 const {
   videoRooms,
   onlineUsers,
+  socketToUserId,
   broadcastVideoRooms,
 } = require('./userHandlers');
 
 const videoRoomCreateHandler = (socket, data, io) => {
   console.log('new room', data);
   const { peerId, newRoomId } = data;
-
   videoRooms[newRoomId] = {
     participants: [
       {
+        userId: socketToUserId[socket.id],
+        username: onlineUsers[socketToUserId[socket.id]].username,
         socketId: socket.id,
-        username: onlineUsers[socket.id].username,
         peerId,
       },
     ],
@@ -23,7 +24,7 @@ const videoRoomCreateHandler = (socket, data, io) => {
 
 const videoRoomJoinHandler = (socket, data, io) => {
   const { roomId, peerId } = data;
-
+  console.log(videoRooms[roomId].participants);
   if (videoRooms[roomId]) {
     videoRooms[roomId].participants.forEach((participant) => {
       socket.to(participant.socketId).emit('video-room-init', {
@@ -34,8 +35,9 @@ const videoRoomJoinHandler = (socket, data, io) => {
     videoRooms[roomId].participants = [
       ...videoRooms[roomId].participants,
       {
+        userId: socketToUserId[socket.id],
+        username: onlineUsers[socketToUserId[socket.id]].username,
         socketId: socket.id,
-        username: onlineUsers[socket.id].username,
         peerId,
       },
     ];
@@ -58,7 +60,6 @@ const videoRoomLeaveHandler = (socket, data, io) => {
       .to(videoRooms[roomId].participants[0].socketId)
       .emit('video-call-disconnect');
   }
-  console.log(videoRooms[roomId]);
 
   if (videoRooms[roomId]?.participants.length < 1) {
     delete videoRooms[roomId];

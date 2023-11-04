@@ -15,7 +15,7 @@ export const mapSlice = createSlice({
     },
     removeDisconnectedUser: (state, action) => {
       state.onlineUsers = state.onlineUsers.filter(
-        (onlineUser) => onlineUser.socketId !== action.payload
+        (onlineUser) => onlineUser.userId !== action.payload
       );
     },
     setCardChosenOption: (state, action) => {

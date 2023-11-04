@@ -39,7 +39,7 @@ export const connectWithPeerServer = () => {
 
   peer.on('call', async (call) => {
     const localStream = store.getState().videoRooms.localStream;
-
+    console.log('local stream');
     call.answer(localStream);
     call.on('stream', (remoteStream) => {
       console.log('remote stream came');

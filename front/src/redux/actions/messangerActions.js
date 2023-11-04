@@ -3,18 +3,20 @@ import store from '../stores/store';
 import { addChatMessage, addChatbox } from '../slices/messangerSlice';
 import * as socketConn from '../../socketConnection/socketConn';
 
-export const sendChatMessage = (receiverSocketId, content) => {
+export const sendChatMessage = (receiverUserId, content) => {
   const message = {
     content,
-    receiverSocketId,
+    receiverUserId,
     id: uuid(),
   };
+
+  console.log(message);
 
   socketConn.sendChatMessage(message);
 
   store.dispatch(
     addChatMessage({
-      socketId: receiverSocketId,
+      userId: receiverUserId,
       content,
       myMessage: true,
       id: message.id,
@@ -25,25 +27,25 @@ export const sendChatMessage = (receiverSocketId, content) => {
 export const chatMessageHandler = (messageData) => {
   store.dispatch(
     addChatMessage({
-      socketId: messageData.senderSocketId,
+      userId: messageData.senderUserId,
       content: messageData.content,
       meMessage: false,
       id: messageData.id,
     })
   );
 
-  openChatboxIfClosed(messageData.senderSocketId);
+  openChatboxIfClosed(messageData.senderUserId);
 };
 
-const openChatboxIfClosed = (socketId) => {
+const openChatboxIfClosed = (userId) => {
   const chatbox = store
     .getState()
-    .messanger.chatboxes.find((c) => c.socketId === socketId);
+    .messanger.chatboxes.find((c) => c.userId === userId);
   const username = store
     .getState()
-    .map.onlineUsers.find((user) => user.socketId === socketId)?.username;
+    .map.onlineUsers.find((user) => user.userId === userId)?.username;
 
   if (!chatbox) {
-    store.dispatch(addChatbox({ socketId, username }));
+    store.dispatch(addChatbox({ userId, username }));
   }
 };

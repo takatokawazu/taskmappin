@@ -5,13 +5,20 @@ const { Server } = require('socket.io');
 const { default: mongoose } = require('mongoose');
 const app = express();
 const server = http.createServer(app);
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: ['http://localhost:3000'],
     methods: ['GET', 'POST'],
   },
 });

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import AdminNavbar from '../../components/Admin/AdminNavbar';
 import AdminButton from '../../components/Admin/AdminButton';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { formatDateTime } from '../../utils/time';
+import AuthContext from '../../context/AuthContext';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -28,8 +29,7 @@ export default function AdminPage() {
   const [uncompletedTasks, setUncompletedTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
-
-  const { username } = useParams();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const mapTasks = (tasks) =>
@@ -51,17 +51,19 @@ export default function AdminPage() {
         mapTasks(allTasksData.filter((task) => !task.isDone))
       );
 
-      const { data: userData } = await axios.get(
-        `${API_BASE_URL}/users/name/${username}`
-      );
+      if (user) {
+        const { data: userData } = await axios.get(
+          `${API_BASE_URL}/users/name/${user.username}`
+        );
 
-      setAssignedTasks(mapTasks(userData.assignedTasks));
-      setCreatedTasks(mapTasks(userData.createdTasks));
-      setMyCompletedTasks(mapTasks(userData.completedTasks));
+        setAssignedTasks(mapTasks(userData.assignedTasks));
+        setCreatedTasks(mapTasks(userData.createdTasks));
+        setMyCompletedTasks(mapTasks(userData.completedTasks));
+      }
     };
 
     fetchData();
-  }, [username]);
+  }, [user]);
 
   return (
     <div>

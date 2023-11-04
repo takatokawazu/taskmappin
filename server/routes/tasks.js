@@ -3,7 +3,7 @@ const {
   registerTask,
   completeTask,
 } = require('../controllers/task');
-const requestErrorHandler = require('../helpers/helper');
+const requestErrorHandler = require('../middleware/helper');
 
 const router = require('express').Router();
 

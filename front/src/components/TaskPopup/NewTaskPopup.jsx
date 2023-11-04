@@ -14,6 +14,7 @@ const NewTaskPopup = ({
   latitude,
   onClose,
   onSubmit,
+  formFields,
   onlineUsers,
   handleFormFieldChange,
 }) => {
@@ -80,12 +81,13 @@ const NewTaskPopup = ({
             fullWidth
             variant="outlined"
             size="small"
+            value={formFields.assignedUser}
             onChange={(e) =>
               handleFormFieldChange('assignedUser', e.target.value)
             }
           >
             {onlineUsers.map((user) => (
-              <MenuItem key={user.socketId} value={user.username}>
+              <MenuItem key={user.userId} value={user.username}>
                 {user.username}
               </MenuItem>
             ))}

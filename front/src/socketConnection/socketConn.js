@@ -31,11 +31,12 @@ export const connectWithSocketIOServer = () => {
     store.dispatch(completeTask(taskData));
   });
 
-  socket.on('online-users', (usersData) => {
-    onlineUsersHandler(socket.id, usersData);
+  socket.on('online-users', (socketToUserId, usersData) => {
+    onlineUsersHandler(socketToUserId[socket.id], usersData);
   });
 
   socket.on('chat-message', (messageData) => {
+    console.log(messageData);
     chatMessageHandler(messageData);
   });
 
@@ -44,6 +45,7 @@ export const connectWithSocketIOServer = () => {
   });
 
   socket.on('video-room-init', (data) => {
+    console.log('video-call!!!!!!!!!');
     call(data);
   });
 
@@ -71,7 +73,6 @@ export const createVideoRoom = (data) => {
 
 export const joinVideoRoom = (data) => {
   console.log('emitting event to join a room');
-  console.log(data);
   socket.emit('video-room-join', data);
 };
 

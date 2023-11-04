@@ -25,7 +25,6 @@ export const createVideoRoom = async () => {
 
 export const joinVideoRoom = async (roomId) => {
   const success = await getAccessToLocalStream();
-
   if (success) {
     store.dispatch(setInRoom(roomId));
 
