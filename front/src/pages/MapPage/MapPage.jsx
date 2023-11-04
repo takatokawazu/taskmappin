@@ -79,7 +79,6 @@ const MapPage = () => {
       clearInterval(timer);
     };
   }, []);
-  // console.log(onlineUsers);
 
   useEffect(() => {
     const fetchData = () => {
@@ -145,8 +144,6 @@ const MapPage = () => {
       formFields: { ...prev.formFields, [field]: value },
     }));
   };
-
-  // console.log(onlineUsers);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

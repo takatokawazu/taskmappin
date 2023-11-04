@@ -21,8 +21,6 @@ const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
     }
   };
 
-  // console.log(onlineUsers);
-
   return (
     <Menu
       anchorEl={anchorEl}

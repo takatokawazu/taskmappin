@@ -33,16 +33,8 @@ const loginEventHandler = (socket, data, io) => {
 
 const chatMessageHandler = (socket, data, io) => {
   const { receiverUserId, content, id } = data;
-  console.log('message received');
   console.log('sending message to other user');
-  console.log(receiverUserId);
-  // console.log(socketToUserId);
-  // console.log(onlineUsers);
-  console.log(socketToUserId[socket.id]);
-  console.log(onlineUsers[receiverUserId]);
-  console.log('#########################');
   if (onlineUsers[receiverUserId]) {
-    console.log('通った');
     io.to(onlineUsers[receiverUserId].socketId).emit('chat-message', {
       senderUserId: socketToUserId[socket.id],
       content,
@@ -59,16 +51,13 @@ const disconnectEventHandler = (socket, io) => {
     console.log(`socketId ${socket.id} に対応するuser._idは ${userId} です。`);
     checkIfUserIsInCall(socket, io);
     removeOnlineUser(userId);
-    delete socketToUserId[socket.id];
     broadcastDisconnectedUserDetails(userId, io);
+    delete socketToUserId[socket.id];
   } else {
     console.log(
       `socketId ${socket.id} に対応するユーザーが見つかりませんでした。`
     );
   }
-  // checkIfUserIsInCall(socket, io);
-  // removeOnlineUser(foundUserId);
-  // broadcastDisconnectedUserDetails(foundUserId, io);
 };
 
 const removeOnlineUser = (id) => {
@@ -79,27 +68,25 @@ const removeOnlineUser = (id) => {
 
 const checkIfUserIsInCall = (socket, io) => {
   Object.entries(videoRooms).forEach(([key, value]) => {
-    console.log('check!!!!!!!!!!!!!!!!');
-    console.log(value);
     const participant = value.participants.find(
-      (p) => p.userId === socketToUserId[socket.id]
+      (p) => p.socketId === socket.id
     );
 
     if (participant) {
-      removeUserFromTheVideoRoom(socketToUserId[socket.id], key, io);
+      removeUserFromTheVideoRoom(socket.id, key, io);
     }
   });
 };
 
-const removeUserFromTheVideoRoom = (userId, roomId, io) => {
+const removeUserFromTheVideoRoom = (socketId, roomId, io) => {
   videoRooms[roomId].participants = videoRooms[roomId].participants.filter(
-    (p) => p.userId !== userId
+    (p) => p.socketId !== socketId
   );
 
   if (videoRooms[roomId].participants.length < 1) {
     delete videoRooms[roomId];
   } else {
-    io.to(videoRooms[roomId].participants[0].userId).emit(
+    io.to(videoRooms[roomId].participants[0].socketId).emit(
       'video-call-disconnect'
     );
   }

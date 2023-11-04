@@ -36,7 +36,6 @@ export const connectWithSocketIOServer = () => {
   });
 
   socket.on('chat-message', (messageData) => {
-    console.log(messageData);
     chatMessageHandler(messageData);
   });
 
@@ -45,7 +44,6 @@ export const connectWithSocketIOServer = () => {
   });
 
   socket.on('video-room-init', (data) => {
-    console.log('video-call!!!!!!!!!');
     call(data);
   });
 
@@ -55,6 +53,10 @@ export const connectWithSocketIOServer = () => {
 
   socket.on('user-disconnected', (disconnectedUserSocketId) => {
     userDisconnectedHandler(disconnectedUserSocketId);
+  });
+
+  socket.on('taskError', (error) => {
+    console.error(error.message);
   });
 };
 
@@ -67,12 +69,10 @@ export const sendChatMessage = (data) => {
 };
 
 export const createVideoRoom = (data) => {
-  console.log('emitting');
   socket.emit('video-room-create', data);
 };
 
 export const joinVideoRoom = (data) => {
-  console.log('emitting event to join a room');
   socket.emit('video-room-join', data);
 };
 

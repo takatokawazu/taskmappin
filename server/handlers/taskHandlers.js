@@ -1,14 +1,15 @@
 const Task = require('../models/Task');
 const User = require('../models/User');
 
-const registerTask = async (data, io) => {
+const registerTask = async (data, io, socket) => {
   try {
     const user = await User.findOne({ username: data.createdBy });
     const assignedUser = await User.findOne({
       username: data.assignedUser,
     });
     if (!user || !assignedUser) {
-      return res.status(404).json({ message: 'User not found' });
+      socket.emit('taskError', { message: 'User not found' });
+      return;
     }
     const userId = user._id;
     const assignedUserId = assignedUser._id;
@@ -30,25 +31,26 @@ const registerTask = async (data, io) => {
     await assignedUser.save();
     broadCastAddTask(savedTask, io);
   } catch (err) {
+    socket.emit('taskError', { message: err.message });
     console.log(err);
   }
 };
 
-const completeTask = async (data, username, io) => {
-  // console.log(data);
-  // console.log('~~~~~~~~~~~~~');
+const completeTask = async (data, username, io, socket) => {
   try {
     const taskId = data._id;
-    const name = username.username;
+    const name = username.id;
 
     const task = await Task.findById(taskId);
     if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
+      socket.emit('taskError', { message: 'Task not found' });
+      return;
     }
 
     const user = await User.findOne({ username: name });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      socket.emit('taskError', { message: 'User not found' });
+      return;
     }
 
     task.completedBy = user._id;
@@ -59,6 +61,7 @@ const completeTask = async (data, username, io) => {
     await user.save();
     broadCastCompleteTask(task, io);
   } catch (err) {
+    socket.emit('taskError', { message: err.message });
     console.log(err);
   }
 };

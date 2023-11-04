@@ -3,7 +3,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import AdminNavbar from '../../components/Admin/AdminNavbar';
 import AdminButton from '../../components/Admin/AdminButton';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import { formatDateTime } from '../../utils/time';
 import AuthContext from '../../context/AuthContext';
 

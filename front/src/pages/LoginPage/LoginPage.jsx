@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
@@ -35,7 +35,6 @@ const LoginPage = () => {
         'http://localhost:3003/api/users/login',
         userData
       );
-      // console.log(data);
       await getLoggedIn();
       const username = data.user.username;
       localStorage.setItem('userInfo', JSON.stringify(data.user));
@@ -45,13 +44,6 @@ const LoginPage = () => {
       console.log(e);
     }
   };
-
-  // useEffect(() => {
-  //   console.log('navigate');
-  //   if (loggedIn) {
-  //     navigate('/map/takato');
-  //   }
-  // }, []);
 
   const [showPassword, setShowPassword] = React.useState(false);
 

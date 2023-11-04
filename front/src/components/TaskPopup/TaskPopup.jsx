@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 
 const TaskPopup = ({ task, assignedUser, onClose }) => {
   const username = useParams();
-
+  console.log(username);
   const handleComplateTask = async (e) => {
     completeTask(task, username);
     connectWithSocketIOServer();

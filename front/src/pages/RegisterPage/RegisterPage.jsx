@@ -31,14 +31,9 @@ const RegisterPage = () => {
       email: data.get('email'),
       password: data.get('password'),
     };
-    console.log(userData);
 
     try {
-      const res = await axios.post(
-        'http://localhost:3003/api/users/register',
-        userData
-      );
-      console.log(res.data);
+      await axios.post('http://localhost:3003/api/users/register', userData);
       await getLoggedIn();
       navigate('/');
     } catch (e) {
