@@ -16,6 +16,7 @@ import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import AuthContext from '../../context/AuthContext';
+import toast, { Toaster } from 'react-hot-toast';
 
 const defaultTheme = createTheme();
 
@@ -23,21 +24,39 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const { getLoggedIn } = useContext(AuthContext);
 
+  const [formData, setFormData] = React.useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const userData = {
-      username: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
-    };
 
     try {
-      await axios.post('http://localhost:3003/api/users/register', userData);
+      await axios.post('http://localhost:3003/api/users/register', formData);
       await getLoggedIn();
-      navigate('/');
+      toast.success('Registration successful!');
+
+      setTimeout(() => {
+        navigate('/');
+      }, 200);
     } catch (e) {
-      console.log(e);
+      toast.error('Register failed.');
+      setFormData({
+        username: '',
+        email: '',
+        password: '',
+      });
+      console.error(e);
     }
   };
 
@@ -74,11 +93,13 @@ const RegisterPage = () => {
               margin="normal"
               required
               fullWidth
-              id="name"
+              id="username"
               label="username"
-              name="name"
-              autoComplete="name"
+              name="username"
+              autoComplete="username"
               autoFocus
+              value={formData.username}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
@@ -89,6 +110,8 @@ const RegisterPage = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              value={formData.email}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
@@ -96,7 +119,7 @@ const RegisterPage = () => {
               fullWidth
               name="password"
               label="Password"
-              type={showPassword ? 'text' : 'password'} // <-- This is where the magic happens
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               InputProps={{
@@ -112,6 +135,8 @@ const RegisterPage = () => {
                   </InputAdornment>
                 ),
               }}
+              value={formData.password}
+              onChange={handleChange}
             />
             <Button
               type="submit"
@@ -121,6 +146,7 @@ const RegisterPage = () => {
             >
               Sign In
             </Button>
+            <Toaster />
             <Link href="/" variant="body2">
               {'You want to log in?'}
             </Link>

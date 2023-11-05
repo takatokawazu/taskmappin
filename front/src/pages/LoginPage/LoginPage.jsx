@@ -16,32 +16,48 @@ import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import AuthContext from '../../context/AuthContext';
+import toast, { Toaster } from 'react-hot-toast';
 
 const defaultTheme = createTheme();
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { getLoggedIn, setUser } = useContext(AuthContext);
+
+  const [formData, setFormData] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const userData = {
-      email: data.get('email'),
-      password: data.get('password'),
-    };
 
     try {
       const { data } = await axios.post(
         'http://localhost:3003/api/users/login',
-        userData
+        formData
       );
       await getLoggedIn();
       const username = data.user.username;
       localStorage.setItem('userInfo', JSON.stringify(data.user));
       setUser(data.user);
+      toast.success('Login success!');
       navigate(`/map/${username}`);
     } catch (e) {
-      console.log(e);
+      toast.error('Login failed. Please check your email and password.');
+      setFormData({
+        email: '',
+        password: '',
+      });
+      console.error(e);
     }
   };
 
@@ -79,18 +95,20 @@ const LoginPage = () => {
               required
               fullWidth
               id="email"
-              label="Email Address"
               name="email"
+              label="Email Address"
               autoComplete="email"
               autoFocus
+              value={formData.email}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
               label="Password"
-              type={showPassword ? 'text' : 'password'} // <-- This is where the magic happens
+              name="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               InputProps={{
@@ -106,6 +124,8 @@ const LoginPage = () => {
                   </InputAdornment>
                 ),
               }}
+              value={formData.password}
+              onChange={handleChange}
             />
             <Button
               type="submit"
@@ -115,6 +135,7 @@ const LoginPage = () => {
             >
               Sign In
             </Button>
+            <Toaster />
             <Link href="/register" variant="body2">
               {"Don't have an account? Sign Up"}
             </Link>

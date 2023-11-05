@@ -13,22 +13,26 @@ const App = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (loggedIn === true && user) {
+    if (loggedIn && user) {
       if (location.pathname !== `/admin/${user.username}`) {
         navigate(`/map/${user.username}`, { replace: true });
+      }
+    } else {
+      if (location.pathname === '/register') {
+        navigate('/register', { replace: true });
       }
     }
   }, [loggedIn, user, navigate, location.pathname]);
 
   return (
     <Routes>
-      {(loggedIn === false || !user) && (
+      {(!loggedIn || !user) && (
         <>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </>
       )}
-      {loggedIn === true && (
+      {loggedIn && (
         <>
           <Route path="/map/:id" element={<MapPage />} />
           <Route path="/admin/:username" element={<AdminPage />} />
