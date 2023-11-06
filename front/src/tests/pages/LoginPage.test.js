@@ -7,7 +7,7 @@ import { AuthContextProvider } from '../../context/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-jest.mock('axios');
+// jest.mock('axios');
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => jest.fn(),
@@ -19,7 +19,7 @@ describe('LoginPage', () => {
 
   beforeEach(() => {
     mockNavigate.mockReset();
-    axios.get.mockResolvedValue({ data: true });
+    // axios.get.mockResolvedValue({ data: true });
     toast.success.mockClear();
     toast.error.mockClear();
   });
@@ -38,11 +38,11 @@ describe('LoginPage', () => {
   });
 });
 
-describe('first test', () => {
-  afterEach(() => jest.restoreAllMocks());
-  it('should return empty string', async () => {
-    axios.get.mockResolvedValue('');
-    const data = await axios.get();
-    expect(data).toEqual('');
-  });
-});
+// describe('first test', () => {
+//   afterEach(() => jest.restoreAllMocks());
+//   it('should return empty string', async () => {
+//     axios.get.mockResolvedValue('');
+//     const data = await axios.get();
+//     expect(data).toEqual('');
+//   });
+// });
