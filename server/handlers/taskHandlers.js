@@ -32,7 +32,6 @@ const registerTask = async (data, io, socket) => {
     broadCastAddTask(savedTask, io);
   } catch (err) {
     socket.emit('taskError', { message: err.message });
-    console.log(err);
   }
 };
 

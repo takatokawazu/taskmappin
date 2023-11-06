@@ -9,7 +9,7 @@ import { call, disconnect } from '../realtimeCommunication/webRTCHandler';
 import { taskHandler } from '../redux/actions/taskActions';
 import store from '../redux/stores/store';
 import { addTask, completeTask } from '../redux/slices/taskSlice';
-
+import toast from 'react-hot-toast';
 let socket = null;
 
 export const connectWithSocketIOServer = () => {
@@ -57,6 +57,7 @@ export const connectWithSocketIOServer = () => {
 
   socket.on('taskError', (error) => {
     console.error(error.message);
+    toast.error(error.message);
   });
 };
 

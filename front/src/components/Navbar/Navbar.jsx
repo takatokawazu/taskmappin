@@ -38,9 +38,11 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   const tasks = useSelector((state) => state.task.tasks);
   const navigate = useNavigate();
 
-  const assignedTasks = tasks.filter(
-    (task) => task.assignedUser === currentUserId
-  );
+  const assignedTasks = tasks
+    .filter((task) => task.assignedUser === currentUserId)
+    .filter(
+      (task, index, self) => index === self.findIndex((t) => t._id === task._id)
+    );
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -196,7 +198,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
         handleMenuClose={handleMenuClose}
         setViewport={setViewport}
       />
-      {assignedTasks.length != 0 && (
+      {assignedTasks.length !== 0 && (
         <NotificationMenu
           notification={notification}
           handleMenuClose={handleMenuClose}
