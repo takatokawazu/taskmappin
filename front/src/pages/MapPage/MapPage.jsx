@@ -22,6 +22,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import { addTaskHandler } from '../../redux/actions/taskActions';
 import { Box } from '@mui/material';
 import AuthContext from '../../context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 
 const libraries = [process.env.REACT_APP_PLACES];
 
@@ -160,7 +161,16 @@ const MapPage = () => {
     } catch (error) {
       console.error('Error submitting pin:', error);
     }
-    setState((prev) => ({ ...prev, newPlace: null }));
+    setState((prev) => ({
+      ...prev,
+      newPlace: null,
+      formFields: {
+        title: '',
+        desc: '',
+        assignedUser: prev.formFields.assignedUser,
+        deadline: '',
+      },
+    }));
   };
 
   const getUser = async (id) => {
@@ -205,11 +215,11 @@ const MapPage = () => {
             positionOptions={{ enableHighAccuracy: true }}
             trackUserLocation={true}
           />
-          {onlineUsers.map((onlineUser) => (
+          {onlineUsers.map((onlineUser, index) => (
             <UserMarker
               lat={onlineUser.coords?.lat}
               lng={onlineUser.coords?.lng}
-              key={onlineUser.userId}
+              key={index}
               myself={onlineUser?.myself || false}
               userId={onlineUser.userId}
               username={onlineUser.username}
@@ -267,6 +277,7 @@ const MapPage = () => {
               onClose={() => setState((prev) => ({ ...prev, newPlace: null }))}
             />
           )}
+          <Toaster />
         </Map>
         <Messanger />
         {cardChosenOption && currentUserPosition && (
