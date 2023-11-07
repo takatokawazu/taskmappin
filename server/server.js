@@ -1,5 +1,4 @@
 const { app, server, io, mongoose } = require('./app');
-const { PeerServer } = require('peer');
 const express = require('express');
 const path = require('path');
 const userRoutes = require('./routes/users');
@@ -10,7 +9,6 @@ const PORT = process.env.PORT || 3003;
 
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-  secure: true,
 });
 
 app.use(express.json());
