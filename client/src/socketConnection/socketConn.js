@@ -13,10 +13,9 @@ import toast from 'react-hot-toast';
 let socket = null;
 
 const ENDPOINT = 'https://taskmappin-c2989267e49d.herokuapp.com/';
+socket = io(ENDPOINT);
 
 export const connectWithSocketIOServer = () => {
-  socket = io(ENDPOINT);
-
   socket.on('connect', () => {
     console.log('connected to socket server');
   });

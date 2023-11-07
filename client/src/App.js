@@ -6,7 +6,6 @@ import RegisterPage from './pages/RegisterPage/RegisterPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import AuthContext from './context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { connectWithSocketIOServer } from './socketConnection/socketConn';
 
 const App = () => {
   const { loggedIn, user } = useContext(AuthContext);
@@ -16,7 +15,6 @@ const App = () => {
   useEffect(() => {
     if (loggedIn && user) {
       if (location.pathname !== `/admin/${user.username}`) {
-        connectWithSocketIOServer();
         navigate(`/map/${user.username}`, { replace: true });
       }
     } else {
