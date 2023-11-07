@@ -10,7 +10,7 @@ require('dotenv').config();
 
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    // origin: ['http://localhost:3000'],
     credentials: true,
   })
 );
@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000'],
+    // origin: ['http://localhost:3000'],
     methods: ['GET', 'POST'],
   },
 });
