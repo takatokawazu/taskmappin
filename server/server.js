@@ -33,18 +33,6 @@ app.use('/peerjs', peerServer);
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 
-const __dirname1 = path.resolve();
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname1, '/client/build')));
-  app.get('*', function (req, res) {
-    res.sendFile(path.resolve(__dirname1, 'client', 'build', 'index.html'));
-  });
-} else {
-  app.get('/', (req, res) => {
-    res.send('API is Running Successfully');
-  });
-}
-
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true })
   .then(() => {
@@ -57,3 +45,15 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname1, '/client/build')));
+  app.get('*', function (req, res) {
+    res.sendFile(path.resolve(__dirname1, 'client', 'build', 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is Running Successfully');
+  });
+}
