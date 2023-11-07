@@ -8,11 +8,12 @@ const setupSocketHandlers = require('./handlers/socketHandlers');
 
 app.use(express.json());
 
+const __dirname1 = path.resolve();
+
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('../client/build'));
+  app.use(express.static(path.join(__dirname1, '/client/build')));
   app.get('*', function (req, res) {
-    const indexHtml = path.resolve('../client/build', 'index.html');
-    res.sendFile(indexHtml);
+    res.sendFile(path.join(__dirname1, 'client', 'build', 'index.html'));
   });
 } else {
   app.get('/', (req, res) => {
