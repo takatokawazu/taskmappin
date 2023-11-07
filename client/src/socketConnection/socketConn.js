@@ -12,10 +12,10 @@ import { addTask, completeTask } from '../redux/slices/taskSlice';
 import toast from 'react-hot-toast';
 let socket = null;
 
-const ENDPOINT = process.env.REACT_APP_ENDPOINT;
+const ENDPOINT = process.env.REACT_APP_ENDPOINT || 'http://localhost:3003';
 
 export const connectWithSocketIOServer = () => {
-  socket = io('http://localhost:3003');
+  socket = io(ENDPOINT);
 
   socket.on('connect', () => {
     console.log('connected to socket server');
