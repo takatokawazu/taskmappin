@@ -18,8 +18,6 @@ const columns = [
   { field: 'isDone', headerName: 'Is Done', width: 100 },
 ];
 
-const API_BASE_URL = 'http://localhost:3003/api';
-
 export default function AdminPage() {
   const [selectedButton, setSelectedButton] = useState('all tasks');
   const [assignedTasks, setAssignedTasks] = useState([]);

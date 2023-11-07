@@ -8,17 +8,17 @@ const setupSocketHandlers = require('./handlers/socketHandlers');
 
 app.use(express.json());
 
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static('../front/build'));
-//   app.get('*', function (req, res) {
-//     const indexHtml = path.resolve('../front/build', 'index.html');
-//     res.sendFile(indexHtml);
-//   });
-// } else {
-app.get('/', (req, res) => {
-  res.send('API is Running Successfully');
-});
-// }
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('../front/build'));
+  app.get('*', function (req, res) {
+    const indexHtml = path.resolve('../front/build', 'index.html');
+    res.sendFile(indexHtml);
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is Running Successfully');
+  });
+}
 
 const peerServer = PeerServer({ port: 9000, path: '/peer' });
 const PORT = process.env.PORT || 3003;
