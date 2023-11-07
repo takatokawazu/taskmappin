@@ -9,9 +9,9 @@ const setupSocketHandlers = require('./handlers/socketHandlers');
 app.use(express.json());
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('../front/build'));
+  app.use(express.static('../client/build'));
   app.get('*', function (req, res) {
-    const indexHtml = path.resolve('../front/build', 'index.html');
+    const indexHtml = path.resolve('../client/build', 'index.html');
     res.sendFile(indexHtml);
   });
 } else {
