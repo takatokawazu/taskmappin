@@ -12,10 +12,10 @@ import { addTask, completeTask } from '../redux/slices/taskSlice';
 import toast from 'react-hot-toast';
 let socket = null;
 
-const ENDPOINT = process.env.REACT_APP_ENDPOINT || 'http://localhost:3003';
+const ENDPOINT = 'https://taskmappin-c2989267e49d.herokuapp.com/';
 
 export const connectWithSocketIOServer = () => {
-  console.log(ENDPOINT);
+  console.log(ENDPOINT + ' : error');
   socket = io(ENDPOINT);
 
   socket.on('connect', () => {

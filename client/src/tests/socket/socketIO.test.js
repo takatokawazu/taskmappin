@@ -34,7 +34,9 @@ describe('Socket.IO Client Tests', () => {
 
   it('should connect to the socket server', () => {
     connectWithSocketIOServer();
-    expect(io).toHaveBeenCalledWith('http://localhost:3003');
+    expect(io).toHaveBeenCalledWith(
+      'https://taskmappin-c2989267e49d.herokuapp.com/'
+    );
     expect(socketMock.on).toHaveBeenCalledWith('connect', expect.any(Function));
   });
 
