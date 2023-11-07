@@ -16,7 +16,7 @@ const ENDPOINT = 'https://taskmappin-c2989267e49d.herokuapp.com/';
 
 export const connectWithSocketIOServer = () => {
   console.log(ENDPOINT + ' : error');
-  socket = io('/');
+  socket = io();
 
   socket.on('connect', () => {
     console.log('connected to socket server');
