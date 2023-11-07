@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 
 const App = () => {
   const { loggedIn, user } = useContext(AuthContext);
-  console.log(process.env.REACT_APP_ENDPOINT);
   const navigate = useNavigate();
   const location = useLocation();
 

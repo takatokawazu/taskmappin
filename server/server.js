@@ -5,11 +5,20 @@ const path = require('path');
 const userRoutes = require('./routes/users');
 const taskRoutes = require('./routes/tasks');
 const setupSocketHandlers = require('./handlers/socketHandlers');
+const { ExpressPeerServer } = require('peer');
+const PORT = process.env.PORT || 3003;
+
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+  secure: true,
+});
 
 app.use(express.json());
+app.use('/peerjs', peerServer);
+app.use('/api/users', userRoutes);
+app.use('/api/tasks', taskRoutes);
 
 const __dirname1 = path.resolve();
-
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname1, '/client/build')));
   app.get('*', function (req, res) {
@@ -20,12 +29,6 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is Running Successfully');
   });
 }
-
-const peerServer = PeerServer({ port: 9000, path: '/peer' });
-const PORT = process.env.PORT || 3003;
-
-app.use('/api/users', userRoutes);
-app.use('/api/tasks', taskRoutes);
 
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true })

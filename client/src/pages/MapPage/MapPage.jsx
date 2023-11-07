@@ -173,10 +173,10 @@ const MapPage = () => {
 
   const getUser = async (id) => {
     try {
-      const response = await axios.get(`api/users/id/${id}`);
+      const { data } = await axios.get(`/api/users/id/${id}`);
       setState((prev) => ({
         ...prev,
-        assignedUser: response.data.username,
+        assignedUser: data.username,
       }));
     } catch (error) {
       console.error('Error fetching pins:', error);

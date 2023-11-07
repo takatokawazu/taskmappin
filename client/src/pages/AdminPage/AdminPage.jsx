@@ -41,7 +41,6 @@ export default function AdminPage() {
 
     const fetchData = async () => {
       const { data: allTasksData } = await axios.get('/api/tasks');
-      console.log(allTasksData);
       setAllTasks(mapTasks(allTasksData));
       setCompletedTasks(mapTasks(allTasksData.filter((task) => task.isDone)));
       setUncompletedTasks(

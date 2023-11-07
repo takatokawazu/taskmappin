@@ -23,7 +23,6 @@ const defaultTheme = createTheme();
 const LoginPage = () => {
   const navigate = useNavigate();
   const { getLoggedIn, setUser } = useContext(AuthContext);
-  console.log(process.env.REACT_APP_PLACES);
   const [formData, setFormData] = React.useState({
     email: '',
     password: '',
