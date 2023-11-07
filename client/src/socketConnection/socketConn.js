@@ -15,6 +15,7 @@ let socket = null;
 const ENDPOINT = process.env.REACT_APP_ENDPOINT || 'http://localhost:3003';
 
 export const connectWithSocketIOServer = () => {
+  console.log(ENDPOINT);
   socket = io(ENDPOINT);
 
   socket.on('connect', () => {

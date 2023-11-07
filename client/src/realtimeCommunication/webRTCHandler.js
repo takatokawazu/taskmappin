@@ -28,7 +28,6 @@ export const getAccessToLocalStream = async () => {
 export const connectWithPeerServer = () => {
   const hostName = window.location.hostname;
   console.log(hostName);
-  console.log(process.env.PORT);
   peer = new Peer(undefined, {
     host: hostName,
     port: '443',
