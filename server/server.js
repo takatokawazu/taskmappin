@@ -6,7 +6,7 @@ const taskRoutes = require('./routes/tasks');
 const setupSocketHandlers = require('./handlers/socketHandlers');
 const { ExpressPeerServer } = require('peer');
 const PORT = process.env.PORT || 3003;
-
+console.log(PORT);
 const peerServer = ExpressPeerServer(server, {
   debug: true,
 });

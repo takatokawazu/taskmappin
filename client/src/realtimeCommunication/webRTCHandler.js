@@ -31,7 +31,7 @@ export const connectWithPeerServer = () => {
   console.log(process.env.PORT);
   peer = new Peer(undefined, {
     host: hostName,
-    port: process.env.PORT || '3003',
+    port: '443',
     path: '/peerjs',
   });
 
