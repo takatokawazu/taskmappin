@@ -48,7 +48,6 @@ mongoose
     server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
       setupSocketHandlers(io);
-      app.use('/peerjs', peerServer);
     });
   })
   .catch((error) => {
