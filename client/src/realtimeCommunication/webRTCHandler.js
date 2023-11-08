@@ -27,19 +27,19 @@ export const getAccessToLocalStream = async () => {
 
 export const connectWithPeerServer = () => {
   const hostName = window.location.hostname;
-  const port = '443'; // 443;
+  const port = 443; // 443;
   // ~~~~~~~~~~~~~~~deploy~~~~~~~~~~~~~~
+  peer = new Peer(undefined, {
+    host: 'taskmappin-c2989267e49d.herokuapp.com/',
+    port: port,
+    secure: true,
+  });
+
   // peer = new Peer(undefined, {
   //   host: hostName,
-  //   port: port,
+  //   port: '9000',
   //   path: '/peerjs',
   // });
-
-  peer = new Peer(undefined, {
-    host: hostName,
-    port: '9000',
-    path: '/peerjs',
-  });
 
   peer.on('open', (id) => {
     console.log('My peer ID is: ' + id);
