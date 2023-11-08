@@ -29,7 +29,9 @@ const io = new Server(server, {
 
 const PORT = process.env.PORT || 3003;
 
-const peerServer = PeerServer({ path: '/peerjs' });
+// ~~~~~~~~~~~~~~~deploy~~~~~~~~~~~~~~
+// const peerServer = PeerServer({ path: '/peerjs' });
+const peerServer = PeerServer({ port: '9000', path: '/peerjs' });
 
 app.use(cookieParser());
 app.use(express.json());
