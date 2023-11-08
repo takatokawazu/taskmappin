@@ -34,6 +34,7 @@ const PORT = process.env.PORT || 3003;
 // const peerServer = PeerServer({ port: '9000' });
 const peerServer = ExpressPeerServer(server, {
   debug: true,
+  path: '/myapp',
 });
 
 app.use(cookieParser());
