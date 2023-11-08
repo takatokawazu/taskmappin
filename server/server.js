@@ -4,7 +4,7 @@ const userRoutes = require('./routes/users');
 const taskRoutes = require('./routes/tasks');
 const setupSocketHandlers = require('./handlers/socketHandlers');
 const mongoose = require('mongoose');
-const { ExpressPeerServer } = require('peer');
+const { ExpressPeerServer, PeerServer } = require('peer');
 const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
@@ -15,21 +15,24 @@ require('dotenv').config();
 
 app.use(
   cors({
+    origin: ['http://localhost:3000'],
     credentials: true,
   })
 );
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST'],
+  },
+});
 
 const PORT = process.env.PORT || 3003;
 
-const peerServer = ExpressPeerServer(server, {
-  debug: true,
-});
+const peerServer = PeerServer({ port: '443', path: '/peerjs' });
 
 app.use(cookieParser());
 app.use(express.json());
-app.use('/peerjs', peerServer);
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 
