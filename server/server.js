@@ -38,7 +38,6 @@ const peerServer = ExpressPeerServer(server, {
 
 app.use(cookieParser());
 app.use(express.json());
-app.use('/peerjs', peerServer);
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 

@@ -32,7 +32,6 @@ export const connectWithPeerServer = () => {
   peer = new Peer(undefined, {
     host: 'taskmappin-c2989267e49d.herokuapp.com',
     port: port,
-    path: '/peerjs',
     secure: true,
   });
 
