@@ -15,7 +15,7 @@ require('dotenv').config();
 
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: '*',
     credentials: true,
   })
 );
@@ -31,17 +31,16 @@ const PORT = process.env.PORT || 3003;
 
 // ~~~~~~~~~~~~~~~deploy~~~~~~~~~~~~~~
 // const peerServer = PeerServer({ path: '/peerjs' });
-// const peerServer = PeerServer({ port: '9000', path: '/peerjs' });
+// const peerServer = PeerServer({ port: '9000' });
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-  path: '/myapp',
 });
 
 app.use(cookieParser());
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
-app.use(peerServer);
+// app.use(peerServer);
 
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true })
