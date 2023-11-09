@@ -40,7 +40,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
-app.use('/peerjs', peerServer);
+// app.use(peerServer);
 
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true })
