@@ -287,7 +287,7 @@ const MapPage = () => {
           />
         )}
 
-        <VideoRooms />
+        {/* <VideoRooms /> */}
       </Box>
     )
   );

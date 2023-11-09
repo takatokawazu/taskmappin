@@ -144,7 +144,7 @@ const RegisterPage = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign up
             </Button>
             <Toaster />
             <Link href="/" variant="body2">
