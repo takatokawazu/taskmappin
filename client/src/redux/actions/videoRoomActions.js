@@ -10,12 +10,9 @@ import {
 
 export const createVideoRoom = async () => {
   const success = await getAccessToLocalStream();
-
   if (success) {
     const newRoomId = uuid();
-
     store.dispatch(setInRoom(newRoomId));
-
     socketConn.createVideoRoom({
       peerId: getPeerId(),
       newRoomId,
@@ -23,14 +20,33 @@ export const createVideoRoom = async () => {
   }
 };
 
-export const joinVideoRoom = async (roomId) => {
+export const videoReceiveHandler = async (videoData) => {
+  const { senderUserId, newRoomId, peerId, senderUsername } = videoData;
+  // const success = await getAccessToLocalStream();
+
+  // if (success) {
+  alert(senderUsername + 'から電話がかかりました。');
+  // store.dispatch(setInRoom(newRoomId));
+  // }
+  const success = await getAccessToLocalStream();
+  if (success) {
+    store.dispatch(setInRoom(newRoomId));
+    socketConn.videoAnswer({
+      roomId: newRoomId,
+      peerId,
+      senderUserId,
+    });
+  }
+};
+
+export const joinVideoRoom = async (roomId, userId) => {
   const success = await getAccessToLocalStream();
   if (success) {
     store.dispatch(setInRoom(roomId));
-
     socketConn.joinVideoRoom({
       roomId,
       peerId: getPeerId(),
+      userId,
     });
   }
 };

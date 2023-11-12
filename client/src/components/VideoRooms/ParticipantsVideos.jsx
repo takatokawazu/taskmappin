@@ -9,6 +9,10 @@ const ParticipantsVideos = () => {
   const localStream = useSelector((state) => state.videoRooms.localStream);
   const remoteStream = useSelector((state) => state.videoRooms.remoteStream);
 
+  // console.log(inRoom);
+  // console.log(localStream);
+  // console.log(remoteStream);
+
   return (
     <Box
       sx={{

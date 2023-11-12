@@ -29,17 +29,17 @@ export const connectWithPeerServer = () => {
   const hostName = window.location.hostname;
   const port = 443; // 443;
   // ~~~~~~~~~~~~~~~deploy~~~~~~~~~~~~~~
-  peer = new Peer(undefined, {
-    host: 'taskmappin-c2989267e49d.herokuapp.com',
-    port: port,
-    // path: '/myapp',
-  });
-
   // peer = new Peer(undefined, {
-  //   host: hostName,
-  //   port: '9000',
-  //   // path: '/peerjs',
+  //   host: 'taskmappin-c2989267e49d.herokuapp.com',
+  //   port: port,
+  // path: '/myapp',
   // });
+
+  peer = new Peer(undefined, {
+    host: 'localhost',
+    port: '9000',
+    path: '/myapp',
+  });
 
   peer.on('open', (id) => {
     console.log('My peer ID is: ' + id);
@@ -62,6 +62,7 @@ export const call = (data) => {
 
   const peerCall = peer.call(newParticipantPeerId, localStream);
 
+  console.log('localstream!!!!!!!!!!!!');
   peerCall.on('stream', (remoteStream) => {
     console.log('remote stream came');
     store.dispatch(setRemoteStream(remoteStream));

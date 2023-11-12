@@ -23,6 +23,8 @@ import { addTaskHandler } from '../../redux/actions/taskActions';
 import { Box } from '@mui/material';
 import AuthContext from '../../context/AuthContext';
 import { Toaster } from 'react-hot-toast';
+import RoomJoinButton from '../../components/VideoRooms/RoomJoinButton';
+import CreateRoomButton from '../../components/VideoRooms/CreateRoomButton';
 
 const libraries = [process.env.REACT_APP_PLACES];
 
@@ -30,6 +32,7 @@ const MapPage = () => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
   const tasks = useSelector((state) => state.task.tasks);
+  const rooms = useSelector((store) => store.videoRooms.rooms);
   const [currentUserId, setCurrentUserId] = useState('');
   const { user } = useContext(AuthContext);
 
@@ -286,8 +289,16 @@ const MapPage = () => {
             currentUserPosition={currentUserPosition}
           />
         )}
-
-        {/* <VideoRooms /> */}
+        {/* <CreateRoomButton /> */}
+        {/* {Object.keys(rooms).length !== 0 && (
+          <RoomJoinButton
+            key={rooms.newRoomId}
+            creatorUsername={rooms.username}
+            roomId={rooms.newRoomId}
+            userId={rooms.callerUserId}
+          />
+        )} */}
+        <VideoRooms />
       </Box>
     )
   );

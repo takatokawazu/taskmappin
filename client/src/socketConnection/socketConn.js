@@ -4,7 +4,10 @@ import {
   userDisconnectedHandler,
 } from '../redux/actions/usersActions';
 import { chatMessageHandler } from '../redux/actions/messangerActions';
-import { videoRoomsListHandler } from '../redux/actions/videoRoomActions';
+import {
+  videoReceiveHandler,
+  videoRoomsListHandler,
+} from '../redux/actions/videoRoomActions';
 import { call, disconnect } from '../realtimeCommunication/webRTCHandler';
 import { taskHandler } from '../redux/actions/taskActions';
 import store from '../redux/stores/store';
@@ -13,10 +16,10 @@ import toast from 'react-hot-toast';
 let socket = null;
 
 const ENDPOINT = 'https://taskmappin-c2989267e49d.herokuapp.com';
-// http://localhost:3003
+//
 export const connectWithSocketIOServer = () => {
   // socket = io(ENDPOINT);
-  socket = io(ENDPOINT);
+  socket = io('http://localhost:3003');
 
   socket.on('connect', () => {
     console.log('connected to socket server');
@@ -42,7 +45,13 @@ export const connectWithSocketIOServer = () => {
     chatMessageHandler(messageData);
   });
 
+  socket.on('video-call', (videoData) => {
+    console.log(videoData);
+    videoReceiveHandler(videoData);
+  });
+
   socket.on('video-rooms', (videoRooms) => {
+    console.log(videoRooms);
     videoRoomsListHandler(videoRooms);
   });
 
@@ -70,6 +79,14 @@ export const login = (data) => {
 
 export const sendChatMessage = (data) => {
   socket.emit('chat-message', data);
+};
+
+export const videoCall = (data) => {
+  socket.emit('video-call', data);
+};
+
+export const videoAnswer = (data) => {
+  socket.emit('video-answer', data);
 };
 
 export const createVideoRoom = (data) => {

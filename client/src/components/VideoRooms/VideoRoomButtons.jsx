@@ -7,9 +7,11 @@ import cameraOffIcon from '../../resources/images/camera-off-icon.svg';
 import { leaveVideoRoom } from '../../redux/actions/videoRoomActions';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+  setInRoom,
   setIsCameraOn,
   setIsMicOn,
   setLocalStream,
+  setRooms,
 } from '../../redux/slices/videoRoomsSlice';
 import { Box, Button } from '@mui/material';
 
@@ -27,7 +29,9 @@ const VideoRoomButtons = ({ inRoom }) => {
       });
 
       dispatch(setLocalStream(null));
+      // dispatch(setRooms({}));
     }
+    console.log(inRoom);
     leaveVideoRoom(inRoom);
   };
 

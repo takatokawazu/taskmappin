@@ -7,7 +7,7 @@ const {
 
 const videoRoomCreateHandler = (socket, data, io) => {
   console.log('new room', data);
-  const { peerId, newRoomId } = data;
+  const { peerId, newRoomId, userId } = data;
   videoRooms[newRoomId] = {
     participants: [
       {
@@ -18,20 +18,50 @@ const videoRoomCreateHandler = (socket, data, io) => {
       },
     ],
   };
+  const callData = {
+    callerUserId: socketToUserId[socket.id],
+    callerSocketId: socket.id,
+    username: onlineUsers[socketToUserId[socket.id]].username,
+    peerId,
+    newRoomId,
+  };
+  broadcastVideoRooms(io, userId, callData);
+};
 
-  broadcastVideoRooms(io);
+const callHandler = (socket, data, io) => {
+  // const { receiverUserId, newRoomId, peerId } = data;
+  // console.log('sending message to other user');
+  // if (onlineUsers[receiverUserId]) {
+  //   io.to(onlineUsers[receiverUserId].socketId).emit('video-call', {
+  //     senderUserId: socketToUserId[socket.id],
+  //     newRoomId,
+  //     peerId,
+  //     senderUsername: onlineUsers[socketToUserId[socket.id]].username,
+  //   });
+  // }
+  // if (onlineUsers[receiverUserId]) {
+  //   io.to(onlineUsers[receiverUserId].socketId).emit('video-rooms', data);
+  // }
+};
+
+const answerHandler = (socket, data, io) => {
+  // const { roomId, peerId, senderUserId } = data;
+  // socket.to(onlineUsers[senderUserId].socketId).emit('video-room-init', {
+  //   newParticipantPeerId: peerId,
+  // });
+  // if (onlineUsers[senderUserId]) {
+  //   io.to(onlineUsers[senderUserId].socketId).emit('video-rooms', data);
+  // }
 };
 
 const videoRoomJoinHandler = (socket, data, io) => {
-  const { roomId, peerId } = data;
-  console.log(videoRooms[roomId].participants);
+  const { roomId, peerId, userId } = data;
   if (videoRooms[roomId]) {
     videoRooms[roomId].participants.forEach((participant) => {
       socket.to(participant.socketId).emit('video-room-init', {
         newParticipantPeerId: peerId,
       });
     });
-
     videoRooms[roomId].participants = [
       ...videoRooms[roomId].participants,
       {
@@ -42,7 +72,15 @@ const videoRoomJoinHandler = (socket, data, io) => {
       },
     ];
 
-    broadcastVideoRooms(io);
+    const callData = {
+      callerUserId: socketToUserId[socket.id],
+      callerSocketId: socket.id,
+      username: onlineUsers[socketToUserId[socket.id]].username,
+      peerId,
+      roomId,
+    };
+
+    broadcastVideoRooms(io, userId, callData);
   }
 };
 
@@ -65,11 +103,13 @@ const videoRoomLeaveHandler = (socket, data, io) => {
     delete videoRooms[roomId];
   }
 
-  broadcastVideoRooms(io);
+  broadcastVideoRooms(io, 'logged-users');
 };
 
 module.exports = {
   videoRoomCreateHandler,
   videoRoomJoinHandler,
   videoRoomLeaveHandler,
+  callHandler,
+  answerHandler,
 };

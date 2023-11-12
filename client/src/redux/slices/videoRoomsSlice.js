@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   inRoom: null,
-  rooms: [],
+  rooms: {},
   localStream: null,
   remoteStream: null,
   isMicOn: true,
