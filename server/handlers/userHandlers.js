@@ -6,8 +6,12 @@ const broadcastDisconnectedUserDetails = (disconnectedUserSocketId, io) => {
   io.to('logged-users').emit('user-disconnected', disconnectedUserSocketId);
 };
 
-const broadcastVideoRooms = (io) => {
-  io.to('logged-users').emit('video-rooms', videoRooms);
+const broadcastVideoRooms = (io, userId, data = {}) => {
+  if (onlineUsers[userId]) {
+    io.to(onlineUsers[userId].socketId).emit('video-rooms', data);
+  } else {
+    io.to('logged-users').emit('video-rooms', data);
+  }
 };
 
 const loginEventHandler = (socket, data, io) => {
@@ -28,7 +32,7 @@ const loginEventHandler = (socket, data, io) => {
     convertOnlineUsersToArray()
   );
 
-  broadcastVideoRooms(io);
+  // broadcastVideoRooms(io, user._id);
 };
 
 const chatMessageHandler = (socket, data, io) => {
@@ -91,7 +95,7 @@ const removeUserFromTheVideoRoom = (socketId, roomId, io) => {
     );
   }
 
-  broadcastVideoRooms(io);
+  broadcastVideoRooms(io, socketToUserId[socketId]);
 };
 
 const convertOnlineUsersToArray = () => {
