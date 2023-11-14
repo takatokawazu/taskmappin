@@ -28,32 +28,6 @@ const videoRoomCreateHandler = (socket, data, io) => {
   broadcastVideoRooms(io, userId, callData);
 };
 
-const callHandler = (socket, data, io) => {
-  // const { receiverUserId, newRoomId, peerId } = data;
-  // console.log('sending message to other user');
-  // if (onlineUsers[receiverUserId]) {
-  //   io.to(onlineUsers[receiverUserId].socketId).emit('video-call', {
-  //     senderUserId: socketToUserId[socket.id],
-  //     newRoomId,
-  //     peerId,
-  //     senderUsername: onlineUsers[socketToUserId[socket.id]].username,
-  //   });
-  // }
-  // if (onlineUsers[receiverUserId]) {
-  //   io.to(onlineUsers[receiverUserId].socketId).emit('video-rooms', data);
-  // }
-};
-
-const answerHandler = (socket, data, io) => {
-  // const { roomId, peerId, senderUserId } = data;
-  // socket.to(onlineUsers[senderUserId].socketId).emit('video-room-init', {
-  //   newParticipantPeerId: peerId,
-  // });
-  // if (onlineUsers[senderUserId]) {
-  //   io.to(onlineUsers[senderUserId].socketId).emit('video-rooms', data);
-  // }
-};
-
 const videoRoomJoinHandler = (socket, data, io) => {
   const { roomId, peerId, userId } = data;
   if (videoRooms[roomId]) {
@@ -110,6 +84,4 @@ module.exports = {
   videoRoomCreateHandler,
   videoRoomJoinHandler,
   videoRoomLeaveHandler,
-  callHandler,
-  answerHandler,
 };

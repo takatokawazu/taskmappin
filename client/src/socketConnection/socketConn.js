@@ -5,7 +5,6 @@ import {
 } from '../redux/actions/usersActions';
 import { chatMessageHandler } from '../redux/actions/messangerActions';
 import {
-  videoReceiveHandler,
   videoRoomsListHandler,
 } from '../redux/actions/videoRoomActions';
 import { call, disconnect } from '../realtimeCommunication/webRTCHandler';
@@ -45,11 +44,6 @@ export const connectWithSocketIOServer = () => {
     chatMessageHandler(messageData);
   });
 
-  socket.on('video-call', (videoData) => {
-    console.log(videoData);
-    videoReceiveHandler(videoData);
-  });
-
   socket.on('video-rooms', (videoRooms) => {
     console.log(videoRooms);
     videoRoomsListHandler(videoRooms);
@@ -81,13 +75,6 @@ export const sendChatMessage = (data) => {
   socket.emit('chat-message', data);
 };
 
-export const videoCall = (data) => {
-  socket.emit('video-call', data);
-};
-
-export const videoAnswer = (data) => {
-  socket.emit('video-answer', data);
-};
 
 export const createVideoRoom = (data) => {
   socket.emit('video-room-create', data);

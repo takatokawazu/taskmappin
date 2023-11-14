@@ -25,14 +25,6 @@ const setupSocketHandlers = (io) => {
       userHandlers.chatMessageHandler(socket, data, io)
     );
 
-    socket.on('video-call', (data) => {
-      videoRoomHandlers.callHandler(socket, data, io);
-    });
-
-    socket.on('video-answer', (data) => {
-      videoRoomHandlers.answerHandler(socket, data, io);
-    });
-
     socket.on('video-room-create', (data) =>
       videoRoomHandlers.videoRoomCreateHandler(socket, data, io)
     );
