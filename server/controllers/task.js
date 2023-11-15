@@ -43,32 +43,4 @@ const getAllTasks = async (req, res) => {
   res.status(200).json(tasks);
 };
 
-const completeTask = async (req, res) => {
-  try {
-    const taskId = req.params.id;
-    const username = req.body.username;
-
-    const task = await Task.findById(taskId);
-    if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
-    }
-
-    const user = await User.findOne({ username: username });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    task.completedBy = user._id;
-    task.isDone = true;
-    await task.save();
-
-    user.completedTasks.push(task._id);
-    await user.save();
-
-    res.status(200).json({ message: 'Task completed successfully' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-module.exports = { registerTask, getAllTasks, completeTask };
+module.exports = { registerTask, getAllTasks };

@@ -18,13 +18,11 @@ const RoomJoinButton = ({ creatorUsername, roomId, userId }) => {
     <Button
       onClick={handleJoinRoom}
       variant="contained"
-      color="primary"
+      color="success"
       sx={{
-        width: '100px',
+        width: '200px',
         height: '45px',
-        marginRight: '15px',
-        borderRadius: '50px',
-        fontSize: '24px',
+        fontSize: '12px',
         transition: '0.3s',
         '&:hover': {
           opacity: 0.6,
@@ -34,7 +32,7 @@ const RoomJoinButton = ({ creatorUsername, roomId, userId }) => {
         },
       }}
     >
-      {creatorUsername}
+      {creatorUsername}が電話をしています
     </Button>
   );
 };

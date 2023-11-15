@@ -14,8 +14,9 @@ const App = () => {
 
   useEffect(() => {
     if (loggedIn && user) {
-      if (location.pathname !== `/admin/${user.username}`) {
-        navigate(`/map/${user.username}`, { replace: true });
+      console.log(user)
+      if (location.pathname !== `/admin/${user._id}`) {
+        navigate(`/map/${user._id}`, { replace: true });
       }
     } else {
       if (location.pathname === '/register') {

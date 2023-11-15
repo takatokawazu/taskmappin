@@ -35,18 +35,18 @@ const registerTask = async (data, io, socket) => {
   }
 };
 
-const completeTask = async (data, username, io, socket) => {
+const completeTask = async (data, userId, io, socket) => {
   try {
     const taskId = data._id;
-    const name = username.id;
-
+    const id = userId.id;
+    console.log(id)
     const task = await Task.findById(taskId);
     if (!task) {
       socket.emit('taskError', { message: 'Task not found' });
       return;
     }
 
-    const user = await User.findOne({ username: name });
+    const user = await User.findById(id);
     if (!user) {
       socket.emit('taskError', { message: 'User not found' });
       return;
