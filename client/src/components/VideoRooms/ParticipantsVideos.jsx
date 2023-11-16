@@ -9,10 +9,6 @@ const ParticipantsVideos = () => {
   const localStream = useSelector((state) => state.videoRooms.localStream);
   const remoteStream = useSelector((state) => state.videoRooms.remoteStream);
 
-  // console.log(inRoom);
-  // console.log(localStream);
-  // console.log(remoteStream);
-
   return (
     <Box
       sx={{
@@ -20,7 +16,7 @@ const ParticipantsVideos = () => {
         display: 'flex',
         flexDirection: 'column-reverse',
         right: '10px',
-        bottom: '150px',
+        bottom: '30px',
         width: '250px',
         alignItems: 'flex-end',
       }}

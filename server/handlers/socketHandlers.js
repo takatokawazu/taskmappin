@@ -17,8 +17,8 @@ const setupSocketHandlers = (io) => {
       taskHandlers.registerTask(task, io, socket);
     });
 
-    socket.on('complete-task', (task, username) => {
-      taskHandlers.completeTask(task, username, io, socket);
+    socket.on('complete-task', (task, userId) => {
+      taskHandlers.completeTask(task, userId, io, socket);
     });
 
     socket.on('chat-message', (data) =>

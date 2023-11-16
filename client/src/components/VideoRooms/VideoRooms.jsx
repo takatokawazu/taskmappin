@@ -6,17 +6,18 @@ import { Box } from '@mui/material';
 
 const VideoRooms = () => {
   const rooms = useSelector((store) => store.videoRooms.rooms);
-  console.log(rooms);
 
   return (
     <>
       <Box
         sx={{
           position: 'absolute',
-          top: '25px',
-          right: '45px',
+          top: '100px',
           display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           flexDirection: 'row-reverse',
+          width: '100%',
         }}
       >
         {Object.keys(rooms).length !== 0 && (

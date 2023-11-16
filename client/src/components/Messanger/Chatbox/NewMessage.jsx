@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { sendChatMessage } from '../../../redux/actions/messangerActions';
 import { useSelector } from 'react-redux';
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, IconButton } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 
 const NewMessage = ({ userId }) => {
   const [message, setMessage] = useState('');
@@ -36,7 +37,7 @@ const NewMessage = ({ userId }) => {
       }}
     >
       <form
-        style={{ height: '40px', width: '100%' }}
+        style={{ height: '40px', width: '100%', alignItems: 'center', display: "flex" }}
         onSubmit={handleSendMessage}
       >
         <TextField
@@ -65,14 +66,16 @@ const NewMessage = ({ userId }) => {
           }}
           style={{
             height: '100%',
-            width: '100%',
-          }}
-          InputProps={{
-            sx: {
-              height: '40px',
-            },
+            width: '90%',
           }}
         />
+        <IconButton
+          type="submit"
+          color="primary"
+          aria-label="Send"
+        >
+          <SendIcon />
+        </IconButton>
       </form>
     </Box>
   );

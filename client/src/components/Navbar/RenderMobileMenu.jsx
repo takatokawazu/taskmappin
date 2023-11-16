@@ -7,6 +7,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useSelector } from 'react-redux';
+import { People } from '@mui/icons-material';
 
 const RenderMobileMenu = ({
   mobileMenuId,
@@ -43,10 +44,10 @@ const RenderMobileMenu = ({
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton size="large" aria-label="show mails" color="inherit">
           <Badge badgeContent={onlineUsers.length} color="error">
-            <MailIcon />
+          <People />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>People</p>
       </MenuItem>
       <MenuItem onClick={handleNotificationMenuOpen}>
         <IconButton

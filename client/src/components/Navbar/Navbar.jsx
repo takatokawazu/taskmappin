@@ -90,7 +90,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
 
   const handleAdminPage = () => {
     if (user) {
-      navigate(`/admin/${user.username}`);
+      navigate(`/admin/${user._id}`);
     }
   };
 
@@ -104,7 +104,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Task Mappin
           </Typography>
           <SearchStyle>
             <SearchIconWrapper>

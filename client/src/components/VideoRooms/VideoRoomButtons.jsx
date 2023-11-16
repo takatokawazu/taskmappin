@@ -29,9 +29,7 @@ const VideoRoomButtons = ({ inRoom }) => {
       });
 
       dispatch(setLocalStream(null));
-      // dispatch(setRooms({}));
     }
-    console.log(inRoom);
     leaveVideoRoom(inRoom);
   };
 

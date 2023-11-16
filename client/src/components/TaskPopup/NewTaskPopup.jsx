@@ -24,6 +24,9 @@ const NewTaskPopup = ({
       latitude={latitude}
       anchor="left"
       onClose={onClose}
+      style={{
+        width: '200px'
+      }}
     >
       <Box p={2}>
         <form onSubmit={onSubmit}>
@@ -33,7 +36,7 @@ const NewTaskPopup = ({
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             タイトル
@@ -51,7 +54,7 @@ const NewTaskPopup = ({
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             説明
@@ -72,7 +75,7 @@ const NewTaskPopup = ({
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             誰がする？
@@ -98,7 +101,7 @@ const NewTaskPopup = ({
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             締め切り日
@@ -116,7 +119,7 @@ const NewTaskPopup = ({
             fullWidth
             size="small"
             sx={{
-              mt: 2,
+              mt: 1,
               backgroundColor: 'tomato',
               color: 'white',
               '&:hover': { backgroundColor: 'tomato', opacity: 0.8 },

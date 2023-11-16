@@ -42,11 +42,12 @@ const LoginPage = () => {
     try {
       const { data } = await axios.post('/api/users/login', formData);
       await getLoggedIn();
-      const username = data.user.username;
+      const userId = data.user._id;
       localStorage.setItem('userInfo', JSON.stringify(data.user));
       setUser(data.user);
+      console.log(userId)
       toast.success('Login success!');
-      navigate(`/map/${username}`);
+      navigate(`/map/${userId}`);
     } catch (e) {
       toast.error('Login failed. Please check your email and password.');
       setFormData({

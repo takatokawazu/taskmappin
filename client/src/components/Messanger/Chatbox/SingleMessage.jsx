@@ -19,7 +19,7 @@ const SingleMessage = ({ content, myMessage }) => {
           fontSize: 14,
           maxWidth: '80%',
           bgcolor: myMessage
-            ? 'rgba(39, 220, 197, 0.9)'
+            ? '#85e14b'
             : 'rgba(211, 211, 211, 0.9)',
         }}
       >

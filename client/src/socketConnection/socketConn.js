@@ -92,6 +92,6 @@ export const addT = (data) => {
   socket.emit('add-task', data);
 };
 
-export const completeT = (data, username) => {
-  socket.emit('complete-task', data, username);
+export const completeT = (data, userId) => {
+  socket.emit('complete-task', data, userId);
 };

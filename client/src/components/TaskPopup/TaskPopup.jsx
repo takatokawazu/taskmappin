@@ -1,7 +1,7 @@
 import React from 'react';
 import TimeAgo from 'timeago-react';
 import { Popup } from 'react-map-gl';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { connectWithSocketIOServer } from '../../socketConnection/socketConn';
 import { completeTask } from '../../redux/actions/taskActions';
@@ -12,9 +12,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
 const TaskPopup = ({ task, assignedUser, onClose }) => {
-  const username = useParams();
+  const userId = useParams();
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
+  const anchor = isSmallScreen ? 'top' : 'left';
   const handleComplateTask = async (e) => {
-    completeTask(task, username);
+    completeTask(task, userId);
     connectWithSocketIOServer();
     e.preventDefault();
     onClose();
@@ -24,10 +26,13 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
     <Popup
       longitude={task.coords.lng}
       latitude={task.coords.lat}
-      anchor="left"
+      anchor={anchor}
       onClose={onClose}
+      style={{
+        width: isSmallScreen ? '200px' : '300px',
+      }}
     >
-      <Box>
+      <Box >
         <form onSubmit={handleComplateTask}>
           <Typography
             variant="caption"
@@ -35,7 +40,7 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             タイトル
@@ -54,7 +59,7 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             説明
@@ -65,8 +70,8 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
             size="small"
             fullWidth
             value={task.desc}
-            minRows={3}
-            maxRows={6}
+            minRows={2}
+            maxRows={5}
             disabled
           />
           <Typography
@@ -75,7 +80,7 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             誰がする予定？
@@ -87,7 +92,7 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
               color: 'tomato',
               fontSize: '13px',
               borderBottom: '0.5px solid tomato',
-              mb: '2px',
+              mb: '1px',
             }}
           >
             締め切り日
@@ -106,7 +111,7 @@ const TaskPopup = ({ task, assignedUser, onClose }) => {
             fullWidth
             size="small"
             sx={{
-              mt: 2,
+              mt: 1,
               backgroundColor: 'tomato',
               color: 'white',
               '&:hover': { backgroundColor: 'tomato', opacity: 0.8 },

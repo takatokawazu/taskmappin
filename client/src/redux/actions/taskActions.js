@@ -10,6 +10,6 @@ export const addTaskHandler = (data) => {
   socketConn.addT(data);
 };
 
-export const completeTask = (data, username) => {
-  socketConn.completeT(data, username);
+export const completeTask = (data, userId) => {
+  socketConn.completeT(data, userId);
 };
