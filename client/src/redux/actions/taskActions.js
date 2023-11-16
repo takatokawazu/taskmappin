@@ -1,6 +1,6 @@
 import { setTask } from '../slices/taskSlice';
 import store from '../stores/store';
-import * as socketConn from '../../socketConnection/socketConn';
+import * as socketConn from '../../socketConnection/socketConnection';
 
 export const taskHandler = (data) => {
   store.dispatch(setTask(data));

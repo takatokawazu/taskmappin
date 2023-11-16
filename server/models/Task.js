@@ -24,12 +24,6 @@ const TaskSchema = new Schema(
     assignedUser: { type: Schema.Types.ObjectId, ref: 'User' },
     auther: { type: Schema.Types.ObjectId, ref: 'User' },
     completedBy: { type: Schema.Types.ObjectId, ref: 'User' },
-    comments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Comment',
-      },
-    ],
     isDone: { type: Boolean, default: false },
     deadline: { type: Date, required: true },
   },
