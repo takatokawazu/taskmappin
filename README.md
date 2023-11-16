@@ -1,3 +1,19 @@
-# [Task Mappin](https://taskmappin-c2989267e49d.herokuapp.com/map/654900765db16dc3ea2f5a2b)
+# [Task Mappin](https://taskmappin-c2989267e49d.herokuapp.com)
 
 # Description
+
+# Usage
+```bash
+git clone https://github.com/takatokawazu/taskmappin.git
+npm i
+npm run start
+cd client
+npm i
+npm run start
+```
+
+# Documents
+- [要件定義]()
+- [設計]()
+
+# Contirubutors
