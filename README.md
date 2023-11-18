@@ -44,4 +44,32 @@ npm run start
 
 # 設計
 
+## 使用技術一覧
+
+### フロントエンド
+- 言語
+  - javascript
+- フレームワーク
+  - React
+  - Redux
+- ライブラリ
+  - socket.io-client
+
+### バックエンド
+- 言語
+  - Node.js
+- フレームワーク
+  - express.js
+- ライブラリ
+  - socket.io
+- データベース
+  - MongoDB
+
+### デプロイ環境
+- heroku
+
+## アクティビティ図
+
+## ER図
+
 # 今後の目標
