@@ -39,7 +39,6 @@ const completeTask = async (data, userId, io, socket) => {
   try {
     const taskId = data._id;
     const id = userId.id;
-    console.log(id)
     const task = await Task.findById(taskId);
     if (!task) {
       socket.emit('taskError', { message: 'Task not found' });

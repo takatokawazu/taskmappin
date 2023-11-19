@@ -45,7 +45,6 @@ const LoginPage = () => {
       const userId = data.user._id;
       localStorage.setItem('userInfo', JSON.stringify(data.user));
       setUser(data.user);
-      console.log(userId)
       toast.success('Login success!');
       navigate(`/map/${userId}`);
     } catch (e) {
