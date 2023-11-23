@@ -7,7 +7,14 @@
 
 
 # 主要機能の使い方
+## メッセージ送信
+https://github.com/takatokawazu/taskmappin/assets/99064128/4642e348-8b63-4412-970a-d26002ac5a29
 
+## タスク作成
+https://github.com/takatokawazu/taskmappin/assets/99064128/c202694e-07e6-46d9-ad08-19f6422eebee
+
+## タスク完了
+https://github.com/takatokawazu/taskmappin/assets/99064128/20f54ac8-9151-4b3e-9b6e-e3f29d91c0c4
 
 # 要件定義
 ## 目的
