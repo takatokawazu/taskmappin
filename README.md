@@ -118,6 +118,8 @@ https://github.com/takatokawazu/taskmappin/assets/99064128/20f54ac8-9151-4b3e-9b
 - リファレンス、populateを利用することで、リレーションを持たせ、データを結合することが可能になる
 - NoSQLデータベースの中で最も人気なサービス
 
+[参照](https://6sense.com/tech/nosql-databases)
+
 ### リアルタイム通信: WebSocket (socket.io)
 <b>検討技術:</b> Pusher, Firebase Realtime Database
 <br>
@@ -125,8 +127,6 @@ https://github.com/takatokawazu/taskmappin/assets/99064128/20f54ac8-9151-4b3e-9b
 - トラフィック量に応じた料金が発生しないこと
 - カスタマイズ性が他の2つに比べると高い
 - 学習教材が多い
-
-[参照](https://6sense.com/tech/nosql-databases)
 
 ### デプロイ環境: heroku
 <b>検討技術:</b> vercel/aws
