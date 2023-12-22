@@ -29,6 +29,7 @@
     "react-scripts": "5.0.1",
     "socket.io-client": "^4.7.2",
     "timeago-react": "^3.0.6",
+    "ts-migrate": "^0.1.35",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
