@@ -1,6 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+interface Task {
+  _id: string;
+  isDone: boolean
+}
+
+interface TaskState {
+  tasks: Task[];
+  finishedTasks: Task[];
+}
+
+const initialState: TaskState = {
   tasks: [],
   finishedTasks: [],
 };
@@ -9,14 +19,14 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-    addTask: (state, action) => {
+    addTask: (state, action: PayloadAction<Task>) => {
       state.tasks.push(action.payload);
     },
-    setTask: (state, action) => {
+    setTask: (state, action: PayloadAction<Task[]>) => {
       state.finishedTasks = action.payload.filter((task) => task.isDone);
       state.tasks = action.payload.filter((task) => !task.isDone);
     },
-    completeTask: (state, action) => {
+    completeTask: (state, action: PayloadAction<Task>) => {
       state.tasks = state.tasks.filter(
         (task) => task._id !== action.payload._id
       );

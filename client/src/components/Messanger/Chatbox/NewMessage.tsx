@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 import { Box, TextField, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
-const NewMessage = ({ userId }) => {
+const NewMessage = ({ userId }:  { userId: string }) => {
   const [message, setMessage] = useState('');
   const [inputDisabled, setInputDisabled] = useState(false);
 
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
 
-  const handleMessageValueChange = (e) => {
+  const handleMessageValueChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 

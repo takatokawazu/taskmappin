@@ -14,7 +14,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoreActions: [
+        ignoredActions: [
           'videoRooms/setLocalStream',
           'videoRooms/setRemoteStream',
         ],

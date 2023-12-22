@@ -22,13 +22,19 @@ const defaultTheme = createTheme();
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { getLoggedIn, setUser } = useContext(AuthContext);
+
+  const authContext = useContext(AuthContext);
+
+// Check if authContext and its properties are defined
+  const getLoggedIn = authContext?.getLoggedIn;
+  const setUser = authContext?.setUser;
+
   const [formData, setFormData] = React.useState({
     email: '',
     password: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -36,15 +42,15 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const { data } = await axios.post('/api/users/login', formData);
-      await getLoggedIn();
+      if(getLoggedIn) await getLoggedIn();
       const userId = data.user._id;
       localStorage.setItem('userInfo', JSON.stringify(data.user));
-      setUser(data.user);
+      if(setUser) setUser(data.user);
       console.log(userId)
       toast.success('Login success!');
       navigate(`/map/${userId}`);

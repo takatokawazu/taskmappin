@@ -1,4 +1,4 @@
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import {
   onlineUsersHandler,
   userDisconnectedHandler,
@@ -12,7 +12,8 @@ import { taskHandler } from '../redux/actions/taskActions';
 import store from '../redux/stores/store';
 import { addTask, completeTask } from '../redux/slices/taskSlice';
 import toast from 'react-hot-toast';
-let socket = null;
+
+let socket: Socket | null = null; // Socket型を使用
 
 const ENDPOINT = 'https://taskmappin-c2989267e49d.herokuapp.com';
 //
@@ -37,7 +38,11 @@ export const connectWithSocketIOServer = () => {
   });
 
   socket.on('online-users', (socketToUserId, usersData) => {
-    onlineUsersHandler(socketToUserId[socket.id], usersData);
+    const socketId = socket?.id;
+
+    if(socketId) {
+      onlineUsersHandler(socketToUserId[socketId], usersData);
+    }
   });
 
   socket.on('chat-message', (messageData) => {
@@ -67,31 +72,31 @@ export const connectWithSocketIOServer = () => {
   });
 };
 
-export const login = (data) => {
-  socket.emit('user-login', data);
+export const login = (data : any) => {
+  socket?.emit('user-login', data);
 };
 
-export const sendChatMessage = (data) => {
-  socket.emit('chat-message', data);
+export const sendChatMessage = (data : any) => {
+  socket?.emit('chat-message', data);
 };
 
 
-export const createVideoRoom = (data) => {
-  socket.emit('video-room-create', data);
+export const createVideoRoom = (data : any) => {
+  socket?.emit('video-room-create', data);
 };
 
-export const joinVideoRoom = (data) => {
-  socket.emit('video-room-join', data);
+export const joinVideoRoom = (data : any) => {
+  socket?.emit('video-room-join', data);
 };
 
-export const leaveVideoRoom = (data) => {
-  socket.emit('video-room-leave', data);
+export const leaveVideoRoom = (data : any) => {
+  socket?.emit('video-room-leave', data);
 };
 
-export const addT = (data) => {
-  socket.emit('add-task', data);
+export const addT = (data : any) => {
+  socket?.emit('add-task', data);
 };
 
-export const completeT = (data, userId) => {
-  socket.emit('complete-task', data, userId);
+export const completeT = (data : any, userId : string) => {
+  socket?.emit('complete-task', data, userId);
 };

@@ -8,13 +8,17 @@ import AuthContext from './context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const App = () => {
-  const { loggedIn, user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // ログイン状態とユーザー情報が存在するかどうかを確認
+  const loggedIn = authContext?.loggedIn || false;
+  const user = authContext?.user || null;
+
   useEffect(() => {
     if (loggedIn && user) {
-      console.log(user)
+      console.log(user);
       if (location.pathname !== `/admin/${user._id}`) {
         navigate(`/map/${user._id}`, { replace: true });
       }

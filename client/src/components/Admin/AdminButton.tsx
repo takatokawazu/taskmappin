@@ -3,9 +3,13 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { Typography } from '@mui/material';
 
-export default function AdminButton({ setSelectedButton }) {
-  const [alignment, setAlignment] = React.useState('all tasks');
-  const [isMobile, setIsMobile] = React.useState(false);
+interface AdminButtonProps {
+  setSelectedButton: (newAlignment: string) => void;
+}
+
+export default function AdminButton({ setSelectedButton }: AdminButtonProps) {
+  const [alignment, setAlignment] = React.useState<string>('all tasks');
+  const [isMobile, setIsMobile] = React.useState<boolean>(false);
 
   const buttons = [
     'all tasks',
@@ -16,33 +20,28 @@ export default function AdminButton({ setSelectedButton }) {
     'assigned tasks',
   ];
 
-  const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
-    setSelectedButton(newAlignment);
+  const handleChange = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+    if (newAlignment) {
+      setAlignment(newAlignment);
+      setSelectedButton(newAlignment);
+    }
   };
 
   const checkIsMobile = () => {
-    setIsMobile(window.innerWidth <= 700); // 700px以下の場合を例としています
+    setIsMobile(window.innerWidth <= 700);
   };
 
   React.useEffect(() => {
-    // コンポーネントがマウントされたときにイベントリスナーを追加
     window.addEventListener('resize', checkIsMobile);
-    // コンポーネントがアンマウントされたときにイベントリスナーを削除
     return () => {
       window.removeEventListener('resize', checkIsMobile);
     };
   }, []);
 
-
   return (
     <>
       {isMobile ? (
-        <div
-          style={{
-            overflowX: 'auto'
-          }}
-        >
+        <div style={{ overflowX: 'auto' }}>
           <ToggleButtonGroup
             color="primary"
             value={alignment}
@@ -51,41 +50,32 @@ export default function AdminButton({ setSelectedButton }) {
             aria-label="Platform"
           >
             {buttons.map((button, index) => (
-              <ToggleButton
-                key={index}
-                value={button}
-              >
+              <ToggleButton key={index} value={button}>
                 {button}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
         </div>
       ) : (
-        <div style={{
-          overflowX: 'auto'
-        }}>
-        <ToggleButtonGroup
-          color="primary"
-          value={alignment}
-          exclusive
-          onChange={handleChange}
-          aria-label="Platform"
-        >
-          {buttons.map((button, index) => (
-            <ToggleButton key={index} value={button}>
-              {button}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
-      </div>
+        <div style={{ overflowX: 'auto' }}>
+          <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+          >
+            {buttons.map((button, index) => (
+              <ToggleButton key={index} value={button}>
+                {button}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        </div>
       )}
-      <Typography
-        variant="h5"
-        style={{ marginTop: '20px', marginBottom: '10px' }}
-      >
+      <Typography variant="h5" style={{ marginTop: '20px', marginBottom: '10px' }}>
         {alignment}
       </Typography>
-
     </>
   );
 }

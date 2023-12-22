@@ -1,18 +1,34 @@
 import axios from 'axios';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const AuthContext = createContext();
+interface UserInfo {
+  // ここにユーザー情報の型定義を追加する
+  usename: string;
+  _id: string
+}
 
-const AuthContextProvider = (props) => {
-  const [loggedIn, setLoggedIn] = useState(undefined);
-  const [user, setUser] = useState(undefined);
+interface AuthContextProps {
+  loggedIn: boolean | undefined;
+  getLoggedIn: () => Promise<void> | undefined;
+  user: UserInfo | undefined;
+  setUser: React.Dispatch<React.SetStateAction<UserInfo | undefined>> | undefined;
+}
+
+const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+
+interface AuthContextProviderProps {
+  children: ReactNode;
+}
+
+const AuthContextProvider: React.FC<AuthContextProviderProps> = (props) => {
+  const [loggedIn, setLoggedIn] = useState<boolean | undefined>(undefined);
+  const [user, setUser] = useState<UserInfo | undefined>(undefined);
   const location = useLocation();
   const navigate = useNavigate();
 
   const getLoggedIn = async () => {
     const loggedInRes = await axios.get('/api/users/loggedIn');
-
     setLoggedIn(loggedInRes.data);
   };
 
@@ -21,7 +37,7 @@ const AuthContextProvider = (props) => {
   }, [loggedIn]);
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
     setUser(userInfo);
 
     if (!userInfo || !loggedIn) {

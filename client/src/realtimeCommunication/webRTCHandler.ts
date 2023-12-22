@@ -3,26 +3,31 @@ import {
   setRemoteStream,
 } from '../redux/slices/videoRoomsSlice';
 import store from '../redux/stores/store';
-import { Peer } from 'peerjs';
+import { Peer, MediaConnection } from 'peerjs';
 
-let peer;
-let peerId;
+let peer: Peer | undefined;
+let peerId: string | undefined;
 
-export const getPeerId = () => {
+export const getPeerId = (): string | undefined => {
   return peerId;
 };
 
-export const getAccessToLocalStream = async () => {
-  const localStream = await navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: true,
-  });
+export const getAccessToLocalStream = async (): Promise<boolean> => {
+  try {
+    const localStream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
 
-  if (localStream) {
-    store.dispatch(setLocalStream(localStream));
+    if (localStream) {
+      store.dispatch(setLocalStream(localStream));
+    }
+
+    return Boolean(localStream);
+  } catch (error) {
+    console.error('Error accessing local stream:', error);
+    return false;
   }
-
-  return Boolean(localStream);
 };
 
 export const connectWithPeerServer = () => {
@@ -32,12 +37,12 @@ export const connectWithPeerServer = () => {
   // peer = new Peer(undefined, {
   //   host: 'taskmappin-c2989267e49d.herokuapp.com',
   //   port: port,
-  // path: '/myapp',
+  //   path: '/myapp',
   // });
 
-  peer = new Peer(undefined, {
+  peer = new Peer({
     host: 'localhost',
-    port: '9000',
+    port: 9000, // Port should be a number, not a string
     path: '/myapp',
   });
 
@@ -46,38 +51,47 @@ export const connectWithPeerServer = () => {
     peerId = id;
   });
 
-  peer.on('call', async (call) => {
+  peer.on('call', async (call: MediaConnection) => {
     const localStream = store.getState().videoRooms.localStream;
-    call.answer(localStream);
-    call.on('stream', (remoteStream) => {
-      console.log('remote stream came');
-      store.dispatch(setRemoteStream(remoteStream));
-    });
+
+    if (localStream) {
+      call.answer(localStream);
+      call.on('stream', (remoteStream) => {
+        console.log('remote stream came');
+        store.dispatch(setRemoteStream(remoteStream));
+      });
+    }
   });
 };
 
-export const call = (data) => {
+export const call = (data: { newParticipantPeerId: string }) => {
   const { newParticipantPeerId } = data;
   const localStream = store.getState().videoRooms.localStream;
 
-  const peerCall = peer.call(newParticipantPeerId, localStream);
+  if (peer && localStream) {
+    const peerCall = peer.call(newParticipantPeerId, localStream);
 
-  console.log('localstream!!!!!!!!!!!!');
-  peerCall.on('stream', (remoteStream) => {
-    console.log('remote stream came');
-    store.dispatch(setRemoteStream(remoteStream));
-  });
+    console.log('localstream!!!!!!!!!!!!');
+    peerCall.on('stream', (remoteStream) => {
+      console.log('remote stream came');
+      store.dispatch(setRemoteStream(remoteStream));
+    });
+  }
 };
 
 export const disconnect = () => {
-  for (let conns in peer.connections) {
-    peer.connections[conns].forEach((c) => {
+  const connections : any = peer?.connections || {};
+
+  Object.keys(connections).forEach((connKey: string) => {
+    const conn = connections[connKey] as MediaConnection[];
+
+    conn.forEach((c) => {
       console.log('closing connection');
       c.peerConnection.close();
 
       if (c.close) c.close();
     });
-  }
+  });
 
   store.dispatch(setRemoteStream(null));
 };
