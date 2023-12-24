@@ -6,7 +6,16 @@ import myselfImage from '../../resources/icons/myself.png';
 import otherUserImage from '../../resources/icons/otherUser.png';
 import { Box } from '@mui/material';
 
-const UserMarker = ({
+interface UserMarkerProps {
+  myself: boolean;
+  userId: string;
+  username: string;
+  coords: { lat: number; lng: number };
+  currentUser: string;
+  onMarkerClick: (lat: number, lng: number) => void;
+}
+
+const UserMarker: React.FC<UserMarkerProps> = ({
   myself,
   userId,
   username,
