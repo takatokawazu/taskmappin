@@ -1,7 +1,18 @@
 import store from '../stores/store';
 import { setOnlineUsers, removeDisconnectedUser } from '../slices/mapSlice';
 
-export const onlineUsersHandler = (userId, usersData) => {
+
+interface UserInfo {
+  myself: boolean;
+  userId: string;
+  callerUserId: string,
+  callerSocketId: string,
+  username: string,
+  peerId : string,
+  newRoomId : string,
+}
+
+export const onlineUsersHandler = (userId : string, usersData : UserInfo[]) => {
   store.dispatch(
     setOnlineUsers(
       usersData.map((user) => {
@@ -14,6 +25,6 @@ export const onlineUsersHandler = (userId, usersData) => {
   );
 };
 
-export const userDisconnectedHandler = (disconnectedUserSocketId) => {
+export const userDisconnectedHandler = (disconnectedUserSocketId : string) => {
   store.dispatch(removeDisconnectedUser(disconnectedUserSocketId));
 };

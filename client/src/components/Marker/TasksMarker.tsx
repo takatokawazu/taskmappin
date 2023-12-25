@@ -2,7 +2,23 @@ import React from 'react';
 import { Room } from '@mui/icons-material';
 import { Marker } from 'react-map-gl';
 
-const TasksMarker = ({ task, currentUser, onMarkerClick }) => {
+interface Task {
+  _id: string;
+  isDone: boolean;
+  coords: {
+    lat: number;
+    lng: number;
+  };
+  createdBy: string;
+}
+
+interface TasksMarkerProps {
+  task: Task;
+  currentUser: string;
+  onMarkerClick: (taskId: string, lat: number, lng: number) => void;
+}
+
+const TasksMarker: React.FC<TasksMarkerProps> = ({ task, currentUser, onMarkerClick }) => {
   return (
     !task.isDone && (
       <Marker longitude={task.coords.lng} latitude={task.coords.lat}>

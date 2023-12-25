@@ -21,7 +21,7 @@ export const createVideoRoom = async () => {
 };
 
 
-export const joinVideoRoom = async (roomId, userId) => {
+export const joinVideoRoom = async (roomId : string, userId : string) => {
   const success = await getAccessToLocalStream();
   if (success) {
     store.dispatch(setInRoom(roomId));
@@ -33,11 +33,11 @@ export const joinVideoRoom = async (roomId, userId) => {
   }
 };
 
-export const videoRoomsListHandler = (videoRooms) => {
+export const videoRoomsListHandler = (videoRooms : any) => {
   store.dispatch(setRooms(videoRooms));
 };
 
-export const leaveVideoRoom = (roomId) => {
+export const leaveVideoRoom = (roomId : string) => {
   disconnect();
   socketConn.leaveVideoRoom({
     roomId,

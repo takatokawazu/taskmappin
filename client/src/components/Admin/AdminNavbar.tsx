@@ -8,10 +8,11 @@ import AuthContext from '../../context/AuthContext';
 
 export default function AdminNavbar() {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user || null;
 
   const handleMapPage = () => {
-    navigate(`/map/${user.usename}`);
+    navigate(`/map/${user?.usename}`);
   };
 
   return (

@@ -11,11 +11,30 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
-const TaskPopup = ({ task, assignedUser, onClose }) => {
-  const userId = useParams();
+interface TaskPopupProps {
+  task: {
+    coords: {
+      lng: number;
+      lat: number;
+    };
+    title: string;
+    desc: string;
+    deadline: string; // Assuming deadline is a string, update the type accordingly
+    createdAt: string; // Assuming createdAt is a string, update the type accordingly
+  };
+  assignedUser: string; // Update the type accordingly
+  onClose: () => void;
+}
+
+interface userIdProps {
+  id: string
+}
+
+const TaskPopup : React.FC<TaskPopupProps>= ({ task, assignedUser, onClose }) => {
+  const userId = useParams<{ id : string }>();
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
   const anchor = isSmallScreen ? 'top' : 'left';
-  const handleComplateTask = async (e) => {
+  const handleComplateTask = async (e: React.FormEvent<HTMLFormElement>) => {
     completeTask(task, userId);
     connectWithSocketIOServer();
     e.preventDefault();

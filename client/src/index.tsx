@@ -6,12 +6,12 @@ import App from './App';
 import './index.css';
 import { AuthContextProvider } from './context/AuthContext';
 import axios from 'axios';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom'; // 直接 'BrowserRouter' を使用
 
 axios.defaults.withCredentials = true;
 
 const container = document.getElementById('root');
-const root = createRoot(container);
+const root = createRoot(container as HTMLElement);
 
 root.render(
   <BrowserRouter>

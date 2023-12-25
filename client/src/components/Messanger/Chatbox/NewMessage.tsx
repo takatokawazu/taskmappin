@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { sendChatMessage } from '../../../redux/actions/messangerActions';
 import { useSelector } from 'react-redux';
 import { Box, TextField, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
-const NewMessage = ({ userId }) => {
+interface OnlineUser {
+  userId: string,
+  username: string,
+  coords: object,
+}
+
+const NewMessage = ({ userId }:  { userId: string }) => {
   const [message, setMessage] = useState('');
   const [inputDisabled, setInputDisabled] = useState(false);
 
-  const onlineUsers = useSelector((state) => state.map.onlineUsers);
+  const onlineUsers = useSelector((state: { map: { onlineUsers: OnlineUser[] } }) => state.map.onlineUsers);
 
-  const handleMessageValueChange = (e) => {
+
+  const handleMessageValueChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = (e: FormEvent) => {
     e.preventDefault();
     proceedChatMessage();
     setMessage('');

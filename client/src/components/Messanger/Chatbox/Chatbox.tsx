@@ -4,7 +4,7 @@ import Messages from './Messages';
 import NewMessage from './NewMessage';
 import { Box } from '@mui/material';
 
-const Chatbox = (props) => {
+const Chatbox = (props : any) => {
   const { userId } = props;
 
   return (
