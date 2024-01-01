@@ -1,6 +1,5 @@
 const Task = require('../models/Task');
 const userHandlers = require('./userHandlers');
-const videoRoomHandlers = require('./videoRoomHandlers');
 const taskHandlers = require('./taskHandlers');
 
 const setupSocketHandlers = (io) => {
@@ -10,7 +9,7 @@ const setupSocketHandlers = (io) => {
     );
 
     Task.find().then((messages) => {
-      socket.emit('init', messages);
+      socket.emit('get-task', messages);
     });
 
     socket.on('add-task', (task) => {
@@ -23,18 +22,6 @@ const setupSocketHandlers = (io) => {
 
     socket.on('chat-message', (data) =>
       userHandlers.chatMessageHandler(socket, data, io)
-    );
-
-    socket.on('video-room-create', (data) =>
-      videoRoomHandlers.videoRoomCreateHandler(socket, data, io)
-    );
-
-    socket.on('video-room-join', (data) =>
-      videoRoomHandlers.videoRoomJoinHandler(socket, data, io)
-    );
-
-    socket.on('video-room-leave', (data) =>
-      videoRoomHandlers.videoRoomLeaveHandler(socket, data, io)
     );
 
     socket.on('disconnect', () =>

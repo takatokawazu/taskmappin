@@ -3,7 +3,7 @@ import TimeAgo from 'timeago-react';
 import { Popup } from 'react-map-gl';
 import { Box, Button, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { connectWithSocketIOServer } from '../../socketConnection/socketConn';
+import { connectWithSocketIOServer } from '../../socketConnection/socketConnection';
 import { completeTask } from '../../redux/actions/taskActions';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';

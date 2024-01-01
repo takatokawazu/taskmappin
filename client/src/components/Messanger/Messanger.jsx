@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Chatbox from './Chatbox/Chatbox';
 import { useSelector } from 'react-redux';
 import { Box } from '@mui/material';
