@@ -56,7 +56,6 @@ const LoginPage = () => {
       const { data } = await axios.post('/api/users/login', formData);
       await getLoggedIn();
       const userId = data.user._id;
-      localStorage.setItem('userInfo', JSON.stringify(data.user));
       setUser(data.user);
       toast.success('Login success!');
       navigate(`/map/${userId}`);
