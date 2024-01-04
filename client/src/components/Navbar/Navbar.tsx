@@ -29,26 +29,32 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 
-const Navbar = ({ state, setState, setViewport, currentUserId }) => {
+const Navbar = ({ state, setState, setViewport, currentUserId } : {
+  state: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
+  setViewport: React.Dispatch<React.SetStateAction<any>>;
+  currentUserId: string;
+}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user || null;
   const tasks = useSelector((state) => state.task.tasks);
   const navigate = useNavigate();
 
   const assignedTasks = tasks
-    .filter((task) => task.assignedUser === currentUserId)
+    .filter((task: { assignedUser: any; }) => task.assignedUser === currentUserId)
     .filter(
-      (task, index, self) => index === self.findIndex((t) => t._id === task._id)
+      (task: { _id: any; }, index: any, self: any[]) => index === self.findIndex((t: { _id: any; }) => t._id === task._id)
     );
 
-  const handleProfileMenuOpen = (event) => {
+  const handleProfileMenuOpen = (event: { currentTarget: React.SetStateAction<null>; }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleNotificationMenuOpen = (event) => {
+  const handleNotificationMenuOpen = (event: { currentTarget: React.SetStateAction<null>; }) => {
     setNotification(event.currentTarget);
   };
 
@@ -56,7 +62,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
     setMobileMoreAnchorEl(null);
   };
 
-  const handleMobileMenuOpen = (event) => {
+  const handleMobileMenuOpen = (event: { currentTarget: React.SetStateAction<null>; }) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
@@ -72,7 +78,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   const handlePlaceChanged = () => {
     const [place] = inputRef.current.getPlaces();
     if (place) {
-      setState((prev) => ({ ...prev, location: place.formatted_address }));
+      setState((prev: any) => ({ ...prev, location: place.formatted_address }));
       setViewport({
         longitude: place.geometry.location.lng(),
         latitude: place.geometry.location.lat(),
@@ -85,7 +91,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
 
   const clearInput = () => {
     setInputValue('');
-    setState((prev) => ({ ...prev, location: '' }));
+    setState((prev: any) => ({ ...prev, location: '' }));
   };
 
   const handleAdminPage = () => {
@@ -121,7 +127,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
                   value={state.location}
                   onChange={(e) => {
                     setInputValue(e.target.value);
-                    setState((prev) => ({ ...prev, location: e.target.value }));
+                    setState((prev: any) => ({ ...prev, location: e.target.value }));
                   }}
                 />
                 {inputValue && (

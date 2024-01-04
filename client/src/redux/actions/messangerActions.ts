@@ -3,7 +3,7 @@ import store from '../stores/store';
 import { addChatMessage, addChatbox } from '../slices/messangerSlice';
 import * as socketConn from '../../socketConnection/socketConn';
 
-export const sendChatMessage = (receiverUserId, content) => {
+export const sendChatMessage = (receiverUserId: string, content: string) => {
   const message = {
     content,
     receiverUserId,
@@ -22,7 +22,7 @@ export const sendChatMessage = (receiverUserId, content) => {
   );
 };
 
-export const chatMessageHandler = (messageData) => {
+export const chatMessageHandler = (messageData: { senderUserId: any; content: any; id: any; }) => {
   store.dispatch(
     addChatMessage({
       userId: messageData.senderUserId,
@@ -35,7 +35,7 @@ export const chatMessageHandler = (messageData) => {
   openChatboxIfClosed(messageData.senderUserId);
 };
 
-const openChatboxIfClosed = (userId) => {
+const openChatboxIfClosed = (userId: string) => {
   const chatbox = store
     .getState()
     .messanger.chatboxes.find((c) => c.userId === userId);

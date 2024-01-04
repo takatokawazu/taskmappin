@@ -10,7 +10,10 @@ import store from '../../redux/stores/store';
 import { setInRoom } from '../../redux/slices/videoRoomsSlice';
 import { useSelector } from 'react-redux';
 
-const CallButton = ({ userId, setOpen }) => {
+const CallButton = ({ userId, setOpen }: {
+  userId: any,
+  setOpen: any
+}) => {
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
 
 

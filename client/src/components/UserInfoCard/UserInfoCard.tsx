@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import CallButton from './CallButton';
 
-export default function UserInfoCard(props) {
+export default function UserInfoCard(props : any) {
   const { open, setOpen, username, userLocation, userId, currentUserPosition } =
     props;
 

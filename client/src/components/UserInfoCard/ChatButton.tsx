@@ -3,7 +3,11 @@ import { useDispatch } from 'react-redux';
 import { addChatbox } from '../../redux/slices/messangerSlice';
 import { Button } from '@mui/material';
 
-const ChatButton = ({ userId, username, setOpen }) => {
+const ChatButton = ({ userId, username, setOpen } : {
+  userId: any,
+  username: any,
+  setOpen: any
+}) => {
   const dispatch = useDispatch();
 
   const handleAddChatbox = () => {

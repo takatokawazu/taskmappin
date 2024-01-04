@@ -1,6 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+interface ChatMessage {
+  content: string;
+  myMessage: boolean;
+  id: string; // メッセージのIDなど、適切な型を指定する必要があります
+}
+
+// チャットボックスの型を定義
+interface Chatbox {
+  userId: string;
+  // 他に必要なプロパティがあればここに追加する
+  username: string
+}
+
+interface MessengerState {
+  chatboxes: Chatbox[];
+  chatHistory: Record<string, ChatMessage[]>; // ユーザーIDごとのチャット履歴を保持
+}
+
+const initialState: MessengerState = {
   chatboxes: [],
   chatHistory: {},
 };

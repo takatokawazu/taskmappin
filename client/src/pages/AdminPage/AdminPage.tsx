@@ -26,7 +26,8 @@ export default function AdminPage() {
   const [uncompletedTasks, setUncompletedTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user || null;
 
   useEffect(() => {
     const mapTasks = (tasks) =>

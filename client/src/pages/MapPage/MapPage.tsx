@@ -31,7 +31,8 @@ const MapPage = () => {
   const cardChosenOption = useSelector((state) => state.map.cardChosenOption);
   const tasks = useSelector((state) => state.task.tasks);
   const [currentUserId, setCurrentUserId] = useState('');
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user || null;
 
   const [currentUserPosition, setCurrentUserPosition] = useState(null);
   const [viewport, setViewport] = useState({
@@ -45,7 +46,7 @@ const MapPage = () => {
     formFields: {
       title: '',
       desc: '',
-      assignedUser: user.username,
+      assignedUser: user?.username,
       deadline: '',
     },
     currentPlaceId: null,
@@ -110,7 +111,7 @@ const MapPage = () => {
     fetchUserId();
   }, []);
 
-  const updateUserLocation = (position) => {
+  const updateUserLocation = (position : any) => {
     if (user) {
       socketConn.login({
         user,
@@ -125,7 +126,7 @@ const MapPage = () => {
     }
   };
 
-  const handleAddClick = (e) => {
+  const handleAddClick = (e : any) => {
     const { lng, lat } = e.lngLat;
     setViewport({
       longitude: lng,
@@ -172,7 +173,7 @@ const MapPage = () => {
     }));
   };
 
-  const getUser = async (id) => {
+  const getUser = async (id : string) => {
     try {
       const { data } = await axios.get(`/api/users/id/${id}`);
       setState((prev) => ({

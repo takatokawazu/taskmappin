@@ -1,7 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
-const SingleMessage = ({ content, myMessage }) => {
+interface Message {
+  content: string;
+  myMessage: boolean;
+}
+
+const SingleMessage : React.FC<Message> = ({ content, myMessage }) => {
   return (
     <Box
       sx={{

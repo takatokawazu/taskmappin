@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setCardChosenOption } from '../../redux/slices/mapSlice';
+import { setCardChosenOption } from '@/redux/slices/mapSlice';
 import { Marker } from 'react-map-gl';
-import myselfImage from '../../resources/icons/myself.png';
-import otherUserImage from '../../resources/icons/otherUser.png';
+import myselfImage from '@/resources/icons/myself.png';
+import otherUserImage from '@/resources/icons/otherUser.png';
 import { Box } from '@mui/material';
 
 interface UserMarkerProps {

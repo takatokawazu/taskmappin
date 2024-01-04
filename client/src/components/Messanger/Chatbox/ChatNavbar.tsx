@@ -3,9 +3,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import closeIcon from '../../../resources/images/close-icon.svg';
 import { removeChatbox } from '../../../redux/slices/messangerSlice';
 import { Box, Typography } from '@mui/material';
+import { RootState } from '@/redux/stores/store'; // このimport文はReduxの設定に基づきます
 
-const ChatNavbar = ({ username, userId }) => {
-  const onlineUsers = useSelector((state) => state.map.onlineUsers);
+
+interface UserMarkerProps {
+  myself: boolean;
+  userId: string;
+  username: string;
+  coords: { lat: number; lng: number };
+  currentUser: string;
+  onMarkerClick: (lat: number, lng: number) => void;
+}
+
+const ChatNavbar : React.FC<UserMarkerProps> = ({ username, userId }) => {
+  const onlineUsers = useSelector((state : RootState) => state.map.onlineUsers);
 
   const dispatch = useDispatch();
   const handleCloseChatbox = () => {

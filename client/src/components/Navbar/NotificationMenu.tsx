@@ -7,6 +7,11 @@ const NotificationMenu = ({
   handleMenuClose,
   setViewport,
   assignedTasks,
+} : {
+  notification : any,
+  handleMenuClose : any,
+  setViewport : any,
+  assignedTasks : any
 }) => {
   const isMenuOpen = Boolean(notification);
   return (

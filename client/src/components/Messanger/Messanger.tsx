@@ -3,9 +3,10 @@ import React from 'react';
 import Chatbox from './Chatbox/Chatbox';
 import { useSelector } from 'react-redux';
 import { Box } from '@mui/material';
+import { RootState } from '@/redux/stores/store';
 
 const Messanger = () => {
-  const chatboxes = useSelector((state) => state.messanger.chatboxes);
+  const chatboxes = useSelector((state: RootState) => state.messanger.chatboxes);
   return (
     <Box
       sx={{

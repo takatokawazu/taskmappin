@@ -5,10 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addChatbox } from '../../redux/slices/messangerSlice';
 import AuthContext from '../../context/AuthContext';
 
-const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport }) => {
+const OnlineUserMenu = ({ anchorEl, menuId, handleMenuClose, setViewport } : {
+  anchorEl : any, menuId : any, handleMenuClose : any, setViewport : any
+}) => {
   const isMenuOpen = Boolean(anchorEl);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user || null;
   const dispatch = useDispatch();
   const handleAddChatbox = (username, userId) => {
     if (user.username !== username) {

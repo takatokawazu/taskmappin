@@ -22,7 +22,8 @@ const defaultTheme = createTheme();
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const { getLoggedIn } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const getLoggedIn = authContext?.getLoggedIn;
 
   const [formData, setFormData] = React.useState({
     username: '',
@@ -30,7 +31,7 @@ const RegisterPage = () => {
     password: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e : any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -38,12 +39,12 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e : any) => {
     e.preventDefault();
 
     try {
       await axios.post('/api/users/register', formData);
-      await getLoggedIn();
+      if(getLoggedIn) await getLoggedIn();
       toast.success('Registration successful!');
 
       setTimeout(() => {
