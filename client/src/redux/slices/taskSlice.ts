@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Task {
   _id: string;
-  isDone: boolean
+  isDone: boolean;
+  assignedUser: string;
 }
 
 interface TaskState {

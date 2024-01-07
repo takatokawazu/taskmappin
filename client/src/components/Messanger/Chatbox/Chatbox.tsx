@@ -21,7 +21,12 @@ const Chatbox = (props : any) => {
       }}
     >
       <ChatNavbar {...props} />
-      <Messages userId={userId} />
+      <Messages userId={userId} myself={false} username={''} coords={{
+        lat: 0,
+        lng: 0
+      }} currentUser={''} onMarkerClick={function (lat: number, lng: number): void {
+        throw new Error('Function not implemented.');
+      } } />
       <NewMessage userId={userId} />
     </Box>
   );

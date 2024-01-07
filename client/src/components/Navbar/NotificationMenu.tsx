@@ -29,7 +29,7 @@ const NotificationMenu = ({
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {assignedTasks.map((task, index) => (
+      {assignedTasks.map((task: any, index : number) => (
         <MenuItem
           key={index}
           onClick={() => {

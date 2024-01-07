@@ -3,6 +3,7 @@ import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface UserInfo {
+  username: any;
   // ここにユーザー情報の型定義を追加する
   usename: string;
   _id: string

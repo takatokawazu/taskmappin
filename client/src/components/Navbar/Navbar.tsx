@@ -28,6 +28,13 @@ import { StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
+import { RootState } from '@/redux/stores/store';
+
+interface Task {
+  _id: string;
+  assignedUser: string;
+  // 他のプロパティがあれば追加
+}
 
 const Navbar = ({ state, setState, setViewport, currentUserId } : {
   state: any;
@@ -38,17 +45,19 @@ const Navbar = ({ state, setState, setViewport, currentUserId } : {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const onlineUsers = useSelector((state) => state.map.onlineUsers);
+  const onlineUsers = useSelector((state : RootState) => state.map.onlineUsers);
   const authContext = useContext(AuthContext);
   const user = authContext?.user || null;
-  const tasks = useSelector((state) => state.task.tasks);
+  const tasks = useSelector((state : RootState) => state.task.tasks);
   const navigate = useNavigate();
 
-  const assignedTasks = tasks
-    .filter((task: { assignedUser: any; }) => task.assignedUser === currentUserId)
-    .filter(
-      (task: { _id: any; }, index: any, self: any[]) => index === self.findIndex((t: { _id: any; }) => t._id === task._id)
-    );
+    const assignedTasks = tasks
+  .filter((task: Task) => task.assignedUser === currentUserId)
+  .filter(
+    (task: Task, index: number, self: Task[]) =>
+      index === self.findIndex((t: Task) => t._id === task._id)
+  );
+
 
   const handleProfileMenuOpen = (event: { currentTarget: React.SetStateAction<null>; }) => {
     setAnchorEl(event.currentTarget);
@@ -74,16 +83,18 @@ const Navbar = ({ state, setState, setViewport, currentUserId } : {
 
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
   const handlePlaceChanged = () => {
-    const [place] = inputRef.current.getPlaces();
-    if (place) {
-      setState((prev: any) => ({ ...prev, location: place.formatted_address }));
-      setViewport({
-        longitude: place.geometry.location.lng(),
-        latitude: place.geometry.location.lat(),
-        zoom: 18,
-      });
+    if (inputRef.current) {
+      const [place] = inputRef.current.getPlaces();
+      if (place) {
+        setState((prev: any) => ({ ...prev, location: place.formatted_address }));
+        setViewport({
+          longitude: place.geometry.location.lng(),
+          latitude: place.geometry.location.lat(),
+          zoom: 18,
+        });
+      }
     }
   };
 

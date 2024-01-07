@@ -30,8 +30,8 @@ export default function AdminPage() {
   const user = authContext?.user || null;
 
   useEffect(() => {
-    const mapTasks = (tasks) =>
-      tasks.map((item, index) => ({
+    const mapTasks = (tasks : any) =>
+      tasks.map((item: any, index: any) => ({
         ...item,
         id: index + 1,
         assignedUser: item.assignedUser.username,
@@ -43,9 +43,9 @@ export default function AdminPage() {
     const fetchData = async () => {
       const { data: allTasksData } = await axios.get('/api/tasks');
       setAllTasks(mapTasks(allTasksData));
-      setCompletedTasks(mapTasks(allTasksData.filter((task) => task.isDone)));
+      setCompletedTasks(mapTasks(allTasksData.filter((task : any) => task.isDone)));
       setUncompletedTasks(
-        mapTasks(allTasksData.filter((task) => !task.isDone))
+        mapTasks(allTasksData.filter((task : any) => !task.isDone))
       );
 
       if (user) {
