@@ -1,17 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../context/AuthContext';
 
 export default function AdminNavbar() {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
 
   const handleMapPage = () => {
-    navigate(`/map/${user.usename}`);
+    navigate('/map');
   };
 
   return (

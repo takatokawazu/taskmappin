@@ -55,10 +55,9 @@ const LoginPage = () => {
     try {
       const { data } = await axios.post('/api/users/login', formData);
       await getLoggedIn();
-      const userId = data.user._id;
       setUser(data.user);
       toast.success('Login success!');
-      navigate(`/map/${userId}`);
+      navigate('/map');
     } catch (e) {
       toast.error('Login failed. Please check your email and password.');
       setFormData({

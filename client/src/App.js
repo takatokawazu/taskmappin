@@ -14,8 +14,8 @@ const App = () => {
 
   useEffect(() => {
     if (loggedIn && user) {
-      if (location.pathname !== `/admin/${user._id}`) {
-        navigate(`/map/${user._id}`, { replace: true });
+      if (location.pathname !== '/admin') {
+        navigate('/map', { replace: true });
       }
     } else {
       if (location.pathname === '/register') {
@@ -34,8 +34,8 @@ const App = () => {
       )}
       {loggedIn && (
         <>
-          <Route path="/map/:id" element={<MapPage />} />
-          <Route path="/admin/:username" element={<AdminPage />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </>
       )}
     </Routes>

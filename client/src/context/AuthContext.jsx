@@ -13,7 +13,6 @@ const AuthContextProvider = (props) => {
 
   const getLoggedIn = async () => {
     const loggedInRes = await axios.get('/api/users/loggedIn');
-    console.log(loggedIn)
     const decodedToken = decodeJwt(loggedInRes.data);
     if(decodedToken) {
       setUser(decodedToken.payload)
