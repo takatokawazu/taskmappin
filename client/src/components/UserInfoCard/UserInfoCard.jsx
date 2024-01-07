@@ -5,7 +5,6 @@ import * as React from 'react';
 import List from '@mui/material/List';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import CallButton from './CallButton';
 
 export default function UserInfoCard(props) {
   const { open, setOpen, username, userLocation, userId, currentUserPosition } =
@@ -27,7 +26,6 @@ export default function UserInfoCard(props) {
         </p>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <ChatButton userId={userId} username={username} setOpen={setOpen} />
-          <CallButton  userId={userId} setOpen={setOpen}/>
         </div>
       </List>
     </Dialog>

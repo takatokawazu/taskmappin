@@ -4,10 +4,6 @@ import {
   userDisconnectedHandler,
 } from '../redux/actions/usersActions';
 import { chatMessageHandler } from '../redux/actions/messangerActions';
-import {
-  videoRoomsListHandler,
-} from '../redux/actions/videoRoomActions';
-import { call, disconnect } from '../realtimeCommunication/webRTCHandler';
 import { taskHandler } from '../redux/actions/taskActions';
 import store from '../redux/stores/store';
 import { addTask, completeTask } from '../redux/slices/taskSlice';
@@ -15,16 +11,16 @@ import toast from 'react-hot-toast';
 let socket = null;
 
 const ENDPOINT = 'https://taskmappin-c2989267e49d.herokuapp.com';
-//
+// const ENDPOINT = 'http://localhost:3003';
+
 export const connectWithSocketIOServer = () => {
-  // socket = io(ENDPOINT);
-  socket = io('http://localhost:3003');
+  socket = io(ENDPOINT);
 
   socket.on('connect', () => {
     console.log('connected to socket server');
   });
 
-  socket.on('init', (taskData) => {
+  socket.on('get-task', (taskData) => {
     taskHandler(taskData);
   });
 
@@ -44,19 +40,6 @@ export const connectWithSocketIOServer = () => {
     chatMessageHandler(messageData);
   });
 
-  socket.on('video-rooms', (videoRooms) => {
-    console.log(videoRooms);
-    videoRoomsListHandler(videoRooms);
-  });
-
-  socket.on('video-room-init', (data) => {
-    call(data);
-  });
-
-  socket.on('video-call-disconnect', () => {
-    disconnect();
-  });
-
   socket.on('user-disconnected', (disconnectedUserSocketId) => {
     userDisconnectedHandler(disconnectedUserSocketId);
   });
@@ -73,19 +56,6 @@ export const login = (data) => {
 
 export const sendChatMessage = (data) => {
   socket.emit('chat-message', data);
-};
-
-
-export const createVideoRoom = (data) => {
-  socket.emit('video-room-create', data);
-};
-
-export const joinVideoRoom = (data) => {
-  socket.emit('video-room-join', data);
-};
-
-export const leaveVideoRoom = (data) => {
-  socket.emit('video-room-leave', data);
 };
 
 export const addT = (data) => {

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { decodeJwt } from '../utils/tokenDecode';
 
 const AuthContext = createContext();
 
@@ -12,7 +13,10 @@ const AuthContextProvider = (props) => {
 
   const getLoggedIn = async () => {
     const loggedInRes = await axios.get('/api/users/loggedIn');
-
+    const decodedToken = decodeJwt(loggedInRes.data);
+    if(decodedToken) {
+      setUser(decodedToken.payload)
+    }
     setLoggedIn(loggedInRes.data);
   };
 
@@ -21,10 +25,7 @@ const AuthContextProvider = (props) => {
   }, [loggedIn]);
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    setUser(userInfo);
-
-    if (!userInfo || !loggedIn) {
+    if (!user || !loggedIn) {
       if (location.pathname === '/register') {
         navigate('/register', { replace: true });
       } else {

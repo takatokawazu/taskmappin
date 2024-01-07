@@ -22,13 +22,11 @@ export default function AdminButton({ setSelectedButton }) {
   };
 
   const checkIsMobile = () => {
-    setIsMobile(window.innerWidth <= 700); // 700px以下の場合を例としています
+    setIsMobile(window.innerWidth <= 700);
   };
 
   React.useEffect(() => {
-    // コンポーネントがマウントされたときにイベントリスナーを追加
     window.addEventListener('resize', checkIsMobile);
-    // コンポーネントがアンマウントされたときにイベントリスナーを削除
     return () => {
       window.removeEventListener('resize', checkIsMobile);
     };

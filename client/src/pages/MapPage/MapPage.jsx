@@ -6,12 +6,10 @@ import Map, { GeolocateControl } from 'react-map-gl';
 import UserMarker from '../../components/Marker/UserMarker';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import Messanger from '../../components/Messanger/Messanger';
-import VideoRooms from '../../components/VideoRooms/VideoRooms';
 import axios from 'axios';
 
-import * as socketConn from '../../socketConnection/socketConn';
-import { connectWithSocketIOServer } from '../../socketConnection/socketConn';
-import { connectWithPeerServer } from '../../realtimeCommunication/webRTCHandler';
+import * as socketConn from '../../socketConnection/socketConnection';
+import { connectWithSocketIOServer } from '../../socketConnection/socketConnection';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapPage.css';
@@ -55,7 +53,6 @@ const MapPage = () => {
 
   useEffect(() => {
     connectWithSocketIOServer();
-    connectWithPeerServer();
     const getLocation = () => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
@@ -184,7 +181,7 @@ const MapPage = () => {
     }
   };
 
-  const { isLoaded, loadError } = useJsApiLoader({
+  const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries,
   });
@@ -287,7 +284,6 @@ const MapPage = () => {
             currentUserPosition={currentUserPosition}
           />
         )}
-        <VideoRooms />
       </Box>
     )
   );

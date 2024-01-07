@@ -15,7 +15,6 @@ const ChatButton = ({ userId, username, setOpen }) => {
     );
   };
 
-
   return (
       <Button
         onClick={() => {

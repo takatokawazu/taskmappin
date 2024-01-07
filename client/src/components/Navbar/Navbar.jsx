@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import {
   AppBar,
@@ -27,14 +27,12 @@ import NotificationMenu from './NotificationMenu';
 import { StandaloneSearchBox } from '@react-google-maps/api';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../context/AuthContext';
 
 const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const onlineUsers = useSelector((state) => state.map.onlineUsers);
-  const { user } = useContext(AuthContext);
   const tasks = useSelector((state) => state.task.tasks);
   const navigate = useNavigate();
 
@@ -89,9 +87,7 @@ const Navbar = ({ state, setState, setViewport, currentUserId }) => {
   };
 
   const handleAdminPage = () => {
-    if (user) {
-      navigate(`/admin/${user._id}`);
-    }
+    navigate('/admin');
   };
 
   return (

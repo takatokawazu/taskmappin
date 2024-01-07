@@ -33,7 +33,7 @@ export default function AdminPage() {
       tasks.map((item, index) => ({
         ...item,
         id: index + 1,
-        assignedUser: item.assignedUser.username,
+        assignedUser: item.assignedUser ? item.assignedUser.username : "",
         completedBy: item.completedBy ? item.completedBy.username : 'not yet',
         createdAt: formatDateTime(item.createdAt),
         deadline: formatDateTime(item.deadline),

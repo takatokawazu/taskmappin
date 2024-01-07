@@ -71,7 +71,7 @@ const loginUser = async (req, res) => {
   }
 
   const token = jwt.sign(
-    { _id: user._id, username: user.username },
+    { _id: user._id, username: user.username, email: user.email },
     process.env.JWT_SECRET
   );
 
@@ -93,8 +93,7 @@ const loggedIn = async (req, res) => {
     if (!token) return res.json(false);
 
     jwt.verify(token, process.env.JWT_SECRET);
-
-    res.send(true);
+    res.json(token);
   } catch (err) {
     console.log(err);
     res.json(err);

@@ -8,7 +8,7 @@ import {
   leaveVideoRoom,
   addT,
   completeT,
-} from '../../socketConnection/socketConn';
+} from '../../socketConnection/socketConnection';
 
 jest.mock('socket.io-client');
 
@@ -60,30 +60,6 @@ describe('Socket.IO Client Tests', () => {
     sendChatMessage({ message: 'Hello' });
     expect(socketMock.emit).toHaveBeenCalledWith('chat-message', {
       message: 'Hello',
-    });
-  });
-
-  it('should emit a create video room event', () => {
-    connectWithSocketIOServer();
-    createVideoRoom({ roomName: 'RoomA' });
-    expect(socketMock.emit).toHaveBeenCalledWith('video-room-create', {
-      roomName: 'RoomA',
-    });
-  });
-
-  it('should emit a join video room event', () => {
-    connectWithSocketIOServer();
-    joinVideoRoom({ roomId: 'RoomA' });
-    expect(socketMock.emit).toHaveBeenCalledWith('video-room-join', {
-      roomId: 'RoomA',
-    });
-  });
-
-  it('should emit a leave video room event', () => {
-    connectWithSocketIOServer();
-    leaveVideoRoom({ roomId: 'RoomA' });
-    expect(socketMock.emit).toHaveBeenCalledWith('video-room-leave', {
-      roomId: 'RoomA',
     });
   });
 
